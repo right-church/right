@@ -4,94 +4,176 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>올바른교회 | 한없는 은혜 끝없는 사랑</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #ff7e5f;
+            --primary-dark: #eb6b4d;
+            --secondary-color: #2c3e50;
+            --bg-light: #f8f9fa;
+            --text-main: #333;
+            --text-muted: #777;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
         /* 기본 설정 */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Nanum Gothic', sans-serif; line-height: 1.8; color: #333; background-color: #fff; scroll-behavior: smooth; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        
+        body { 
+            font-family: 'Noto Sans KR', sans-serif; 
+            line-height: 1.7; 
+            color: var(--text-main); 
+            background-color: #fff; 
+            overflow-x: hidden;
+            word-break: keep-all;
+        }
+        a { text-decoration: none; color: inherit; transition: var(--transition); }
+        ul { list-style: none; }
+
+        /* 헤더 - 유리창 효과(Glassmorphism) */
         header {
-            position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.98);
+            position: fixed; top: 0; width: 100%; 
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 1rem 10%; border-bottom: 1px solid #eee; z-index: 1000;
+            padding: 1.2rem 8%; border-bottom: 1px solid rgba(0,0,0,0.05); z-index: 1000;
         }
-        .logo { font-size: 1.4rem; font-weight: 800; color: #2c3e50; }
-        .logo span { font-weight: 400; font-size: 0.85rem; color: #888; margin-left: 5px; }
-        nav ul { display: flex; list-style: none; }
-        nav ul li { margin-left: 20px; font-weight: 700; font-size: 0.9rem; }
-        nav ul li a:hover { color: #e67e22; }
-
-        .hero {
-            height: 60vh; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), 
-            url('https://images.unsplash.com/photo-1470058869958-2a77abd41c02?auto=format&fit=crop&w=1200&q=80');
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: #fff; text-align: center;
-        }
-        .hero .year-badge { background: #e67e22; padding: 5px 20px; border-radius: 50px; font-size: 1.1rem; margin-bottom: 20px; font-weight: 700; }
-        .hero h1 { font-size: 3.2rem; margin-bottom: 15px; font-weight: 800; text-shadow: 2px 2px 10px rgba(0,0,0,0.3); }
-
-        section { padding: 100px 10%; }
-        .section-title { text-align: center; margin-bottom: 60px; }
-        .section-title h2 { font-size: 2.2rem; color: #2c3e50; margin-bottom: 15px; }
-        .section-title .bar { width: 40px; height: 3px; background: #e67e22; margin: 0 auto; }
-
-        .intro-desc { max-width: 900px; margin: 0 auto 50px; text-align: center; font-size: 1.1rem; color: #444; word-break: keep-all; }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--secondary-color); letter-spacing: -1px; }
+        .logo span { font-weight: 400; font-size: 0.8rem; color: var(--primary-color); margin-left: 5px; text-transform: uppercase; }
         
-        /* 통일된 카드 스타일 */
-        .unified-card { 
-            background: #fff; padding: 40px; border-radius: 12px; border: 1px solid #eee; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s;
+        nav ul { display: flex; }
+        nav ul li { margin-left: 30px; }
+        nav ul li a { font-weight: 500; font-size: 0.95rem; color: #555; position: relative; }
+        nav ul li a::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background: var(--primary-color); transition: var(--transition);
         }
-        .info-card-box { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 900px; margin: 0 auto; }
-        .info-card { text-align: center; }
-        .info-card h3 { color: #e67e22; margin-bottom: 15px; font-size: 1.3rem; }
+        nav ul li a:hover { color: var(--primary-color); }
+        nav ul li a:hover::after { width: 100%; }
 
-        .service-list { list-style: none; max-width: 700px; margin: 0 auto; }
-        .service-list li { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px dashed #ddd; }
-        .service-list li:last-child { border-bottom: none; }
-        .service-list strong { color: #e67e22; }
+        /* 메인 비주얼 - 세련된 그래디언트 오버레이 */
+        .hero {
+            height: 80vh; 
+            background: linear-gradient(rgba(44, 62, 80, 0.4), rgba(44, 62, 80, 0.2)), 
+            url('https://images.unsplash.com/photo-1470058869958-2a77abd41c02?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: #fff; text-align: center; padding: 0 20px;
+        }
+        .hero .year-badge { 
+            background: var(--primary-color); padding: 6px 24px; border-radius: 50px; 
+            font-size: 1rem; margin-bottom: 25px; font-weight: 700;
+            animation: fadeInUp 1s ease;
+        }
+        .hero h1 { 
+            font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 20px; font-weight: 900; 
+            text-shadow: 0 10px 30px rgba(0,0,0,0.2); line-height: 1.2;
+            animation: fadeInUp 1.2s ease;
+        }
+        .hero p { font-size: 1.2rem; opacity: 0.9; font-weight: 300; animation: fadeInUp 1.4s ease; }
 
-        .pastor-wrap { display: flex; align-items: center; gap: 60px; flex-wrap: wrap; }
-        .pastor-img { flex: 1; min-width: 300px; text-align: center; }
-        .pastor-img img { width: 100%; max-width: 300px; border-radius: 15px; box-shadow: 15px 15px 0 #f0f0f0; }
-        .pastor-info { flex: 2; min-width: 300px; }
+        /* 섹션 공통 스타일 */
+        section { padding: 120px 10%; }
+        .section-title { text-align: center; margin-bottom: 70px; }
+        .section-title h2 { font-size: 2.5rem; color: var(--secondary-color); font-weight: 800; margin-bottom: 15px; }
+        .section-title .bar { width: 50px; height: 4px; background: var(--primary-color); margin: 0 auto; border-radius: 2px; }
 
-        .bible-section { background: #e67e22; color: #fff; text-align: center; border-radius: 20px; margin: 0 10% 80px; padding: 60px 40px; }
-        .bible-btn { background: #fff; color: #e67e22; padding: 12px 35px; border-radius: 30px; font-weight: 800; display: inline-block; margin-top: 20px; cursor: pointer; border: none; }
+        /* 안내 섹션 - 카드 디자인 개선 */
+        .combined-intro { background-color: var(--bg-light); border-radius: 50px 50px 0 0; margin-top: -50px; position: relative; z-index: 10; }
+        .intro-desc { max-width: 800px; margin: 0 auto 60px; text-align: center; font-size: 1.15rem; color: #555; }
+        
+        .info-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
+        .info-card-box { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .info-card { 
+            background: #fff; padding: 40px 20px; border-radius: 20px; 
+            transition: var(--transition); border: 1px solid rgba(0,0,0,0.03);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+        .info-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
+        .info-card h3 { color: var(--primary-color); font-size: 1.2rem; margin-bottom: 15px; font-weight: 800; }
+        
+        .service-table-box { 
+            background: var(--secondary-color); color: #fff; padding: 50px; 
+            border-radius: 30px; box-shadow: 0 20px 40px rgba(44, 62, 80, 0.2);
+        }
+        .service-table-box h3 { margin-bottom: 30px; font-size: 1.6rem; font-weight: 700; position: relative; }
+        .service-list li { 
+            display: flex; justify-content: space-between; padding: 15px 0; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); font-weight: 300;
+        }
+        .service-list li strong { color: var(--primary-color); font-weight: 700; }
 
-        /* 모달 스타일 */
-        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); overflow-y: auto; }
-        .modal-content { background-color: #fff; margin: 5% auto; padding: 40px; border-radius: 15px; width: 90%; max-width: 600px; position: relative; }
-        .close-btn { position: absolute; right: 20px; top: 15px; font-size: 2rem; font-weight: bold; cursor: pointer; color: #aaa; }
-        .bible-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .bible-table th, .bible-table td { padding: 12px; border-bottom: 1px solid #eee; text-align: left; }
+        /* 담임목사 섹션 - 이미지 스타일링 */
+        .pastor-wrap { display: grid; grid-template-columns: 1fr 1.5fr; gap: 80px; align-items: center; }
+        .pastor-img img { 
+            width: 100%; border-radius: 30px; 
+            box-shadow: 30px 30px 0 var(--bg-light); 
+            transition: var(--transition);
+        }
+        .pastor-img:hover img { transform: scale(1.02); }
+        .pastor-info h3 { font-size: 2rem; color: var(--primary-color); margin-bottom: 25px; font-weight: 800; }
+        .pastor-info p { font-size: 1.1rem; color: #666; margin-bottom: 30px; }
+        .career-list { border-top: 2px solid var(--bg-light); padding-top: 30px; }
+        .career-list li { margin-bottom: 8px; font-size: 0.95rem; color: #444; }
 
-        .video-sec { background: #1a252f; color: #fff; text-align: center; }
-        .video-box { max-width: 800px; margin: 0 auto; border-radius: 15px; overflow: hidden; }
-        .video-box iframe { width: 100%; aspect-ratio: 16/9; border: 0; }
+        /* 성경통독 배너 - 그래디언트 */
+        .bible-section { 
+            background: linear-gradient(135deg, var(--primary-color), #f3a683); 
+            color: #fff; text-align: center; border-radius: 40px; 
+            margin: 0 10% 100px; padding: 80px 40px;
+            box-shadow: 0 20px 40px rgba(230, 126, 34, 0.2);
+        }
+        .bible-btn { 
+            background: #fff; color: var(--primary-color); padding: 15px 45px; 
+            border-radius: 50px; font-weight: 800; display: inline-block; 
+            margin-top: 30px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .bible-btn:hover { background: var(--secondary-color); color: #fff; transform: translateY(-3px); }
 
-        .location-sec { text-align: center; }
-        .naver-map-btn { background: #03C75A; color: #fff; padding: 15px 40px; border-radius: 8px; font-weight: 800; display: inline-block; margin-top: 20px; }
+        /* 영상 섹션 */
+        .video-sec { background: #1a252f; border-radius: 50px 50px 0 0; }
+        .video-box { 
+            max-width: 900px; margin: 0 auto; border-radius: 25px; 
+            overflow: hidden; box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
 
-        footer { background: #2c3e50; color: #fff; padding: 50px 10%; text-align: center; font-size: 0.9rem; }
+        /* 오시는 길 */
+        .naver-map-btn { 
+            background: #03C75A; color: #fff; padding: 18px 50px; 
+            border-radius: 12px; font-weight: 700; display: inline-block; 
+            margin-top: 30px; font-size: 1.1rem;
+        }
 
-        @media (max-width: 900px) {
-            .info-card-box { grid-template-columns: 1fr; }
+        /* 푸터 */
+        footer { background: #1a252f; color: rgba(255,255,255,0.6); padding: 80px 10% 40px; text-align: center; }
+        footer strong { color: #fff; display: block; margin-bottom: 15px; font-size: 1.2rem; }
+
+        /* 애니메이션 */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 반응형 */
+        @media (max-width: 1024px) {
+            .info-container, .pastor-wrap { grid-template-columns: 1fr; gap: 40px; }
             header { padding: 1rem 5%; }
-            nav ul li { margin-left: 10px; font-size: 0.8rem; }
+            .hero h1 { font-size: 2.8rem; }
+        }
+        @media (max-width: 768px) {
+            nav { display: none; } /* 모바일에서는 햄버거 메뉴 권장 */
+            section { padding: 80px 5%; }
+            .info-card-box { grid-template-columns: 1fr; }
+            .bible-section { margin: 0 5% 60px; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">올바른교회 <span>RIGHT CHURCH</span></div>
+        <div class="logo">올바른교회 <span>Right Church</span></div>
         <nav>
             <ul>
-                <li><a href="#about">교회소개</a></li>
-                <li><a href="#service">예배안내</a></li>
+                <li><a href="#about">교회안내</a></li>
                 <li><a href="#pastor">담임목사</a></li>
                 <li><a href="#bible">성경통독</a></li>
                 <li><a href="#video">테이블워십</a></li>
@@ -102,46 +184,54 @@
 
     <section class="hero">
         <div class="year-badge">2026년 교회 표어</div>
-        <h1>한없는 은혜 끝없는 사랑!</h1>
+        <h1>한없는 은혜<br>끝없는 사랑!</h1>
         <p>복음의 본질로 돌아가 지역과 세상을 섬기는 광주 올바른교회</p>
     </section>
 
-    <section id="about" style="background-color: #fdfaf7;">
-        <div class="section-title"><h2>교회 소개</h2><div class="bar"></div></div>
-        <p class="intro-desc">올바른교회는 대한예수교장로회 소속의 교회로,<br>예수 그리스도의 복음 안에서 지역사회와 이웃을 사랑으로 섬깁니다.</p>
-        <div class="info-card-box">
-            <div class="unified-card info-card"><h3>올바른 믿음</h3><p>성경 중심의<br>개혁주의 신앙</p></div>
-            <div class="unified-card info-card"><h3>올바른 삶</h3><p>말씀 안에서<br>성숙해가는 일상</p></div>
-            <div class="unified-card info-card"><h3>올바른 나눔</h3><p>이웃을 향한<br>진실한 사랑과 선교</p></div>
+    <section id="about" class="combined-intro">
+        <div class="section-title">
+            <h2>교회 및 예배 안내</h2>
+            <div class="bar"></div>
+        </div>
+        <p class="intro-desc">
+            올바른교회는 <strong>대한예수교장로회(합동교단 광주노회)</strong> 소속의 예수 그리스도의 복음만을 전하는 교회로, <br>
+            지역사회와 이웃에게 봉사하며 따뜻한 사랑으로 섬기는 가족 같은 아름다운 교회입니다.
+        </p>
+
+        <div class="info-container">
+            <div class="info-card-box">
+                <div class="info-card"><h3>바른 믿음</h3><p>성경 중심의<br>개혁주의 신앙</p></div>
+                <div class="info-card"><h3>바른 삶</h3><p>말씀 안에서<br>성숙해가는 일상</p></div>
+                <div class="info-card"><h3>바른 선교</h3><p>테이블워십과<br>따뜻한 나눔</p></div>
+                <div class="info-card"><h3>바른 섬김</h3><p>이웃을 향한<br>진실한 사랑</p></div>
+            </div>
+
+            <div class="service-table-box">
+                <h3>⏱ 예배 시간 안내</h3>
+                <ul class="service-list">
+                    <li><span>주일 대예배</span> <strong>오전 11:00</strong></li>
+                    <li><span>다음세대 예배</span> <strong>오전 10:00</strong></li>
+                    <li><span>수요 기도회</span> <strong>오후 07:30</strong></li>
+                    <li><span>테이블워십</span> <strong>매월 마지막 주 주일 저녁</strong></li>
+                </ul>
+            </div>
         </div>
     </section>
 
-    <section id="service">
-        <div class="section-title"><h2>예배 안내</h2><div class="bar"></div></div>
-        <div class="unified-card" style="max-width: 900px; margin: 0 auto;">
-            <ul class="service-list">
-                <li><span>주일 대예배</span> <strong>오전 11:00</strong></li>
-                <li><span>다음세대 예배</span> <strong>오전 10:00</strong></li>
-                <li><span>수요 기도회</span> <strong>오후 07:30</strong></li>
-                <li><span>테이블워십</span> <strong>매월 마지막 주 주일 저녁</strong></li>
-            </ul>
-        </div>
-    </section>
-
-    <section id="pastor" style="background-color: #fdfaf7;">
-        <div class="section-title"><h2>담임목사</h2><div class="bar"></div></div>
+    <section id="pastor">
+        <div class="section-title"><h2>담임목사 소개</h2><div class="bar"></div></div>
         <div class="pastor-wrap">
-            <div class="pastor-img"><img src="https://via.placeholder.com/300x400" alt="유진헌 목사님"></div>
+            <div class="pastor-img"><img src="https://via.placeholder.com/400x550" alt="유진헌 목사님"></div>
             <div class="pastor-info">
-                <h3 style="color:#e67e22; margin-bottom:15px;">"따뜻한 만남이 있는 공동체"</h3>
-                <p style="margin-bottom: 25px;">하나님의 은혜를 경험하는 행복한 곳, 당신을 기다리고 있습니다.</p>
-                <div style="border-top: 1px solid #eee; padding-top: 20px;">
-                    <h4 style="margin-bottom: 10px;">유진헌 담임목사</h4>
-                    <ul style="list-style: none; color: #666; font-size: 0.9rem;">
+                <h3>"따뜻한 만남이 있는<br>복된 공동체로 초대합니다"</h3>
+                <p>안녕하세요, 유진헌 목사입니다. 우리 교회는 하나님의 한없는 은혜를 깊이 경험하고, 그 흘러넘치는 사랑을 이웃과 나누는 행복한 곳입니다. 삶의 지친 발걸음이 쉼을 얻고, 말씀 안에서 새로운 소망을 발견하는 이 복된 여정에 당신을 기쁘게 기다리고 있습니다.</p>
+                
+                <div class="career-list">
+                    <p style="font-weight: 700; font-size: 1.2rem; margin-bottom: 15px;">유진헌 담임목사</p>
+                    <ul>
                         <li>• 총신대학교 신학대학원(M.Div) 졸업</li>
-                        <li>• 現 광주 올바른교회 담임목사</li>
-                        <li>• 現 테이블워십(Table Worship) 기획 및 디렉터</li>
-                        <li>• (추가 경력을 이곳에 입력해 주세요)</li>
+                        <li>• 테이블워십(Table Worship) 기획 및 총괄 디렉터</li>
+                        <li>• 현) 광주 올바른교회 담임목사</li>
                     </ul>
                 </div>
             </div>
@@ -149,44 +239,40 @@
     </section>
 
     <div id="bible" class="bible-section">
-        <h2>📖 90일 성경통독 대장정</h2>
-        <p>2026년, 전 성도가 말씀의 은혜를 깊이 누립니다.</p>
-        <button class="bible-btn" onclick="openModal()">성경통독 진도표 보기</button>
-    </div>
-
-    <div id="bibleModal" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal()">&times;</span>
-            <h2 style="text-align: center; margin-bottom: 20px;">90일 통독 진도표</h2>
-            <table class="bible-table">
-                <tr><th>주차</th><th>범위</th></tr>
-                <tr><td>1-2주</td><td>창세기 ~ 출애굽기</td></tr>
-                <tr><td>3-4주</td><td>레위기 ~ 신명기</td></tr>
-                <tr><td colspan="2" style="text-align:center; color:#999;">진도표 내용은 교회 일정에 따라 업데이트됩니다.</td></tr>
-            </table>
-        </div>
+        <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 10px;">📖 90일 성경통독 대장정</h2>
+        <p>2026년, 전 성도가 함께 말씀의 바다로 나아갑니다.</p>
+        <a href="#" class="bible-btn">성경통독 진도표 다운로드</a>
     </div>
 
     <section id="video" class="video-sec">
-        <div class="section-title"><h2 style="color:#fff;">TABLE WORSHIP</h2><div class="bar"></div></div>
-        <div class="video-box"><iframe src="https://www.youtube.com/embed/bu1q_3YP49M" allowfullscreen></iframe></div>
+        <div class="section-title">
+            <h2 style="color: #fff;">TABLE WORSHIP</h2>
+            <div class="bar"></div>
+        </div>
+        <div class="video-box">
+            <iframe src="https://www.youtube.com/embed/bu1q_3YP49M" title="테이블워십" allowfullscreen style="width: 100%; aspect-ratio: 16/9; border: 0;"></iframe>
+        </div>
+        <p style="margin-top:30px; color: rgba(255,255,255,0.5); font-size: 0.9rem;">
+            YouTube 채널 <strong>'@tableworship'</strong>에서 더 많은 영상을 만나보세요.
+        </p>
     </section>
 
     <section id="location" class="location-sec">
         <div class="section-title"><h2>오시는 길</h2><div class="bar"></div></div>
-        <p>광주광역시 서구 학생독립로10번길 8 | 062-434-1133</p>
-        <a href="https://map.naver.com/v5/search/광주올바른교회" target="_blank" class="naver-map-btn">네이버 지도 보기</a>
+        <div class="location-info">
+            <p style="font-size: 1.2rem; margin-bottom: 5px;">광주광역시 서구 학생독립로10번길 8</p>
+            <p style="color: var(--text-muted); margin-bottom: 20px;">문의: 062-434-1133</p>
+            <a href="https://map.naver.com/v5/search/광주올바른교회" target="_blank" class="naver-map-btn">
+                네이버 지도로 길찾기
+            </a>
+        </div>
     </section>
 
     <footer>
-        <p><strong>광주 올바른교회 (RIGHT CHURCH)</strong> | © 2026 All Rights Reserved.</p>
+        <strong>광주 올바른교회 (RIGHT CHURCH)</strong>
+        <p>담임목사 유진헌 | 광주광역시 서구 학생독립로10번길 8 | 062-434-1133</p>
+        <p style="margin-top:30px; font-size: 0.8rem; letter-spacing: 1px;">© 2026 RIGHT CHURCH. ALL RIGHTS RESERVED.</p>
     </footer>
 
-    <script>
-        const modal = document.getElementById("bibleModal");
-        function openModal() { modal.style.display = "block"; document.body.style.overflow = "hidden"; }
-        function closeModal() { modal.style.display = "none"; document.body.style.overflow = "auto"; }
-        window.onclick = function(e) { if (e.target == modal) closeModal(); }
-    </script>
 </body>
 </html>
