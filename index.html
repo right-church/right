@@ -18,6 +18,7 @@
             --naver-green: #03C75A;
         }
 
+        /* 기본 초기화 */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body { 
@@ -41,32 +42,36 @@
         header.scrolled {
             padding: 0.8rem 5%;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            background: rgba(255, 255, 255, 0.98);
         }
         .logo { font-size: 1.3rem; font-weight: 700; color: var(--text-dark); letter-spacing: -1px; z-index: 1001; }
-        .logo span { font-size: 0.7rem; color: var(--text-gray); margin-left: 5px; font-weight: 400; }
+        .logo span { font-size: 0.7rem; color: var(--text-gray); margin-left: 5px; font-weight: 400; text-transform: uppercase; }
 
-        /* --- Navigation (Mobile First) --- */
+        /* --- Navigation & Menu Toggle --- */
         .menu-toggle {
             display: flex; cursor: pointer; z-index: 1001;
             flex-direction: column; justify-content: space-between;
-            width: 24px; height: 18px;
+            width: 24px; height: 17px;
         }
         .menu-toggle span {
             display: block; height: 2px; width: 100%;
             background-color: var(--text-dark); border-radius: 3px;
             transition: 0.3s;
         }
+        .menu-toggle.active span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); }
 
         nav {
-            position: fixed; top: 0; right: -100%; width: 80%; height: 100vh;
-            background: #fff; padding-top: 80px;
+            position: fixed; top: 0; right: -100%; width: 100%; height: 100vh;
+            background: #fff; padding: 100px 40px;
             transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+            z-index: 1000;
         }
         nav.active { right: 0; }
-        nav ul { list-style: none; padding: 20px; }
-        nav ul li { margin-bottom: 25px; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; }
-        nav ul li a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 1.1rem; display: block; }
+        nav ul { list-style: none; text-align: center; }
+        nav ul li { margin-bottom: 30px; }
+        nav ul li a { text-decoration: none; color: var(--text-dark); font-weight: 500; font-size: 1.5rem; display: block; }
 
         /* --- Hero --- */
         .hero {
@@ -79,16 +84,16 @@
         }
         .hero h1 { 
             font-family: 'Noto Serif KR', serif;
-            font-size: clamp(2.2rem, 8vw, 4.5rem); font-weight: 700; margin-bottom: 1rem;
-            line-height: 1.3;
+            font-size: clamp(2.2rem, 8vw, 4.5rem); font-weight: 700; margin-bottom: 1.2rem;
+            line-height: 1.25;
         }
         .hero p { font-size: 1rem; letter-spacing: 1px; opacity: 0.9; }
 
-        /* --- Common Section Style --- */
+        /* --- Sections --- */
         section { padding: 80px 6%; }
         .section-header { margin-bottom: 50px; text-align: center; }
-        .tag { font-size: 0.75rem; color: var(--accent); font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 10px; }
-        .section-header h2 { font-family: 'Noto Serif KR', serif; font-size: 2rem; }
+        .tag { font-size: 0.75rem; color: var(--accent); font-weight: 700; letter-spacing: 2px; display: block; margin-bottom: 10px; text-transform: uppercase; }
+        .section-header h2 { font-family: 'Noto Serif KR', serif; font-size: 2rem; font-weight: 700; }
 
         /* --- Core Values --- */
         .core-values { 
@@ -115,53 +120,89 @@
 
         /* --- Pastor --- */
         .pastor-wrap { display: flex; flex-direction: column; gap: 40px; }
-        .pastor-img { width: 100%; border-radius: 15px; overflow: hidden; }
+        .pastor-img { width: 100%; border-radius: 15px; overflow: hidden; background: #eee; }
         .pastor-img img { width: 100%; height: auto; display: block; }
         .pastor-text blockquote { font-family: 'Noto Serif KR', serif; font-size: 1.5rem; line-height: 1.4; margin-bottom: 25px; border-left: 4px solid var(--accent); padding-left: 15px; }
         .pastor-info { background: #f9f9f9; padding: 20px; border-radius: 10px; }
+        .pastor-info h4 { margin-bottom: 10px; font-size: 1.2rem; }
         .pastor-info p { font-size: 0.9rem; margin-bottom: 5px; color: var(--text-gray); }
 
-        /* --- Bible Modal --- */
-        .modal-content {
-            width: 95%; height: 85vh; top: 55%;
+        /* --- Bible Section --- */
+        .bible-cta-box {
+            background: var(--brand); color: #fff; text-align: center; 
+            padding: 50px 20px; border-radius: 20px;
         }
-        .bible-table { font-size: 0.9rem; }
-        .day-col { width: 70px; }
-        input[type="checkbox"] { width: 24px; height: 24px; } /* 터치하기 쉽게 크기 확장 */
 
-        /* --- Map & Offering --- */
-        .video-container { border-radius: 12px; overflow: hidden; margin: 0 -2%; }
-        #map { height: 350px; border-radius: 12px; }
-        .offering-card { padding: 40px 20px; width: 100%; }
-        .offering-card h2 { font-size: 1.5rem; word-break: break-all; }
+        /* --- Modal Popup --- */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 2000; backdrop-filter: blur(5px);
+        }
+        .modal-content {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 95%; max-width: 800px; height: 80vh;
+            background: #fff; border-radius: 20px; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .modal-header { padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { flex: 1; overflow-y: auto; padding: 0 15px; }
+        .bible-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .bible-table th { position: sticky; top: 0; background: #f8f9fa; padding: 15px 5px; text-align: left; z-index: 10; }
+        .bible-table td { padding: 12px 5px; border-bottom: 1px solid #eee; }
+        input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-color: var(--brand); }
 
-        /* --- Desktop Refinement --- */
+        /* --- Video & Buttons --- */
+        .video-container { border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        
+        .btn-wrap {
+            display: flex; flex-direction: column; align-items: center; 
+            gap: 12px; margin-top: 30px; width: 100%;
+        }
+        .btn-common {
+            display: inline-flex; align-items: center; justify-content: center;
+            width: 100%; max-width: 320px; padding: 16px 25px;
+            border-radius: 12px; text-decoration: none; font-weight: 500;
+            transition: 0.3s; font-size: 0.95rem; cursor: pointer; border: none;
+        }
+        .btn-youtube { background: #ff0000; color: #fff; box-shadow: 0 4px 15px rgba(255,0,0,0.2); }
+        .btn-naver { background: var(--naver-green); color: #fff; box-shadow: 0 4px 15px rgba(3, 199, 90, 0.2); }
+        .btn-outline { background: #fff; color: var(--brand); border: 1px solid #fff; }
+
+        /* --- Location & Map --- */
+        #map { height: 350px; border-radius: 15px; overflow: hidden; background: #eee; margin-top: 20px; }
+
+        /* --- Offering --- */
+        .offering-card {
+            background: #fff; padding: 40px 20px; text-align: center;
+            border: 1px solid #eee; border-radius: 20px; max-width: 500px; margin: 0 auto;
+        }
+
+        /* --- Footer --- */
+        footer { background: #1a1a1a; color: #888; padding: 60px 5%; text-align: center; font-size: 0.85rem; }
+        footer b { color: #fff; display: block; margin-bottom: 10px; font-size: 1.1rem; }
+
+        /* --- Desktop Optimization --- */
         @media (min-width: 1024px) {
             header { padding: 1.5rem 8%; background: transparent; backdrop-filter: none; }
-            header.scrolled { background: rgba(255,255,255,0.95); }
+            header.scrolled { background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); }
             .menu-toggle { display: none; }
             nav { position: static; width: auto; height: auto; background: transparent; padding: 0; box-shadow: none; }
-            nav ul { display: flex; padding: 0; }
-            nav ul li { margin-left: 35px; margin-bottom: 0; border: none; padding: 0; }
-            nav ul li a { font-size: 0.95rem; }
+            nav ul { display: flex; }
+            nav ul li { margin-left: 35px; margin-bottom: 0; }
+            nav ul li a { font-size: 1rem; }
             
             section { padding: 120px 15%; }
             .core-values, .worship-grid { grid-template-columns: repeat(4, 1fr); }
-            .pastor-wrap { flex-direction: row; align-items: center; gap: 60px; }
+            .pastor-wrap { flex-direction: row; align-items: center; gap: 80px; }
             .pastor-img { flex: 1; }
             .pastor-text { flex: 1.5; }
-            .modal-content { width: 800px; }
+            .pastor-text blockquote { font-size: 2.2rem; }
+            
+            .btn-wrap { flex-direction: row; justify-content: center; }
+            .btn-common { width: auto; max-width: none; }
+            
+            #map { height: 450px; }
         }
-
-        /* Utility */
-        .btn-common {
-            width: 100%; justify-content: center; padding: 16px; margin-bottom: 10px;
-            border-radius: 10px; text-decoration: none; display: inline-flex; font-weight: 500;
-        }
-        @media (min-width: 1024px) { .btn-common { width: auto; padding: 15px 40px; } }
-        
-        .btn-youtube { background: #ff0000; color: #fff; }
-        .btn-naver { background: var(--naver-green); color: #fff; }
     </style>
 </head>
 <body>
@@ -194,7 +235,7 @@
             <h2>올바른교회 소개</h2>
         </div>
         <div class="about-content">
-            <p style="font-size: 1.1rem; margin-bottom: 40px; text-align: center;" data-aos="fade-up">
+            <p style="font-size: 1.1rem; margin-bottom: 40px; text-align: center; max-width: 800px; margin-left: auto; margin-right: auto;" data-aos="fade-up">
                 올바른교회는 <strong>대한예수교장로회(합동)</strong> 소속으로<br>오직 복음만을 전하며 지역사회를 사랑으로 섬기는 공동체입니다.
             </p>
             
@@ -219,43 +260,46 @@
 
     <section id="pastor" style="background: #fdfdfd;">
         <div class="pastor-wrap">
-            <div class="pastor-img" data-aos="fade-up">
+            <div class="pastor-img" data-aos="fade-right">
                 <img src="jinheon.png" alt="유진헌 목사">
             </div>
-            <div class="pastor-text" data-aos="fade-up">
+            <div class="pastor-text" data-aos="fade-left">
                 <span class="tag">GREETINGS</span>
                 <blockquote style="margin-top:10px;">"살아있는 <span style="color:var(--brand)">말씀</span>의 능력,<br>뜨거운 <span style="color:var(--accent)">찬양</span>의 고백"</blockquote>
-                <p style="margin-bottom: 30px; color: var(--text-gray); font-size: 0.95rem;">
-                    하나님의 말씀이 우리 삶의 기준이 되고, 찬양이 우리 영혼의 고백이 될 때 참된 회복이 시작됩니다. 격식보다 본질에 집중하는 역동적인 예배의 자리로 여러분을 초대합니다.
+                <p style="margin-bottom: 30px; color: var(--text-gray); font-size: 1rem;">
+                    하나님의 말씀이 우리 삶의 기준이 되고, 찬양이 우리 영혼의 진솔한 고백이 될 때 참된 회복을 경험합니다. 말씀으로 삶을 깨우는 역동적인 예배의 자리로 여러분을 초대합니다.
                 </p>
                 <div class="pastor-info">
-                    <h4 style="margin-bottom:10px;">유진헌 담임목사</h4>
-                    <p>• 총신대학교 신학대학원(M.Div.)</p>
+                    <h4>유진헌 담임목사</h4>
+                    <p>• 총신대학교 신학대학원(M.Div.) 졸업</p>
                     <p>• Liberty University 예배학</p>
                     <p>• 테이블워십 기획 및 디렉터</p>
+                    <p>• 90일 성경통독 프로그램 인도</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <div id="bible" style="padding: 60px 5%;">
-        <div class="offering-card" style="background: var(--brand); color: #fff; text-align: center; border: none;" data-aos="zoom-in">
-            <h2 style="font-family: 'Noto Serif KR', serif; margin-bottom: 10px;">90일 성경통독</h2>
-            <p style="font-size:0.9rem; opacity:0.8; margin-bottom: 25px;">매일 말씀으로 하나님과 더 깊이 동행하세요.</p>
-            <div class="btn-common" style="background:#fff; color:var(--brand); cursor:pointer;" onclick="openBibleModal()">통독 진도표 보기</div>
-        </div>
-    </div>
-
-    <div id="bibleModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; backdrop-filter:blur(5px);">
-        <div class="modal-content" style="position:absolute; left:50%; transform:translate(-50%, -50%); background:#fff; border-radius:20px; overflow:hidden; display:flex; flex-direction:column;">
-            <div style="padding:20px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center;">
-                <h3 style="font-family:'Noto Serif KR';">성경통독 진도표</h3>
-                <span style="font-size:2rem; cursor:pointer;" onclick="closeBibleModal()">×</span>
+    <section id="bible" style="padding: 60px 6%;">
+        <div class="bible-cta-box" data-aos="zoom-in">
+            <h2 style="font-family: 'Noto Serif KR', serif; font-size: 2rem; margin-bottom: 10px;">90일 성경통독</h2>
+            <p style="opacity: 0.9; margin-bottom: 30px;">90일간의 여정을 통해 하나님과 더 깊이 동행하세요.</p>
+            <div class="btn-wrap">
+                <button class="btn-common btn-outline" onclick="openBibleModal()">통독 진도표 열기</button>
             </div>
-            <div style="flex:1; overflow-y:auto; padding:0 15px;">
-                <table class="bible-table" style="width:100%; border-collapse:collapse;">
-                    <thead style="position:sticky; top:0; background:#f8f9fa;">
-                        <tr><th style="padding:15px 5px; text-align:left;">일차</th><th style="padding:15px 5px; text-align:left;">말씀</th><th style="padding:15px 5px;">체크</th></tr>
+        </div>
+    </section>
+
+    <div id="bibleModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="font-family:'Noto Serif KR';">90일 성경통독 진도표</h3>
+                <span style="font-size:2rem; cursor:pointer; padding:10px;" onclick="closeBibleModal()">×</span>
+            </div>
+            <div class="modal-body">
+                <table class="bible-table">
+                    <thead>
+                        <tr><th>일차</th><th>읽을 말씀</th><th style="text-align:center;">확인</th></tr>
                     </thead>
                     <tbody id="bible-table-body"></tbody>
                 </table>
@@ -271,75 +315,75 @@
         <div class="video-container" data-aos="fade-up">
             <iframe src="https://www.youtube.com/embed/bu1q_3YP49M" style="width:100%; aspect-ratio:16/9; border:0;" allowfullscreen></iframe>
         </div>
-        <div style="margin-top:30px;">
-            <a href="https://www.youtube.com/@tableworship" target="_blank" class="btn-common btn-youtube">유튜브 채널 구독하기</a>
+        <div class="btn-wrap" data-aos="fade-up">
+            <a href="https://www.youtube.com/@tableworship" target="_blank" class="btn-common btn-youtube">테이블워십 유튜브 채널 바로가기</a>
         </div>
     </section>
 
     <section id="location" style="background: #fafafa; text-align: center;">
         <div class="section-header"><span class="tag">LOCATION</span><h2>오시는 길</h2></div>
-        <div style="margin-bottom: 30px;">
-            <p style="font-size: 1rem;">광주광역시 서구 학생독립로10번길 8</p>
-            <p style="color: var(--accent); font-weight: 700; margin-top:5px;">062-434-1133</p>
+        <div style="margin-bottom: 20px;">
+            <p style="font-size: 1.1rem; font-weight: 500;">광주광역시 서구 학생독립로10번길 8</p>
+            <p style="color: var(--accent); font-weight: 700; margin-top:5px;">T. 062-434-1133</p>
         </div>
-        <div id="map">
+        <div id="map" data-aos="fade-up">
              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3261.646549221237!2d126.8833133!3d35.152945!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35718eb28c1199a5%3A0x6a0a09e072f9801!2z6rSR7KO86rSR7Jet7IucIOyEnOq1rCDtmZTrmJXrj5kg65287J246rWQ7ZqM!5e0!3m2!1sko!2skr!4v1700000000000!5m2!1sko!2skr" style="width:100%; height:100%; border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
-        <div style="margin-top:30px;">
-            <a href="https://map.naver.com/v5/search/광주 올바른교회" target="_blank" class="btn-common btn-naver">네이버 지도로 보기</a>
+        <div class="btn-wrap" data-aos="fade-up">
+            <a href="https://map.naver.com/v5/search/광주 올바른교회" target="_blank" class="btn-common btn-naver">네이버 지도 바로가기</a>
         </div>
     </section>
 
     <section id="offering">
-        <div class="offering-card" data-aos="fade-up" style="border: 1px solid #eee; border-radius:20px; text-align:center; margin: 0 auto; max-width:500px;">
+        <div class="offering-card" data-aos="fade-up">
             <span class="tag">OFFERING</span>
-            <p style="color: var(--text-gray); margin-bottom:10px;">NH농협은행</p>
-            <h2 style="letter-spacing: 1px; margin-bottom:15px;">601056-51-000298</h2>
+            <p style="color: var(--text-gray); margin-bottom:8px;">NH농협은행</p>
+            <h2 style="font-size: 1.8rem; letter-spacing: 1px; margin-bottom:10px;">601056-51-000298</h2>
             <p style="margin-bottom:25px;">예금주: 올바른교회</p>
-            <div style="background: var(--brand); color:#fff; padding:15px; border-radius:8px; cursor:pointer; font-weight:500;" onclick="copyAccount()">계좌번호 복사하기</div>
+            <button class="btn-common" style="background: var(--brand); color:#fff;" onclick="copyAccount()">계좌번호 복사하기</button>
         </div>
     </section>
 
-    <footer style="background:#1a1a1a; color:#888; padding:60px 5%; text-align:center; font-size:0.85rem;">
-        <b style="color:#fff; display:block; margin-bottom:10px; font-size:1rem;">올바른교회</b>
-        <p>광주광역시 서구 학생독립로10번길 8 | 062-434-1133</p>
-        <p style="margin-top:10px;">© 2026 RIGHT CHURCH. All Rights Reserved.</p>
+    <footer>
+        <b>올바른교회 (RIGHT CHURCH)</b>
+        <p>담임목사 유진헌 | 광주광역시 서구 학생독립로10번길 8 | 062-434-1133</p>
+        <p style="margin-top:10px; opacity:0.6;">© 2026 RIGHT CHURCH. All Rights Reserved.</p>
     </footer>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 800, once: true });
 
-        // Header Scroll
+        // Header Scroll Effect
         window.addEventListener('scroll', () => {
             const header = document.getElementById('header');
             if (window.scrollY > 50) header.classList.add('scrolled');
             else header.classList.remove('scrolled');
         });
 
-        // Mobile Menu
+        // Mobile Menu Toggle
         const menuToggle = document.getElementById('mobile-menu');
         const navMenu = document.getElementById('nav-menu');
+        
         menuToggle.addEventListener('click', () => {
             menuToggle.classList.toggle('active');
             navMenu.classList.toggle('active');
-            // 메뉴 열렸을 때 배경 스크롤 방지
             document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : 'auto';
         });
 
-        // 메뉴 클릭 시 닫기
-        document.querySelectorAll('nav a').forEach(anchor => {
-            anchor.addEventListener('click', () => {
+        // Close menu when link clicked
+        document.querySelectorAll('nav a').forEach(link => {
+            link.addEventListener('click', () => {
                 menuToggle.classList.remove('active');
                 navMenu.classList.remove('active');
                 document.body.style.overflow = 'auto';
             });
         });
 
-        // 성경통독 데이터 (동일)
+        // Bible Data (Abbreviated for Mobile)
         const bibleData = [
             { day: 1, range: "창세기 1~13장" }, { day: 2, range: "창세기 14~26장" },
-            { day: 3, range: "창세기 27~39장" }, { day: 4, range: "창세기 40~출 2장" },
+            { day: 3, range: "창세기 27~39장" }, { day: 4, range: "창 40~출 2장" },
             { day: 5, range: "출애굽기 3~15장" }, { day: 6, range: "출애굽기 16~29장" },
             { day: 7, range: "출애굽기 30~40장" }, { day: 8, range: "레위기 1~13장" },
             { day: 9, range: "레위기 14~27장" }, { day: 10, range: "민수기 1~12장" },
@@ -347,42 +391,42 @@
             { day: 13, range: "신명기 1~11장" }, { day: 14, range: "신명기 12~23장" },
             { day: 15, range: "신명기 24~34장" }, { day: 16, range: "여호수아 1~12장" },
             { day: 17, range: "여호수아 13~24장" }, { day: 18, range: "사사기 1~11장" },
-            { day: 19, range: "사사기 12~삼상 3장" }, { day: 20, range: "사무엘상 4~16장" },
+            { day: 19, range: "사 12~삼상 3장" }, { day: 20, range: "사무엘상 4~16장" },
             { day: 21, range: "사무엘상 17~31장" }, { day: 22, range: "사무엘하 1~12장" },
             { day: 23, range: "사무엘하 13~24장" }, { day: 24, range: "열왕기상 1~11장" },
             { day: 25, range: "열왕기상 12~22장" }, { day: 26, range: "열왕기하 1~12장" },
             { day: 27, range: "열왕기하 13~25장" }, { day: 28, range: "역대상 1~15장" },
             { day: 29, range: "역대상 16~29장" }, { day: 30, range: "역대하 1~14장" },
-            { day: 31, range: "역대하 15~28장" }, { day: 32, range: "역대하 29~에스라 5장" },
-            { day: 33, range: "에스라 6~느헤미야 8장" }, { day: 34, range: "느헤미야 9~에스더 8장" },
-            { day: 35, range: "에스더 9~욥기 11장" }, { day: 36, range: "욥기 12~24장" },
-            { day: 37, range: "욥기 25~38장" }, { day: 38, range: "욥기 39~시편 9편" },
+            { day: 31, range: "역대하 15~28장" }, { day: 32, range: "대하 29~스 5장" },
+            { day: 33, range: "스 6~느 8장" }, { day: 34, range: "느 9~에 8장" },
+            { day: 35, range: "에 9~욥 11장" }, { day: 36, range: "욥기 12~24장" },
+            { day: 37, range: "욥기 25~38장" }, { day: 38, range: "욥 39~시 9편" },
             { day: 39, range: "시편 10~22편" }, { day: 40, range: "시편 23~35편" },
             { day: 41, range: "시편 36~48편" }, { day: 42, range: "시편 49~61편" },
             { day: 43, range: "시편 62~75편" }, { day: 44, range: "시편 76~88편" },
             { day: 45, range: "시편 89~101편" }, { day: 46, range: "시편 102~114편" },
             { day: 47, range: "시편 115~127편" }, { day: 48, range: "시편 128~140편" },
-            { day: 49, range: "시편 141~잠언 4장" }, { day: 50, range: "잠언 5~17장" },
-            { day: 51, range: "잠언 18~30장" }, { day: 52, range: "잠언 31~전도서 12장" },
-            { day: 53, range: "아가 1~이사야 5장" }, { day: 54, range: "이사야 6~18장" },
+            { day: 49, range: "시 141~잠 4장" }, { day: 50, range: "잠언 5~17장" },
+            { day: 51, range: "잠언 18~30장" }, { day: 52, range: "잠 31~전 12장" },
+            { day: 53, range: "아 1~사 5장" }, { day: 54, range: "이사야 6~18장" },
             { day: 55, range: "이사야 19~32장" }, { day: 56, range: "이사야 33~45장" },
-            { day: 57, range: "이사야 46~58장" }, { day: 58, range: "이사야 59~예레미야 5장" },
+            { day: 57, range: "이사야 46~58장" }, { day: 58, range: "사 59~렘 5장" },
             { day: 59, range: "예레미야 6~18장" }, { day: 60, range: "예레미야 19~31장" },
             { day: 61, range: "예레미야 32~45장" }, { day: 62, range: "예레미야 46~52장" },
-            { day: 63, range: "애가 1~에스겔 6장" }, { day: 64, range: "에스겔 7~19장" },
+            { day: 63, range: "애 1~겔 6장" }, { day: 64, range: "에스겔 7~19장" },
             { day: 65, range: "에스겔 20~32장" }, { day: 66, range: "에스겔 33~48장" },
-            { day: 67, range: "다니엘 1~12장" }, { day: 68, range: "호세아 1~아모스 2장" },
-            { day: 69, range: "아모스 3~미가 7장" }, { day: 70, range: "나훔 1~말라기 4장" },
+            { day: 67, range: "다니엘 1~12장" }, { day: 68, range: "호 1~암 2장" },
+            { day: 69, range: "암 3~미 7장" }, { day: 70, range: "나 1~말 4장" },
             { day: 71, range: "마태복음 1~13장" }, { day: 72, range: "마태복음 14~28장" },
             { day: 73, range: "마가복음 1~8장" }, { day: 74, range: "마가복음 9~16장" },
             { day: 75, range: "누가복음 1~12장" }, { day: 76, range: "누가복음 13~24장" },
             { day: 77, range: "요한복음 1~10장" }, { day: 78, range: "요한복음 11~21장" },
             { day: 79, range: "사도행전 1~14장" }, { day: 80, range: "사도행전 15~28장" },
             { day: 81, range: "로마서 1~16장" }, { day: 82, range: "고린도전서 1~16장" },
-            { day: 83, range: "고린도후서 1~13장" }, { day: 84, range: "갈라디아~에베소서" },
-            { day: 85, range: "빌립보~살후" }, { day: 86, range: "딤전~빌레몬서" },
+            { day: 83, range: "고린도후서 1~13장" }, { day: 84, range: "갈라디아~에베소" },
+            { day: 85, range: "빌립보~살후" }, { day: 86, range: "디모데~빌레몬" },
             { day: 87, range: "히브리서 1~13장" }, { day: 88, range: "야고보~벧후" },
-            { day: 89, range: "요한1서~유다서" }, { day: 90, range: "요한계시록 1~22장" }
+            { day: 89, range: "요한1~유다서" }, { day: 90, range: "요한계시록 1~22장" }
         ];
 
         const modal = document.getElementById("bibleModal");
@@ -406,7 +450,7 @@
                 const row = document.createElement("tr");
                 const isChecked = savedChecks[item.day] ? "checked" : "";
                 row.innerHTML = `
-                    <td style="padding:12px 5px; border-bottom:1px solid #eee;">${item.day}일</td>
+                    <td style="padding:12px 5px; border-bottom:1px solid #eee; color:var(--accent); font-weight:700;">${item.day}일</td>
                     <td style="padding:12px 5px; border-bottom:1px solid #eee; font-weight:500;">${item.range}</td>
                     <td style="padding:12px 5px; border-bottom:1px solid #eee; text-align:center;">
                         <input type="checkbox" ${isChecked} onchange="saveProgress(${item.day}, this.checked)">
