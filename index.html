@@ -137,7 +137,6 @@
                 <li><a href="#bible">성경통독</a></li>
                 <li><a href="#video">테이블워십</a></li>
                 <li><a href="#location">오시는길</a></li>
-                <li><a href="#offering">온라인헌금</a></li>
             </ul>
         </nav>
     </header>
@@ -207,7 +206,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>📖 90일 성경통독 진도표</h3>
-                <span class="close-modal" onclick="closeBibleModal()">&times;</span>
+                <span class="close-modal" onclick="closeBibleModal()">×</span>
             </div>
             <div class="modal-body">
                 <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666; text-align: center;">성경을 읽고 체크하세요.</p>
@@ -279,7 +278,6 @@
     </footer>
 
     <script>
-        // PDF 데이터 90일치 전체 수록 
         const bibleSchedule = [
             ["1일", "창1~13"], ["2일", "창14~26"], ["3일", "창27~39"], ["4일", "창40~출2"], ["5일", "출3~15"], ["6일", "출16~29"],
             ["7일", "출30~레2"], ["8일", "레3~15"], ["9일", "레16~민1"], ["10일", "민2~14"], ["11일", "민15~27"], ["12일", "민28~신5"],
@@ -298,7 +296,6 @@
             ["85일", "빌4~살후3"], ["86일", "딤전1~몬1"], ["87일", "히1~약1"], ["88일", "약2~요일2"], ["89일", "요일3~계8"], ["90일", "계9~22"]
         ];
 
-        // 팝업 열기
         function openBibleModal() {
             const tableBody = document.getElementById('bibleTableBody');
             if (tableBody.innerHTML === '') {
@@ -312,13 +309,11 @@
             document.body.style.overflow = 'hidden';
         }
 
-        // 팝업 닫기
         function closeBibleModal() {
             document.getElementById('bibleModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
-        // 헌금 계좌 복사
         function copyAccount() {
             const account = "60105651000298";
             navigator.clipboard.writeText(account).then(() => {
@@ -326,7 +321,6 @@
             });
         }
 
-        // 모달 외부 클릭 시 닫기
         window.onclick = function(event) {
             const modal = document.getElementById('bibleModal');
             if (event.target == modal) closeBibleModal();
