@@ -73,42 +73,41 @@
         .pastor-img img { width: 100%; border-radius: 30px; box-shadow: 20px 20px 0 var(--bg-light); }
         .pastor-info h3 { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 20px; font-weight: 800; }
 
-        /* 오시는길 지도 영역 스타일 */
-        .map-wrapper {
-            width: 100%;
-            max-width: 1000px;
-            margin: 40px auto 0;
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            border: 1px solid #eee;
-            position: relative;
+        /* 성경통독 모달 스타일 */
+        .modal-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.75); z-index: 2000; backdrop-filter: blur(5px);
         }
-        .map-iframe-container {
-            width: 100%;
-            height: 450px;
-            background: #f0f0f0;
+        .modal-content {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #fff; width: 90%; max-width: 550px; max-height: 80vh;
+            border-radius: 30px; overflow: hidden; display: flex; flex-direction: column;
         }
+        .modal-header {
+            padding: 20px 30px; background: var(--primary-color); color: #fff;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .modal-header h3 { margin: 0; font-size: 1.3rem; }
+        .close-modal { font-size: 2rem; cursor: pointer; line-height: 1; }
+        .modal-body { padding: 25px; overflow-y: auto; }
+        .table-scroll { border-radius: 15px; overflow: hidden; border: 1px solid #eee; }
+        .bible-table { width: 100%; border-collapse: collapse; text-align: center; }
+        .bible-table th { background: #fdf2f0; padding: 12px; font-size: 0.9rem; border-bottom: 2px solid #eee; }
+        .bible-table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+        .bible-table input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary-color); cursor: pointer; }
+
+        /* 오시는길 */
+        .map-wrapper { width: 100%; max-width: 1000px; margin: 40px auto 0; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid #eee; position: relative; }
+        .map-iframe-container { width: 100%; height: 450px; background: #f0f0f0; }
 
         /* 헌금안내 */
-        .offering-card {
-            background: #fff; max-width: 450px; margin: 0 auto; padding: 40px 20px; 
-            border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.05); 
-            border: 1px solid rgba(255,126,95,0.2); transition: var(--transition);
-        }
+        .offering-card { background: #fff; max-width: 450px; margin: 0 auto; padding: 40px 20px; border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.05); border: 1px solid rgba(255,126,95,0.2); transition: var(--transition); }
         .offering-card:hover { transform: scale(1.02); }
-        .copy-badge {
-            display: inline-block; background: var(--primary-color); color: #fff;
-            padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700;
-            margin-top: 5px; cursor: pointer;
-        }
+        .copy-badge { display: inline-block; background: var(--primary-color); color: #fff; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; margin-top: 5px; cursor: pointer; }
 
         /* 기타 섹션 */
-        .bible-section { 
-            background: linear-gradient(135deg, var(--primary-color), #f3a683); 
-            color: #fff; text-align: center; border-radius: 40px; margin: 0 10% 100px; padding: 70px 40px;
-        }
-        .bible-btn { background: #fff; color: var(--primary-color); padding: 15px 45px; border-radius: 50px; font-weight: 800; display: inline-block; margin-top: 25px; }
+        .bible-section { background: linear-gradient(135deg, var(--primary-color), #f3a683); color: #fff; text-align: center; border-radius: 40px; margin: 0 10% 100px; padding: 70px 40px; }
+        .bible-btn { background: #fff; color: var(--primary-color); padding: 15px 45px; border-radius: 50px; font-weight: 800; display: inline-block; margin-top: 25px; cursor: pointer; }
         
         .video-sec { background: #1a252f; color: #fff; text-align: center; border-radius: 50px 50px 0 0; }
         .video-box { max-width: 850px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
@@ -200,8 +199,33 @@
 
     <div id="bible" class="bible-section">
         <h2>📖 90일 성경통독</h2>
-        <p>90일간의 성경1독을 통해 만나게 되는 하나님과의 친밀한 교제</p>
-        <a href="#" class="bible-btn">성경통독 진도표 보기</a>
+        <p>90일간의 성경 1독을 통해 만나게 되는 하나님과의 친밀한 교제</p>
+        <a href="javascript:void(0);" class="bible-btn" onclick="openBibleModal()">성경통독 진도표 보기</a>
+    </div>
+
+    <div id="bibleModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📖 90일 성경통독 진도표</h3>
+                <span class="close-modal" onclick="closeBibleModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 15px; font-size: 0.9rem; color: #666; text-align: center;">성경을 읽고 체크하세요.</p>
+                <div class="table-scroll">
+                    <table class="bible-table">
+                        <thead>
+                            <tr>
+                                <th>일차</th>
+                                <th>성경 범위</th>
+                                <th>체크</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bibleTableBody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <section id="video" class="video-sec">
@@ -248,32 +272,65 @@
     </section>
 
     <footer>
-        <strong>광주 올바른교회 (RIGHT CHURCH)</strong>
+        <strong>올바른교회 (RIGHT CHURCH)</strong>
         <p>담임목사 유진헌 | 광주광역시 서구 학생독립로10번길 8 | 062-434-1133</p>
         <p>온라인 헌금: 농협 601056-51-000298 (올바른교회)</p>
         <p style="margin-top:20px; opacity: 0.5;">© 2026 RIGHT CHURCH. All Rights Reserved.</p>
     </footer>
 
     <script>
+        // PDF 데이터 90일치 전체 수록 
+        const bibleSchedule = [
+            ["1일", "창1~13"], ["2일", "창14~26"], ["3일", "창27~39"], ["4일", "창40~출2"], ["5일", "출3~15"], ["6일", "출16~29"],
+            ["7일", "출30~레2"], ["8일", "레3~15"], ["9일", "레16~민1"], ["10일", "민2~14"], ["11일", "민15~27"], ["12일", "민28~신5"],
+            ["13일", "신6~18"], ["14일", "신19~31"], ["15일", "신32~수10"], ["16일", "수11~23"], ["17일", "수24~삿12"], ["18일", "삿13~삼상1"],
+            ["19일", "삼상2~14"], ["20일", "삼상15-27"], ["21일", "삼상28~삼하9"], ["22일", "삼하10-22"], ["23일", "삼하23~왕상11"], ["24일", "왕상12~왕하3"],
+            ["25일", "왕하4~16"], ["26일", "왕하17~대상4"], ["27일", "대상5~17"], ["28일", "대상18~대하1"], ["29일", "대하2~14"], ["30일", "대하15~28"],
+            ["31일", "대하29~스5"], ["32일", "스6-느8"], ["33일", "느9~에8"], ["34일", "에9~욥11"], ["35일", "욥12~24"], ["36일", "욥25~38"],
+            ["37일", "욥39~시9"], ["38일", "시10~22"], ["39일", "시23~35"], ["40일", "시36~48"], ["41일", "시49~61"], ["42일", "시62~75"],
+            ["43일", "시76~88"], ["44일", "시89~101"], ["45일", "시102~114"], ["46일", "시115~127"], ["47일", "시128~140"], ["48일", "시141~잠4"],
+            ["49일", "잠5~17"], ["50일", "잠18~30"], ["51일", "잠31~전12"], ["52일", "아1~사5"], ["53일", "사6~18"], ["54일", "사19~32"],
+            ["55일", "사33~45"], ["56일", "사46~58"], ["57일", "사59~렘5"], ["58일", "렘6~18"], ["59일", "렘19~31"], ["60일", "렘32~45"],
+            ["61일", "렘46~겔1"], ["62일", "겔2~14"], ["63일", "겔15~27"], ["64일", "겔28~40"], ["65일", "겔41~단5"], ["66일", "단6~호7"],
+            ["67일", "호8~암3"], ["68일", "암4~미2"], ["69일", "미3~습2"], ["70일", "습3~학2"], ["71일", "슥1~마5"], ["72일", "마6~19"],
+            ["73일", "마20~막4"], ["74일", "막5~눅1"], ["75일", "눅2~14"], ["76일", "눅15~요3"], ["77일", "요4~16"], ["78일", "요17~행9"],
+            ["79일", "행10~22"], ["80일", "행23~롬7"], ["81일", "롬8~고전4"], ["82일", "고전5~고후1"], ["83일", "고후2~갈1"], ["84일", "갈2~빌3"],
+            ["85일", "빌4~살후3"], ["86일", "딤전1~몬1"], ["87일", "히1~약1"], ["88일", "약2~요일2"], ["89일", "요일3~계8"], ["90일", "계9~22"]
+        ];
+
+        // 팝업 열기
+        function openBibleModal() {
+            const tableBody = document.getElementById('bibleTableBody');
+            if (tableBody.innerHTML === '') {
+                let html = '';
+                bibleSchedule.forEach(item => {
+                    html += `<tr><td>${item[0]}</td><td style="text-align:left; padding-left:15px;">${item[1]}</td><td><input type="checkbox"></td></tr>`;
+                });
+                tableBody.innerHTML = html;
+            }
+            document.getElementById('bibleModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        // 팝업 닫기
+        function closeBibleModal() {
+            document.getElementById('bibleModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 헌금 계좌 복사
         function copyAccount() {
-            const account = "60105651000298"; 
+            const account = "60105651000298";
             navigator.clipboard.writeText(account).then(() => {
-                alert("계좌번호(60105651000298)가 복사되었습니다.\n은행 앱에 붙여넣어 주세요.");
-            }).catch(err => {
-                const textArea = document.createElement("textarea");
-                textArea.value = account;
-                document.body.appendChild(textArea);
-                textArea.select();
-                try {
-                    document.execCommand('copy');
-                    alert("계좌번호가 복사되었습니다.");
-                } catch (err) {
-                    console.error('복사 실패', err);
-                }
-                document.body.removeChild(textArea);
+                alert("계좌번호가 복사되었습니다.");
             });
         }
-    </script>
 
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            const modal = document.getElementById('bibleModal');
+            if (event.target == modal) closeBibleModal();
+        }
+    </script>
 </body>
 </html>
