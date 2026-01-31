@@ -21,27 +21,16 @@
         
         /* 헤더 */
         header {
-            position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.9);
+            position: fixed; top: 0; width: 100%; background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px); display: flex; justify-content: space-between; align-items: center;
             padding: 1.2rem 8%; border-bottom: 1px solid rgba(0,0,0,0.05); z-index: 1000;
         }
-        .logo { font-size: 1.5rem; font-weight: 900; color: var(--secondary-color); letter-spacing: -1px; z-index: 1001; }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--secondary-color); letter-spacing: -1px; }
         .logo span { font-weight: 400; font-size: 0.8rem; color: var(--primary-color); margin-left: 5px; }
-        
-        /* 네비게이션 (데스크탑) */
         nav ul { display: flex; list-style: none; }
         nav ul li { margin-left: 30px; }
         nav ul li a { font-weight: 500; font-size: 0.95rem; color: #555; position: relative; }
         nav ul li a:hover { color: var(--primary-color); }
-
-        /* 모바일 햄버거 버튼 */
-        .menu-toggle {
-            display: none; flex-direction: column; cursor: pointer; z-index: 1001;
-        }
-        .menu-toggle span {
-            width: 25px; height: 3px; background-color: var(--secondary-color);
-            margin: 2px 0; transition: 0.4s; border-radius: 2px;
-        }
 
         /* 메인 비주얼 */
         .hero {
@@ -63,11 +52,16 @@
         /* 교회안내 */
         .combined-intro { background-color: var(--bg-light); border-radius: 50px 50px 0 0; margin-top: -50px; position: relative; z-index: 10; }
         .intro-desc { max-width: 800px; margin: 0 auto 60px; text-align: center; font-size: 1.15rem; color: #555; }
+        
         .info-container { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: start; }
         .info-card-box { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
-        .info-card { background: #fff; padding: 40px 20px; border-radius: 20px; text-align: center; transition: var(--transition); border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .info-card { 
+            background: #fff; padding: 40px 20px; border-radius: 20px; text-align: center;
+            transition: var(--transition); border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
         .info-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); }
         .info-card h3 { color: var(--primary-color); font-size: 1.2rem; margin-bottom: 15px; font-weight: 800; }
+        
         .service-table-box { background: var(--secondary-color); color: #fff; padding: 50px; border-radius: 30px; }
         .service-table-box h3 { margin-bottom: 30px; font-size: 1.6rem; font-weight: 700; text-align: center; }
         .service-list { list-style: none; }
@@ -79,48 +73,57 @@
         .pastor-img img { width: 100%; border-radius: 30px; box-shadow: 20px 20px 0 var(--bg-light); }
         .pastor-info h3 { font-size: 1.8rem; color: var(--primary-color); margin-bottom: 20px; font-weight: 800; }
 
-        /* 성경통독 & 유튜브 */
-        .bible-section { background: linear-gradient(135deg, var(--primary-color), #f3a683); color: #fff; text-align: center; border-radius: 40px; margin: 0 10% 100px; padding: 70px 40px; }
-        .bible-btn { background: #fff; color: var(--primary-color); padding: 15px 45px; border-radius: 50px; font-weight: 800; display: inline-block; margin-top: 25px; }
-        .video-sec { background: #1a252f; color: #fff; text-align: center; border-radius: 50px 50px 0 0; }
-        .video-box { max-width: 850px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+        /* 오시는길 지도 영역 스타일 */
+        .map-wrapper {
+            width: 100%;
+            max-width: 1000px;
+            margin: 40px auto 0;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+            position: relative;
+        }
+        .map-iframe-container {
+            width: 100%;
+            height: 450px;
+            background: #f0f0f0;
+        }
 
-        /* 오시는 길 */
-        .location-sec { text-align: center; background: #fff; }
-        .map-wrapper { width: 100%; max-width: 1000px; margin: 40px auto 0; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid #eee; }
-        .map-iframe-container { width: 100%; height: 450px; background: #f0f0f0; border:0; }
-        .naver-map-btn { background: #03C75A; color: #fff; padding: 18px 50px; border-radius: 12px; font-weight: 700; display: inline-block; margin-top: 30px; }
-
-        /* 온라인 헌금 */
-        .offering-sec { background-color: var(--bg-light); text-align: center; }
+        /* 헌금안내 */
         .offering-card {
             background: #fff; max-width: 450px; margin: 0 auto; padding: 40px 20px; 
             border-radius: 30px; box-shadow: 0 15px 40px rgba(0,0,0,0.05); 
-            border: 1px solid rgba(255,126,95,0.2); transition: var(--transition); cursor: pointer;
+            border: 1px solid rgba(255,126,95,0.2); transition: var(--transition);
         }
-        .offering-card:hover { transform: translateY(-5px); }
-        .copy-badge { display: inline-block; background: var(--primary-color); color: #fff; padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; margin-top: 5px; }
+        .offering-card:hover { transform: scale(1.02); }
+        .copy-badge {
+            display: inline-block; background: var(--primary-color); color: #fff;
+            padding: 4px 12px; border-radius: 50px; font-size: 0.75rem; font-weight: 700;
+            margin-top: 5px; cursor: pointer;
+        }
 
+        /* 기타 섹션 */
+        .bible-section { 
+            background: linear-gradient(135deg, var(--primary-color), #f3a683); 
+            color: #fff; text-align: center; border-radius: 40px; margin: 0 10% 100px; padding: 70px 40px;
+        }
+        .bible-btn { background: #fff; color: var(--primary-color); padding: 15px 45px; border-radius: 50px; font-weight: 800; display: inline-block; margin-top: 25px; }
+        
+        .video-sec { background: #1a252f; color: #fff; text-align: center; border-radius: 50px 50px 0 0; }
+        .video-box { max-width: 850px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4); }
+
+        .location-sec { text-align: center; }
+        .naver-map-btn { background: #03C75A; color: #fff; padding: 18px 50px; border-radius: 12px; font-weight: 700; display: inline-block; margin-top: 30px; }
+        
         footer { background: #1a252f; color: rgba(255,255,255,0.6); padding: 60px 10%; text-align: center; font-size: 0.9rem; }
         footer strong { color: #fff; display: block; margin-bottom: 10px; font-size: 1.1rem; }
 
-        /* 반응형 모바일 메뉴 */
         @media (max-width: 1024px) {
-            header { padding: 1rem 5%; }
-            .menu-toggle { display: flex; }
-            nav {
-                position: fixed; top: 0; right: -100%; width: 75%; height: 100vh;
-                background: #fff; box-shadow: -10px 0 30px rgba(0,0,0,0.1);
-                transition: 0.4s ease-in-out; padding-top: 100px;
-            }
-            nav.active { right: 0; }
-            nav ul { flex-direction: column; align-items: center; }
-            nav ul li { margin: 20px 0; margin-left: 0; }
-            nav ul li a { font-size: 1.2rem; }
             .info-container, .pastor-wrap { grid-template-columns: 1fr; }
-            .menu-toggle.active span:nth-child(1) { transform: rotate(-45deg) translate(-5px, 5px); }
-            .menu-toggle.active span:nth-child(2) { opacity: 0; }
-            .menu-toggle.active span:nth-child(3) { transform: rotate(45deg) translate(-5px, -5px); }
+            header { padding: 1rem 5%; }
+            nav { display: none; }
+            .map-iframe-container { height: 350px; }
         }
     </style>
 </head>
@@ -128,16 +131,14 @@
 
     <header>
         <div class="logo">올바른교회 <span>Right Church</span></div>
-        <div class="menu-toggle" id="mobile-menu">
-            <span></span><span></span><span></span>
-        </div>
-        <nav id="nav-menu">
+        <nav>
             <ul>
                 <li><a href="#about">교회안내</a></li>
                 <li><a href="#pastor">담임목사</a></li>
                 <li><a href="#bible">성경통독</a></li>
                 <li><a href="#video">테이블워십</a></li>
                 <li><a href="#location">오시는길</a></li>
+                <li><a href="#offering">온라인헌금</a></li>
             </ul>
         </nav>
     </header>
@@ -149,15 +150,23 @@
     </section>
 
     <section id="about" class="combined-intro">
-        <div class="section-title"><h2>교회 및 예배 안내</h2><div class="bar"></div></div>
-        <p class="intro-desc">올바른교회는 대한예수교장로회 소속의 복음을 전하는 공동체입니다.</p>
+        <div class="section-title">
+            <h2>교회 및 예배 안내</h2>
+            <div class="bar"></div>
+        </div>
+        <p class="intro-desc">
+            올바른교회는 <strong>대한예수교장로회(합동교단 광주노회)</strong> 소속의 예수 그리스도의 복음만을 전하는 교회로, <br>
+            지역사회와 이웃에게 봉사하며 따뜻한 사랑으로 섬기는 가족 같은 아름다운 교회입니다.
+        </p>
+
         <div class="info-container">
             <div class="info-card-box">
-                <div class="info-card"><h3>올바른 믿음</h3><p>성경 중심의 신앙</p></div>
-                <div class="info-card"><h3>올바른 삶</h3><p>성숙해가는 일상</p></div>
-                <div class="info-card"><h3>올바른 선교</h3><p>따뜻한 나눔</p></div>
-                <div class="info-card"><h3>올바른 섬김</h3><p>진실한 사랑</p></div>
+                <div class="info-card"><h3>올바른 믿음</h3><p>성경 중심의<br>개혁주의 신앙</p></div>
+                <div class="info-card"><h3>올바른 삶</h3><p>말씀 안에서<br>성숙해가는 일상</p></div>
+                <div class="info-card"><h3>올바른 선교</h3><p>테이블워십과<br>따뜻한 나눔</p></div>
+                <div class="info-card"><h3>올바른 섬김</h3><p>이웃을 향한<br>진실한 사랑</p></div>
             </div>
+
             <div class="service-table-box">
                 <h3>⏱ 예배 시간 안내</h3>
                 <ul class="service-list">
@@ -173,70 +182,98 @@
     <section id="pastor">
         <div class="section-title"><h2>담임목사</h2><div class="bar"></div></div>
         <div class="pastor-wrap">
-            <div class="pastor-img"><img src="https://via.placeholder.com/400x550" alt="목사님"></div>
+            <div class="pastor-img"><img src="https://via.placeholder.com/400x550" alt="유진헌 목사님"></div>
             <div class="pastor-info">
-                <h3>"따뜻한 만남이 있는 공동체"</h3>
-                <p>유진헌 목사입니다. 하나님의 은혜가 가득한 우리 교회에 오신 것을 환영합니다.</p>
-            </div>
+                 <h3>"살아있는 말씀의 능력, 뜨거운 찬양의 고백"</h3>
+                 <p>안녕하세요, 올바른교회 유진헌 목사입니다. 우리 교회는 변하지 않는 <strong>하나님의 말씀</strong> 위에 굳건히 서서, 영혼을 울리는 <strong>진실한 찬양</strong>으로 하나님께 나아가는 공동체입니다.</p>
+                 <p style="margin-top: 15px;">하나님의 말씀이 우리 삶의 명확한 기준이 되고, 입술로 드리는 찬양이 우리 영혼의 진솔한 고백이 될 때 우리는 비로소 참된 회복을 경험합니다. 격식에 매인 종교 생활이 아니라, 말씀으로 삶을 채우고 찬양으로 기쁨을 표현하는 역동적인 신앙의 현장으로 여러분을 초대합니다.</p>
+                 <p style="margin-top: 15px; color: var(--primary-dark); font-weight: 500;">한 구절의 말씀이 인생의 답이 되고, 한 곡의 찬양이 치유의 노래가 되는 은혜를 이곳에서 함께 누리길 소망합니다.</p>
+                 <ul style="border-top: 1px solid #eee; padding-top: 20px; margin-top:25px; list-style: none;">
+                     <li style="font-weight: 800; margin-bottom: 8px; color: var(--secondary-color); font-size: 1.1rem;">유진헌 담임목사</li>
+                     <li style="margin-bottom: 4px;">• 총신대학교 신학대학원(M.Div) 졸업</li>
+                     <li style="margin-bottom: 4px;">• 90일 성경통독 프로그램 디렉터</li>
+                     <li>• 테이블워십(Table Worship) 기획 및 음악 디렉터</li>
+                 </ul>
+             </div>
         </div>
     </section>
 
     <div id="bible" class="bible-section">
-        <h2>📖 90일 성경통독 대장정</h2>
+        <h2>📖 90일 성경통독</h2>
+        <p>90일간의 성경1독을 통해 만나게 되는 하나님과의 친밀한 교제</p>
         <a href="#" class="bible-btn">성경통독 진도표 보기</a>
     </div>
 
     <section id="video" class="video-sec">
-        <div class="section-title"><h2 style="color:#fff;">TABLE WORSHIP</h2><div class="bar"></div></div>
+        <div class="section-title"><h2 style="color: #fff;">TABLE WORSHIP</h2><div class="bar"></div></div>
         <div class="video-box">
-            <iframe src="https://www.youtube.com/embed/bu1q_3YP49M" style="width:100%; aspect-ratio:16/9; border:0;" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/bu1q_3YP49M" title="테이블워십" allowfullscreen style="width:100%; aspect-ratio:16/9; border:0;"></iframe>
         </div>
+        <p style="margin-top:25px; opacity:0.6;">유튜브에서 '@tableworship'을 검색하세요.</p>
     </section>
 
     <section id="location" class="location-sec">
         <div class="section-title"><h2>오시는 길</h2><div class="bar"></div></div>
-        <p><strong>주소:</strong> 광주광역시 서구 학생독립로10번길 8</p>
+        <p><strong>주소:</strong> 광주광역시 서구 학생독립로10번길 8 (화정동 902-7)</p>
+        <p><strong>문의:</strong> 062-434-1133</p>
+        
         <div class="map-wrapper">
-            <iframe src="http://googleusercontent.com/maps.google.com/2" class="map-iframe-container" allowfullscreen loading="lazy"></iframe>
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3261.946399432103!2d126.86381497672922!3d35.14399727276589!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35718bf237a94c9d%3A0x4a2119b00e8dbcda!2z7Jis67CUIOumvOq1kO2ajA!5e0!3m2!1sko!2skr!4v1715670000000!5m2!1sko!2skr" 
+                class="map-iframe-container" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
         </div>
-        <a href="https://map.naver.com/v5/search/광주올바른교회" target="_blank" class="naver-map-btn">네이버 지도로 보기</a>
+
+        <a href="https://map.naver.com/v5/search/광주올바른교회" target="_blank" class="naver-map-btn">네이버 지도로 길찾기 (전체화면)</a>
     </section>
 
-    <section id="offering" class="offering-sec">
-        <div class="section-title"><h2>온라인 헌금 안내</h2><div class="bar"></div></div>
-        <p style="margin-bottom:40px; color:#666;">그리스도의 사랑을 흘려보내는 일에 소중히 사용하겠습니다.</p>
-        <div class="offering-card" onclick="copyAccount()">
-            <div style="font-size: 1.1rem; color: #555; margin-bottom: 8px;">NH농협은행</div>
-            <div id="accountNum" style="font-size: 1.8rem; font-weight: 800; color: var(--secondary-color);">601056-51-000298</div>
+    <section id="offering" style="background-color: var(--bg-light); padding: 100px 10%; text-align: center;">
+        <div class="section-title">
+            <h2>온라인 헌금 안내</h2>
+            <div class="bar"></div>
+        </div>
+        <p style="max-width: 600px; margin: 0 auto 40px; color: #666;">
+            보내주신 귀한 예물은 하나님의 나라를 확장하고 <br>
+            이웃에게 그리스도의 사랑을 흘려보내는 일에 소중히 사용하겠습니다.
+        </p>
+
+        <div class="offering-card" onclick="copyAccount()" style="cursor: pointer;">
+            <div style="font-size: 1.1rem; color: #555; margin-bottom: 8px;">농협은행 (NH농협)</div>
+            <div id="accountNum" style="font-size: 1.8rem; font-weight: 800; color: var(--secondary-color); letter-spacing: 0.5px;">601056-51-000298</div>
             <div class="copy-badge">터치하여 계좌번호 복사</div>
             <div style="font-size: 1.2rem; font-weight: 500; color: #333; margin-top: 15px;">예금주: 올바른교회</div>
         </div>
+
+        <p style="margin-top: 30px; font-size: 0.9rem; color: #999;">
+            * 입금 시 성함과 헌금 종류를 적어주세요 (예: 홍길동십일조, 김철수감사)
+        </p>
     </section>
 
     <footer>
         <strong>광주 올바른교회 (RIGHT CHURCH)</strong>
-        <p>© 2026 RIGHT CHURCH. All Rights Reserved.</p>
+        <p>담임목사 유진헌 | 광주광역시 서구 학생독립로10번길 8 | 062-434-1133</p>
+        <p>온라인 헌금: 농협 601056-51-000298 (올바른교회)</p>
+        <p style="margin-top:20px; opacity: 0.5;">© 2026 RIGHT CHURCH. All Rights Reserved.</p>
     </footer>
 
     <script>
-        const menuToggle = document.getElementById('mobile-menu');
-        const navMenu = document.getElementById('nav-menu');
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-        document.querySelectorAll('nav ul li a').forEach(link => {
-            link.addEventListener('click', () => {
-                menuToggle.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
         function copyAccount() {
             const account = "60105651000298"; 
             navigator.clipboard.writeText(account).then(() => {
-                alert("계좌번호가 복사되었습니다.");
+                alert("계좌번호(60105651000298)가 복사되었습니다.\n은행 앱에 붙여넣어 주세요.");
+            }).catch(err => {
+                const textArea = document.createElement("textarea");
+                textArea.value = account;
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    alert("계좌번호가 복사되었습니다.");
+                } catch (err) {
+                    console.error('복사 실패', err);
+                }
+                document.body.removeChild(textArea);
             });
         }
     </script>
+
 </body>
 </html>
