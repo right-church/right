@@ -27,7 +27,6 @@
             margin: 15px 0;
         }
 
-        /* 사파리 스크롤 최적화 */
         .table-outer {
             max-width: 1200px;
             margin: 0 auto;
@@ -35,13 +34,13 @@
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             border: 1px solid var(--border-color);
-            overflow: hidden; /* 테두리 둥글게 유지 */
+            overflow: hidden;
         }
 
         .table-inner {
             max-height: 75vh;
             overflow: auto; 
-            -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
@@ -50,7 +49,6 @@
             width: 100%;
         }
 
-        /* 왼쪽 이름 열 고정 (사파리 호환성 강화) */
         th:first-child, td:first-child {
             position: -webkit-sticky;
             position: sticky;
@@ -62,7 +60,6 @@
             font-weight: bold;
         }
 
-        /* 상단 날짜 헤더 고정 */
         th {
             background-color: var(--main-blue);
             color: white;
@@ -76,7 +73,6 @@
             white-space: nowrap;
         }
 
-        /* 왼쪽 상단 모서리 칸 고정 */
         th:first-child {
             z-index: 15;
             background-color: var(--main-blue);
@@ -88,16 +84,15 @@
             border-right: 1px solid var(--border-color);
             background-color: #fff;
             text-align: center;
-            min-width: 65px; /* 날짜별 칸 최소 너비 */
+            min-width: 65px;
         }
 
-        /* 말씀 행 스타일 */
         .plan-row td {
             background-color: #ebf5fb;
             font-size: 0.75rem;
             color: #2980b9;
             font-weight: bold;
-            white-space: nowrap; /* 사파리 텍스트 짤림 방지 */
+            white-space: nowrap;
         }
 
         input[type="checkbox"] {
@@ -105,7 +100,7 @@
             height: 24px;
             cursor: pointer;
             accent-color: var(--main-blue);
-            -webkit-appearance: checkbox; /* 사파리 기본 모양 강제 */
+            -webkit-appearance: checkbox;
         }
 
         .footer-action { text-align: center; margin-top: 20px; padding-bottom: 30px; }
@@ -139,7 +134,7 @@
     </div>
 
     <div class="footer-action">
-        <button class="reset-btn" onclick="resetData()">전체 데이터 초기화</button>
+        <button class="reset-btn" onclick="secureReset()">데이터 전체 초기화</button>
     </div>
 
     <script>
@@ -166,14 +161,12 @@
             const headerRow = document.getElementById('header-row');
             const tbody = document.getElementById('attendance-body');
 
-            // 1. 헤더 생성
             for (let i = 1; i <= 90; i++) {
                 const th = document.createElement('th');
                 th.textContent = i + '일';
                 headerRow.appendChild(th);
             }
 
-            // 2. 말씀 행 생성
             const planRow = document.createElement('tr');
             planRow.className = 'plan-row';
             const tdTitle = document.createElement('td');
@@ -187,7 +180,6 @@
             }
             tbody.appendChild(planRow);
 
-            // 3. 멤버별 행 생성
             members.forEach(name => {
                 const tr = document.createElement('tr');
                 const tdName = document.createElement('td');
@@ -208,14 +200,22 @@
             });
         }
 
-        function resetData() {
-            if (confirm("모든 체크 기록이 초기화됩니다. 정말 삭제할까요?")) {
-                localStorage.clear();
-                location.reload();
+        // 비밀번호 확인 기능이 추가된 초기화 함수
+        function secureReset() {
+            const password = prompt("전체 데이터를 삭제하려면 비밀번호를 입력하세요.");
+            
+            if (password === null) return; // 취소 버튼 클릭 시
+
+            if (password === "9191") {
+                if (confirm("정말 모든 체크 기록을 삭제할까요? 이 작업은 되돌릴 수 없습니다.")) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            } else {
+                alert("비밀번호가 틀렸습니다.");
             }
         }
 
-        // DOM 로드 후 즉시 실행
         document.addEventListener('DOMContentLoaded', render);
     </script>
 </body>
