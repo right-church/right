@@ -17,7 +17,7 @@
             color: #2c3e50;
         }
         .table-container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             background: #fff;
             padding: 20px;
@@ -40,6 +40,7 @@
             color: white;
             position: sticky;
             top: 0;
+            z-index: 10;
         }
         tr:nth-child(even) {
             background-color: #f9f9f9;
@@ -48,14 +49,15 @@
             background-color: #f1f1f1;
         }
         input[type="text"] {
-            width: 120px;
-            padding: 5px;
+            width: 130px;
+            padding: 6px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            text-align: center;
         }
         input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
         }
         .reset-btn {
@@ -67,7 +69,8 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
+            transition: 0.3s;
         }
         .reset-btn:hover {
             background-color: #c0392b;
@@ -76,7 +79,7 @@
 </head>
 <body>
 
-    <h1>📖 90일 성경통독 출석부 (10인용)</h1>
+    <h1>📖 90일 성경통독 출석부</h1>
     
     <div class="table-container">
         <table>
@@ -103,49 +106,51 @@
 
     <script>
         const tbody = document.getElementById('attendance-body');
+        const members = ["김사라", "김성은", "김정동", "김하정", "박금희", "유진헌", "이영숙", "한진경"];
         const totalDays = 90;
-        const totalPeople = 10;
 
-        // 90일치 테이블 자동 생성
         for (let i = 1; i <= totalDays; i++) {
             let tr = document.createElement('tr');
             
-            // 1. 일차
+            // 1. 일차 표시
             let tdDay = document.createElement('td');
             tdDay.innerHTML = `<strong>${i}일차</strong>`;
             tr.appendChild(tdDay);
 
-            // 2. 분량 입력칸 (localStorage 연동)
+            // 2. 분량 입력칸
             let tdPortion = document.createElement('td');
             let inputPortion = document.createElement('input');
             inputPortion.type = 'text';
-            inputPortion.placeholder = '예: 창 1-3장';
-            inputPortion.value = localStorage.getItem(`portion-${i}`) || '';
+            inputPortion.placeholder = '분량 입력';
+            inputPortion.value = localStorage.getItem(`bible-portion-${i}`) || '';
             inputPortion.addEventListener('input', function() {
-                localStorage.setItem(`portion-${i}`, this.value);
+                localStorage.setItem(`bible-portion-${i}`, this.value);
             });
             tdPortion.appendChild(inputPortion);
             tr.appendChild(tdPortion);
 
-            // 3. 10명 체크박스 (localStorage 연동)
-            for (let j = 1; j <= totalPeople; j++) {
+            // 3. 8명 이름별 체크박스
+            members.forEach((name, index) => {
                 let tdCheck = document.createElement('td');
                 let checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
-                checkbox.checked = localStorage.getItem(`check-${i}-${j}`) === 'true';
+                // 저장 키값에 이름을 포함하여 데이터 혼선을 방지합니다.
+                const storageKey = `bible-check-${i}-${name}`;
+                checkbox.checked = localStorage.getItem(storageKey) === 'true';
+                
                 checkbox.addEventListener('change', function() {
-                    localStorage.setItem(`check-${i}-${j}`, this.checked);
+                    localStorage.setItem(storageKey, this.checked);
                 });
+                
                 tdCheck.appendChild(checkbox);
                 tr.appendChild(tdCheck);
-            }
+            });
 
             tbody.appendChild(tr);
         }
 
-        // 초기화 버튼 기능
         function resetData() {
-            if (confirm("정말 모든 출석 데이터와 분량 입력 내용을 초기화하시겠습니까? (복구 불가)")) {
+            if (confirm("모든 참석 데이터와 분량 기록을 삭제할까요?")) {
                 localStorage.clear();
                 location.reload();
             }
