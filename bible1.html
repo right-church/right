@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>90일 성경통독 출석부</title>
+    <style>
+        :root {
+            --main-blue: #3498db;
+            --dark-blue: #2c3e50;
+            --light-bg: #f4f7f6;
+            --border-color: #ddd;
+        }
+
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: var(--light-bg);
+            margin: 0;
+            padding: 15px;
+            color: #333;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--dark-blue);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+        }
+
+        /* 테이블 컨테이너: 가로/세로 스크롤 및 모바일 높이 대응 */
+        .table-outer {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden; /* 테두리 둥글게 유지 */
+            border: 1px solid var(--border-color);
+        }
+
+        .table-inner {
+            max-height: 70vh; /* 화면 높이에 맞춰 조정 */
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            text-align: center;
+        }
+
+        /* 공통 헤더 스타일 */
+        th {
+            background-color: var(--main-blue);
+            color: white;
+            padding: 14px 10px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid #2980b9;
+            white-space: nowrap;
+        }
+
+        /* 좌측 '일차' 열 고정 */
+        td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 110;
+            min-width: 70px;
+            background-color: #fff;
+            border-right: 2px solid var(--main-blue);
+        }
+
+        th:first-child {
+            background-color: var(--main-blue);
+            z-index: 120;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            background-color: #fff;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #fcfdfe;
+        }
+
+        /* 입력 및 체크박스 최적화 */
+        input[type="text"] {
+            width: 100px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            text-align: center;
+            outline-color: var(--main-blue);
+        }
+
+        input[type="checkbox"] {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            accent-color: var(--main-blue);
+            vertical-align: middle;
+        }
+
+        /* 하단 버튼 영역 */
+        .footer-action {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .reset-btn {
+            padding: 12px 25px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .reset-btn:hover {
+            background-color: #c0392b;
+        }
+
+        /* 스크롤바 디자인 (웹킷 브라우저) */
+        .table-inner::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .table-inner::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📖 90일 성경통독 출석부</h1>
+    
+    <div class="table-outer">
+        <div class="table-inner">
+            <table>
+                <thead>
+                    <tr>
+                        <th>일차</th>
+                        <th>읽을 분량</th>
+                        <th>김사라</th>
+                        <th>김성은</th>
+                        <th>김정동</th>
+                        <th>김하정</th>
+                        <th>박금희</th>
+                        <th>유진헌</th>
+                        <th>이영숙</th>
+                        <th>한진경</th>
+                    </tr>
+                </thead>
+                <tbody id="attendance-body">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="footer-action">
+        <button class="reset-btn" onclick="resetData()">전체 데이터 초기화</button>
+    </div>
+
+    <script>
+        const tbody = document.getElementById('attendance-body');
+        const members = ["김사라", "김성은", "김정동", "김하정", "박금희", "유진헌", "이영숙", "한진경"];
+        const totalDays = 90;
+
+        // 90일치 행 자동 생성
+        for (let i = 1; i <= totalDays; i++) {
+            const tr = document.createElement('tr');
+            
+            // 1. 일차
+            const tdDay = document.createElement('td');
+            tdDay.innerHTML = `<strong>${i}일차</strong>`;
+            tr.appendChild(tdDay);
+
+            // 2. 분량 입력칸
+            const tdPortion = document.createElement('td');
+            const inputPortion = document.createElement('input');
+            inputPortion.type = 'text';
+            inputPortion.placeholder = '분량';
+            inputPortion.value = localStorage.getItem(`bible-portion-${i}`) || '';
+            inputPortion.oninput = function() {
+                localStorage.setItem(`bible-portion-${i}`, this.value);
+            };
+            tdPortion.appendChild(inputPortion);
+            tr.appendChild(tdPortion);
+
+            // 3. 참석자별 체크박스
+            members.forEach(name => {
+                const tdCheck = document.createElement('td');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                const storageKey = `bible-check-${i}-${name}`;
+                checkbox.checked = localStorage.getItem(storageKey) === 'true';
+                
+                checkbox.onchange = function() {
+                    localStorage.setItem(storageKey, this.checked);
+                };
+                
+                tdCheck.appendChild(checkbox);
+                tr.appendChild(tdCheck);
+            });
+
+            tbody.appendChild(tr);
+        }
+
+        // 데이터 초기화 함수
+        function resetData() {
+            if (confirm("모든 참석 정보와 분량 기록이 삭제됩니다. 정말 초기화할까요?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+
+</body>
+</html>
