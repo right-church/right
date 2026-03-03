@@ -2,107 +2,132 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>90일 성경통독 출석부</title>
     <style>
-        body {
-            font-family: 'Malgun Gothic', sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .table-container {
-            max-width: 1100px;
-            max-height: 80vh; /* 화면 높이의 80%까지만 보여주고 내부 스크롤 발생 */
-            margin: 0 auto;
-            background: #fff;
-            padding: 0; /* 테두리 겹침 방지를 위해 0으로 조정 */
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow: auto; /* 가로 세로 스크롤 모두 허용 */
-            border: 1px solid #ddd;
-        }
-        table {
-            width: 100%;
-            border-collapse: separate; /* sticky 작동을 위해 separate 설정 */
-            border-spacing: 0;
-            text-align: center;
-        }
-        th, td {
-            border-right: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
-            padding: 12px;
-            white-space: nowrap;
-        }
-        /* 이름 줄(헤더) 고정 핵심 설정 */
-        th {
-            background-color: #3498db;
-            color: white;
-            position: sticky;
-            top: 0; /* 최상단에 고정 */
-            z-index: 100; /* 데이터 줄보다 위에 위치 */
-            box-shadow: 0 2px 2px rgba(0,0,0,0.1); /* 고정된 느낌을 주는 그림자 */
-        }
-        /* 일차 열(첫 번째 칸)도 왼쪽 고정하고 싶을 때를 대비한 설정 (선택사항) */
-        td:first-child {
-            background-color: #fefefe;
-            position: sticky;
-            left: 0;
-            z-index: 10;
-            font-weight: bold;
-            border-right: 2px solid #3498db;
-        }
-        th:first-child {
-            left: 0;
-            z-index: 110; /* 헤더이면서 첫 열인 경우 가장 위에 */
+        :root {
+            --primary-color: #3498db;
+            --bg-color: #f4f7f6;
+            --border-color: #ddd;
         }
 
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 10px;
+            color: #333;
+            -webkit-text-size-adjust: none;
         }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        input[type="text"] {
-            width: 110px;
-            padding: 6px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+
+        h1 {
             text-align: center;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin: 15px 0;
         }
+
+        /* 모바일 최적화 컨테이너 */
+        .table-container {
+            width: 100%;
+            max-height: 75vh; 
+            overflow: auto; 
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            -webkit-overflow-scrolling: touch; /* 아이폰 부드러운 스크롤 */
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        /* 상단 헤더 고정 (이름 줄) */
+        th {
+            position: sticky;
+            top: 0;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 8px;
+            font-size: 14px;
+            z-index: 100;
+            border-bottom: 2px solid #2980b9;
+            white-space: nowrap;
+        }
+
+        /* 좌측 일차 고정 (스크롤해도 일차가 보이게 함) */
+        td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
+            z-index: 110;
+            background-color: #fff;
+            font-weight: bold;
+            border-right: 2px solid var(--primary-color);
+            min-width: 60px;
+        }
+
+        th:first-child {
+            background-color: var(--primary-color);
+            z-index: 120;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            font-size: 14px;
+            background-color: #fff;
+        }
+
+        /* 입력칸 모바일 최적화 */
+        input[type="text"] {
+            width: 90px;
+            padding: 8px 4px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 13px;
+            -webkit-appearance: none; /* iOS 기본 스타일 제거 */
+        }
+
+        /* 체크박스 크기 키움 (터치 편의성) */
         input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
+            accent-color: var(--primary-color); /* 체크박스 색상 변경 */
         }
+
+        tr:nth-child(even) td {
+            background-color: #fcfdfe;
+        }
+
         .reset-btn {
             display: block;
             margin: 20px auto;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #e74c3c;
             color: white;
             border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
-    <h1>📖 90일 성경통독 출석부</h1>
+    <h1>📖 90일 성경통독</h1>
     
     <div class="table-container">
         <table>
             <thead>
                 <tr>
                     <th>일차</th>
-                    <th>읽을 분량</th>
+                    <th>분량</th>
                     <th>김사라</th>
                     <th>김성은</th>
                     <th>김정동</th>
@@ -113,12 +138,11 @@
                     <th>한진경</th>
                 </tr>
             </thead>
-            <tbody id="attendance-body">
-                </tbody>
+            <tbody id="attendance-body"></tbody>
         </table>
     </div>
 
-    <button class="reset-btn" onclick="resetData()">전체 초기화 (데이터 삭제)</button>
+    <button class="reset-btn" onclick="resetData()">전체 데이터 초기화</button>
 
     <script>
         const tbody = document.getElementById('attendance-body');
@@ -128,49 +152,17 @@
         for (let i = 1; i <= totalDays; i++) {
             let tr = document.createElement('tr');
             
-            // 1. 일차
+            // 1. 일차 (왼쪽 고정됨)
             let tdDay = document.createElement('td');
-            tdDay.innerHTML = `${i}일차`;
+            tdDay.innerText = `${i}일`;
             tr.appendChild(tdDay);
 
             // 2. 분량
             let tdPortion = document.createElement('td');
             let inputPortion = document.createElement('input');
             inputPortion.type = 'text';
-            inputPortion.placeholder = '분량 입력';
+            inputPortion.placeholder = '분량';
             inputPortion.value = localStorage.getItem(`bible-portion-${i}`) || '';
-            inputPortion.addEventListener('input', function() {
-                localStorage.setItem(`bible-portion-${i}`, this.value);
-            });
+            inputPortion.oninput = function() { localStorage.setItem(`bible-portion-${i}`, this.value); };
             tdPortion.appendChild(inputPortion);
-            tr.appendChild(tdPortion);
-
-            // 3. 8명 체크박스
-            members.forEach((name) => {
-                let tdCheck = document.createElement('td');
-                let checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                const storageKey = `bible-check-${i}-${name}`;
-                checkbox.checked = localStorage.getItem(storageKey) === 'true';
-                
-                checkbox.addEventListener('change', function() {
-                    localStorage.setItem(storageKey, this.checked);
-                });
-                
-                tdCheck.appendChild(checkbox);
-                tr.appendChild(tdCheck);
-            });
-
-            tbody.appendChild(tr);
-        }
-
-        function resetData() {
-            if (confirm("정말 모든 데이터를 삭제할까요?")) {
-                localStorage.clear();
-                location.reload();
-            }
-        }
-    </script>
-
-</body>
-</html>
+            tr
