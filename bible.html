@@ -2,183 +2,223 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>90일 성경통독 출석부</title>
     <style>
         :root {
-            --primary: #3498db;
-            --secondary: #2980b9;
-            --bg: #f8f9fa;
-            --text: #333;
-            --border: #dee2e6;
+            --main-blue: #3498db;
+            --dark-blue: #2c3e50;
+            --light-bg: #f4f7f6;
+            --border-color: #ddd;
         }
 
         body {
-            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-            background-color: var(--bg);
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: var(--light-bg);
             margin: 0;
-            padding: 20px;
-            color: var(--text);
+            padding: 15px;
+            color: #333;
         }
 
         h1 {
             text-align: center;
-            color: #2c3e50;
+            color: var(--dark-blue);
+            font-size: 1.6rem;
             margin-bottom: 20px;
-            font-size: 1.5rem;
         }
 
-        .table-container {
-            max-width: 1100px;
-            max-height: 80vh;
+        .table-outer {
+            max-width: 1200px;
             margin: 0 auto;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .table-inner {
+            max-height: 70vh;
             overflow: auto;
-            border: 1px solid var(--border);
+            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
             border-collapse: separate;
             border-spacing: 0;
+            text-align: center;
         }
 
         th {
-            background-color: var(--primary);
+            background-color: var(--main-blue);
             color: white;
+            padding: 14px 10px;
+            font-size: 0.95rem;
+            font-weight: bold;
             position: sticky;
             top: 0;
             z-index: 100;
-            padding: 15px 12px;
-            font-weight: 600;
-            border-bottom: 2px solid var(--secondary);
+            border-bottom: 2px solid #2980b9;
+            white-space: nowrap;
         }
 
-        td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-            border-right: 1px solid var(--border);
-            text-align: center;
-            transition: background-color 0.2s;
-        }
-
-        /* 왼쪽 고정 열 */
         td:first-child, th:first-child {
             position: sticky;
             left: 0;
+            z-index: 110;
+            min-width: 70px;
             background-color: #fff;
-            z-index: 50;
-            border-right: 2px solid var(--primary);
-            font-weight: bold;
+            border-right: 2px solid var(--main-blue);
         }
-        th:first-child { background-color: var(--primary); z-index: 110; }
 
-        tr:hover td { background-color: #f1f7fd; }
+        th:first-child {
+            background-color: var(--main-blue);
+            z-index: 120;
+        }
+
+        td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            background-color: #fff;
+            white-space: nowrap;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #fcfdfe;
+        }
 
         input[type="text"] {
-            width: 100px;
-            padding: 6px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
+            width: 120px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 0.9rem;
             text-align: center;
-            outline: none;
+            outline-color: var(--main-blue);
         }
-        input[type="text"]:focus { border-color: var(--primary); }
 
         input[type="checkbox"] {
             width: 22px;
             height: 22px;
             cursor: pointer;
-            accent-color: var(--primary);
+            accent-color: var(--main-blue);
+            vertical-align: middle;
+        }
+
+        .footer-action {
+            text-align: center;
+            margin-top: 25px;
         }
 
         .reset-btn {
-            display: block;
-            margin: 25px auto;
-            padding: 12px 24px;
+            padding: 12px 25px;
             background-color: #e74c3c;
             color: white;
             border: none;
             border-radius: 8px;
-            cursor: pointer;
             font-weight: bold;
-            transition: 0.2s;
+            cursor: pointer;
         }
-        .reset-btn:hover { background-color: #c0392b; }
     </style>
 </head>
 <body>
 
     <h1>📖 90일 성경통독 출석부</h1>
     
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>일차</th>
-                    <th>읽을 분량</th>
-                    <th>김사라</th>
-                    <th>김성은</th>
-                    <th>김정동</th>
-                    <th>김하정</th>
-                    <th>박금희</th>
-                    <th>유진헌</th>
-                    <th>이영숙</th>
-                    <th>한진경</th>
-                </tr>
-            </thead>
-            <tbody id="attendance-body"></tbody>
-        </table>
+    <div class="table-outer">
+        <div class="table-inner">
+            <table>
+                <thead>
+                    <tr>
+                        <th>일차</th>
+                        <th>읽을 분량</th>
+                        <th>김사라</th>
+                        <th>김성은</th>
+                        <th>김정동</th>
+                        <th>김하정</th>
+                        <th>박금희</th>
+                        <th>유진헌</th>
+                        <th>이영숙</th>
+                        <th>한진경</th>
+                    </tr>
+                </thead>
+                <tbody id="attendance-body"></tbody>
+            </table>
+        </div>
     </div>
 
-    <button class="reset-btn" onclick="resetData()">모든 데이터 초기화</button>
+    <div class="footer-action">
+        <button class="reset-btn" onclick="resetData()">전체 데이터 초기화</button>
+    </div>
 
     <script>
-        const members = ["김사라", "김성은", "김정동", "김하정", "박금희", "유진헌", "이영숙", "한진경"];
         const tbody = document.getElementById('attendance-body');
+        const members = ["김사라", "김성은", "김정동", "김하정", "박금희", "유진헌", "이영숙", "한진경"];
+        
+        // 이미지 데이터 기반 성경 분량 정리
+        const biblePlan = {
+            1: "창1~13", 2: "창14~26", 3: "창27~39", 4: "창40~출2", 5: "출3~15", 6: "출16~29",
+            7: "출30~레2", 8: "레3~15", 9: "레16~민1", 10: "민2~14", 11: "민15~27", 12: "민28~신5",
+            13: "신6~18", 14: "신19~31", 15: "신32~수10", 16: "수11~23", 17: "수24~삿12", 18: "삿13~삼상1",
+            19: "삼상2~삼상14", 20: "삼상15~27", 21: "삼상28~삼하9", 22: "삼하10~22", 23: "삼하23~왕상11", 24: "왕상12~왕하3",
+            25: "왕하4~왕하16", 26: "왕하17~대상4", 27: "대상5~17", 28: "대상18~대하1", 29: "대하2~대하14", 30: "대하15~28",
+            31: "대하29~스5", 32: "스6~느8", 33: "느9~에8", 34: "에9~욥11", 35: "욥12~24", 36: "욥25~38",
+            37: "욥39~시9", 38: "시10~시22", 39: "시23~시35", 40: "시36~48", 41: "시49~61", 42: "시62~75",
+            43: "시76~88", 44: "시89~101", 45: "시102~114", 46: "시115~127", 47: "시128~140", 48: "시141~잠4",
+            49: "잠5~17", 50: "잠18~30", 51: "잠31~전12", 52: "아1~사5", 53: "사6~18", 54: "사19~32",
+            55: "사33~45", 56: "사46~58", 57: "사59~렘5", 58: "렘6~18", 59: "렘19~31", 60: "렘32~45",
+            61: "렘46~겔1", 62: "겔2~14", 63: "겔15~27", 64: "겔28~40", 65: "겔51~단5", 66: "단6~호7",
+            67: "호8~암3", 68: "암4~미2", 69: "미3~습2", 70: "습3~슥10", 71: "슥11~마5", 72: "마6~19",
+            73: "마20~막4", 74: "막5~눅1", 75: "눅2~14", 76: "눅15~요3", 77: "요4~16", 78: "요17~행9",
+            79: "행10~22", 80: "행23~롬7", 81: "롬8~고전4", 82: "고전5~고후1", 83: "고후2~갈1", 84: "갈2~빌3",
+            85: "빌4~살후3", 86: "딤전1~몬1", 87: "히1~약1", 88: "약2~요일2", 89: "요일3~계8", 90: "계9~22"
+        };
 
-        function initTable() {
-            for (let i = 1; i <= 90; i++) {
-                const tr = document.createElement('tr');
-                
-                // 일차
-                tr.innerHTML = `<td>${i}일차</td>`;
+        for (let i = 1; i <= 90; i++) {
+            const tr = document.createElement('tr');
+            
+            // 1. 일차
+            const tdDay = document.createElement('td');
+            tdDay.innerHTML = `<strong>${i}일차</strong>`;
+            tr.appendChild(tdDay);
 
-                // 분량
-                const tdPortion = document.createElement('td');
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.placeholder = '분량';
-                input.value = localStorage.getItem(`bible-portion-${i}`) || '';
-                input.oninput = (e) => localStorage.setItem(`bible-portion-${i}`, e.target.value);
-                tdPortion.appendChild(input);
-                tr.appendChild(tdPortion);
+            // 2. 분량 (기본값 설정)
+            const tdPortion = document.createElement('td');
+            const inputPortion = document.createElement('input');
+            inputPortion.type = 'text';
+            // 저장된 값이 없으면 biblePlan에서 가져옴
+            inputPortion.value = localStorage.getItem(`bible-portion-${i}`) || biblePlan[i] || '';
+            inputPortion.oninput = function() {
+                localStorage.setItem(`bible-portion-${i}`, this.value);
+            };
+            tdPortion.appendChild(inputPortion);
+            tr.appendChild(tdPortion);
 
-                // 체크박스
-                members.forEach(name => {
-                    const td = document.createElement('td');
-                    const cb = document.createElement('input');
-                    cb.type = 'checkbox';
-                    cb.checked = localStorage.getItem(`bible-check-${i}-${name}`) === 'true';
-                    cb.onchange = (e) => localStorage.setItem(`bible-check-${i}-${name}`, e.target.checked);
-                    td.appendChild(cb);
-                    tr.appendChild(td);
-                });
+            // 3. 참석자별 체크박스
+            members.forEach(name => {
+                const tdCheck = document.createElement('td');
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                const storageKey = `bible-check-${i}-${name}`;
+                checkbox.checked = localStorage.getItem(storageKey) === 'true';
+                checkbox.onchange = function() {
+                    localStorage.setItem(storageKey, this.checked);
+                };
+                tdCheck.appendChild(checkbox);
+                tr.appendChild(tdCheck);
+            });
 
-                tbody.appendChild(tr);
-            }
+            tbody.appendChild(tr);
         }
 
         function resetData() {
-            if (confirm("정말 모든 데이터를 삭제하시겠습니까?")) {
+            if (confirm("모든 기록이 삭제되고 기본 분량으로 초기화됩니다. 진행하시겠습니까?")) {
                 localStorage.clear();
                 location.reload();
             }
         }
-
-        initTable();
     </script>
 </body>
 </html>
