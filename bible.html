@@ -2,8 +2,8 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>90일 성경통독 출석부 (가로형)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>90일 성경통독 출석부</title>
     <style>
         :root {
             --main-blue: #3498db;
@@ -13,114 +13,117 @@
         }
 
         body {
-            font-family: 'Malgun Gothic', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif;
             background-color: var(--light-bg);
             margin: 0;
             padding: 10px;
+            -webkit-font-smoothing: antialiased;
         }
 
         h1 {
             text-align: center;
             color: var(--dark-blue);
             font-size: 1.4rem;
+            margin: 15px 0;
         }
 
-        /* 표가 들어갈 컨테이너 */
+        /* 사파리 스크롤 최적화 */
         .table-outer {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
             background: #fff;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
             border: 1px solid var(--border-color);
+            overflow: hidden; /* 테두리 둥글게 유지 */
         }
 
         .table-inner {
-            max-height: 80vh;
-            overflow: auto; /* 가로, 세로 스크롤 활성화 */
-            -webkit-overflow-scrolling: touch;
+            max-height: 75vh;
+            overflow: auto; 
+            -webkit-overflow-scrolling: touch; /* iOS 부드러운 스크롤 */
         }
 
         table {
             border-collapse: separate;
             border-spacing: 0;
-            table-layout: fixed; /* 너비 고정으로 렌더링 오류 방지 */
-            width: auto; 
+            width: 100%;
         }
 
-        /* 첫 번째 열(이름) 고정 */
+        /* 왼쪽 이름 열 고정 (사파리 호환성 강화) */
         th:first-child, td:first-child {
+            position: -webkit-sticky;
             position: sticky;
             left: 0;
-            z-index: 110;
-            width: 100px; /* 이름 칸 너비 */
+            z-index: 10;
+            min-width: 85px;
             background-color: #f8f9fa;
             border-right: 2px solid var(--main-blue);
             font-weight: bold;
-            text-align: center;
         }
 
-        /* 헤더(날짜) 고정 */
+        /* 상단 날짜 헤더 고정 */
         th {
             background-color: var(--main-blue);
             color: white;
-            padding: 10px 0;
+            padding: 12px 10px;
             font-size: 0.85rem;
+            position: -webkit-sticky;
             position: sticky;
             top: 0;
-            z-index: 100;
-            width: 70px; /* 각 날짜 칸 너비 */
+            z-index: 5;
             border-bottom: 2px solid #2980b9;
-            border-right: 1px solid rgba(255,255,255,0.2);
+            white-space: nowrap;
         }
 
-        th:first-child { z-index: 120; background-color: var(--main-blue); }
+        /* 왼쪽 상단 모서리 칸 고정 */
+        th:first-child {
+            z-index: 15;
+            background-color: var(--main-blue);
+        }
 
         td {
-            padding: 10px 0;
+            padding: 10px;
             border-bottom: 1px solid var(--border-color);
             border-right: 1px solid var(--border-color);
             background-color: #fff;
             text-align: center;
-            height: 40px;
+            min-width: 65px; /* 날짜별 칸 최소 너비 */
         }
 
-        /* 읽을 말씀 행 스타일 */
+        /* 말씀 행 스타일 */
         .plan-row td {
             background-color: #ebf5fb;
-            font-size: 0.7rem;
-            color: #2e86de;
+            font-size: 0.75rem;
+            color: #2980b9;
             font-weight: bold;
-            line-height: 1.2;
-            word-break: break-all;
-            padding: 5px 2px;
+            white-space: nowrap; /* 사파리 텍스트 짤림 방지 */
         }
-
-        tr:hover td { background-color: #f1f1f1; }
 
         input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             cursor: pointer;
             accent-color: var(--main-blue);
+            -webkit-appearance: checkbox; /* 사파리 기본 모양 강제 */
         }
 
-        .footer-action { text-align: center; margin-top: 20px; }
+        .footer-action { text-align: center; margin-top: 20px; padding-bottom: 30px; }
         .reset-btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background-color: #e74c3c;
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+            -webkit-appearance: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>📖 90일 성경통독 (가로형)</h1>
+    <h1>📖 90일 성경통독 출석부</h1>
     
     <div class="table-outer">
         <div class="table-inner">
@@ -128,16 +131,15 @@
                 <thead>
                     <tr id="header-row">
                         <th>구분 \ 일차</th>
-                        </tr>
+                    </tr>
                 </thead>
-                <tbody id="attendance-body">
-                    </tbody>
+                <tbody id="attendance-body"></tbody>
             </table>
         </div>
     </div>
 
     <div class="footer-action">
-        <button class="reset-btn" onclick="resetData()">전체 기록 초기화</button>
+        <button class="reset-btn" onclick="resetData()">전체 데이터 초기화</button>
     </div>
 
     <script>
@@ -160,11 +162,11 @@
             85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22"
         };
 
-        const headerRow = document.getElementById('header-row');
-        const attendanceBody = document.getElementById('attendance-body');
+        function render() {
+            const headerRow = document.getElementById('header-row');
+            const tbody = document.getElementById('attendance-body');
 
-        function init() {
-            // 1. 헤더 (1-90일) 생성
+            // 1. 헤더 생성
             for (let i = 1; i <= 90; i++) {
                 const th = document.createElement('th');
                 th.textContent = i + '일';
@@ -183,7 +185,7 @@
                 td.textContent = biblePlan[i];
                 planRow.appendChild(td);
             }
-            attendanceBody.appendChild(planRow);
+            tbody.appendChild(planRow);
 
             // 3. 멤버별 행 생성
             members.forEach(name => {
@@ -202,7 +204,7 @@
                     td.appendChild(cb);
                     tr.appendChild(td);
                 }
-                attendanceBody.appendChild(tr);
+                tbody.appendChild(tr);
             });
         }
 
@@ -213,8 +215,8 @@
             }
         }
 
-        // 페이지 로드 시 즉시 실행
-        window.onload = init;
+        // DOM 로드 후 즉시 실행
+        document.addEventListener('DOMContentLoaded', render);
     </script>
 </body>
 </html>
