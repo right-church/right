@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90일 성경통독 출석부</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .table-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        input[type="text"] {
+            width: 120px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .reset-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📖 90일 성경통독 출석부 (10인용)</h1>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>일차</th>
+                    <th>읽을 분량</th>
+                    <th>참석자 1</th>
+                    <th>참석자 2</th>
+                    <th>참석자 3</th>
+                    <th>참석자 4</th>
+                    <th>참석자 5</th>
+                    <th>참석자 6</th>
+                    <th>참석자 7</th>
+                    <th>참석자 8</th>
+                    <th>참석자 9</th>
+                    <th>참석자 10</th>
+                </tr>
+            </thead>
+            <tbody id="attendance-body">
+                </tbody>
+        </table>
+    </div>
+
+    <button class="reset-btn" onclick="resetData()">전체 초기화 (데이터 삭제)</button>
+
+    <script>
+        const tbody = document.getElementById('attendance-body');
+        const totalDays = 90;
+        const totalPeople = 10;
+
+        // 90일치 테이블 자동 생성
+        for (let i = 1; i <= totalDays; i++) {
+            let tr = document.createElement('tr');
+            
+            // 1. 일차
+            let tdDay = document.createElement('td');
+            tdDay.innerHTML = `<strong>${i}일차</strong>`;
+            tr.appendChild(tdDay);
+
+            // 2. 분량 입력칸 (localStorage 연동)
+            let tdPortion = document.createElement('td');
+            let inputPortion = document.createElement('input');
+            inputPortion.type = 'text';
+            inputPortion.placeholder = '예: 창 1-3장';
+            inputPortion.value = localStorage.getItem(`portion-${i}`) || '';
+            inputPortion.addEventListener('input', function() {
+                localStorage.setItem(`portion-${i}`, this.value);
+            });
+            tdPortion.appendChild(inputPortion);
+            tr.appendChild(tdPortion);
+
+            // 3. 10명 체크박스 (localStorage 연동)
+            for (let j = 1; j <= totalPeople; j++) {
+                let tdCheck = document.createElement('td');
+                let checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = localStorage.getItem(`check-${i}-${j}`) === 'true';
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(`check-${i}-${j}`, this.checked);
+                });
+                tdCheck.appendChild(checkbox);
+                tr.appendChild(tdCheck);
+            }
+
+            tbody.appendChild(tr);
+        }
+
+        // 초기화 버튼 기능
+        function resetData() {
+            if (confirm("정말 모든 출석 데이터와 분량 입력 내용을 초기화하시겠습니까? (복구 불가)")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+
+</body>
+</html>
