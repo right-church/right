@@ -110,23 +110,20 @@
             white-space: nowrap;
         }
 
+        /* 체크박스 스타일 강제 강화 */
         input[type="checkbox"] {
             width: 24px;
             height: 24px;
             cursor: pointer;
-            accent-color: var(--main-blue); 
+            accent-color: var(--main-blue) !important; 
             -webkit-appearance: checkbox;
             vertical-align: middle;
-            /* 기본 불투명도 설정 */
-            opacity: 1;
+            opacity: 1 !important;
         }
 
-        /* 조회 모드(disabled)에서도 선명하게 보이도록 설정 */
-        input[type="checkbox"]:disabled {
-            opacity: 1 !important; /* 흐릿함 제거 */
+        /* 조회 모드일 때 클릭 커서 변경 */
+        input.read-only {
             cursor: default;
-            /* iOS/Safari 등에서 흐려지는 현상 방지 */
-            filter: none;
         }
 
         .footer-action { 
@@ -242,7 +239,7 @@
                     const td = document.createElement('td');
                     const cb = document.createElement('input');
                     cb.type = 'checkbox';
-                    cb.className = 'attendance-cb';
+                    cb.className = 'attendance-cb' + (isAdmin ? '' : ' read-only');
                     
                     const key = `check-${i}-${name}`;
                     const isChecked = localStorage.getItem(key) === 'true';
@@ -250,8 +247,12 @@
                     cb.checked = isChecked;
                     if(isChecked) td.classList.add('checked-cell');
 
-                    cb.disabled = !isAdmin;
-                    cb.onchange = (e) => {
+                    // [수정] disabled 대신 클릭 이벤트를 제어하여 선명도 유지
+                    cb.onclick = (e) => {
+                        if (!isAdmin) {
+                            return false; // 관리자가 아니면 변경 방지
+                        }
+                        // 관리자일 때만 저장 로직 실행
                         localStorage.setItem(key, e.target.checked);
                         if(e.target.checked) td.classList.add('checked-cell');
                         else td.classList.remove('checked-cell');
@@ -282,7 +283,6 @@
             const adminToggleBtn = document.getElementById('toggle-admin-btn');
             const editBtn = document.getElementById('edit-members-btn');
             const resetBtn = document.getElementById('reset-data-btn');
-            const checkboxes = document.querySelectorAll('.attendance-cb');
 
             if (isAdmin) {
                 statusDisp.textContent = "🔓 현재: 관리자 모드 (수정 가능)";
@@ -299,7 +299,8 @@
                 editBtn.classList.add('hidden');
                 resetBtn.classList.add('hidden');
             }
-            checkboxes.forEach(cb => cb.disabled = !isAdmin);
+            // 전체 다시 렌더링하여 이벤트 바인딩 갱신
+            render();
         }
 
         function editMembers() {
