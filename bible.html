@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90일 성경통독 출석부 (가로형)</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .table-container {
+            max-width: 100%;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto; /* 가로 스크롤 활성화 */
+        }
+        table {
+            border-collapse: collapse;
+            min-width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            min-width: 60px; /* 일차 칸 너비 고정 */
+        }
+        /* 첫 번째, 두 번째 열(이름, 분량) 고정 */
+        th:first-child, td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #3498db;
+            color: white;
+            z-index: 5;
+            min-width: 80px;
+        }
+        th:nth-child(2), td:nth-child(2) {
+            position: sticky;
+            left: 80px; /* 이름 열 너비만큼 띄움 */
+            background-color: #ebf5fb;
+            z-index: 5;
+            min-width: 100px;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            white-space: nowrap;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        input[type="text"] {
+            width: 80px;
+            padding: 4px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .reset-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color
