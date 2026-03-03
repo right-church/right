@@ -3,70 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>90일 성경통독 출석부 (가로형)</title>
+    <title>90일 성경통독 출석부</title>
     <style>
         body {
             font-family: 'Malgun Gothic', sans-serif;
             background-color: #f4f7f6;
             margin: 0;
             padding: 20px;
+            color: #333;
         }
         h1 {
             text-align: center;
             color: #2c3e50;
         }
         .table-container {
-            max-width: 100%;
+            max-width: 1100px;
+            max-height: 80vh; /* 화면 높이의 80%까지만 보여주고 내부 스크롤 발생 */
+            margin: 0 auto;
             background: #fff;
-            padding: 10px;
+            padding: 0; /* 테두리 겹침 방지를 위해 0으로 조정 */
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow-x: auto; /* 가로 스크롤 활성화 */
+            overflow: auto; /* 가로 세로 스크롤 모두 허용 */
+            border: 1px solid #ddd;
         }
         table {
-            border-collapse: collapse;
-            min-width: 100%;
+            width: 100%;
+            border-collapse: separate; /* sticky 작동을 위해 separate 설정 */
+            border-spacing: 0;
+            text-align: center;
         }
         th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-            min-width: 60px; /* 일차 칸 너비 고정 */
+            border-right: 1px solid #ddd;
+            border-bottom: 1px solid #ddd;
+            padding: 12px;
+            white-space: nowrap;
         }
-        /* 첫 번째, 두 번째 열(이름, 분량) 고정 */
-        th:first-child, td:first-child {
-            position: sticky;
-            left: 0;
-            background-color: #3498db;
-            color: white;
-            z-index: 5;
-            min-width: 80px;
-        }
-        th:nth-child(2), td:nth-child(2) {
-            position: sticky;
-            left: 80px; /* 이름 열 너비만큼 띄움 */
-            background-color: #ebf5fb;
-            z-index: 5;
-            min-width: 100px;
-        }
+        /* 이름 줄(헤더) 고정 핵심 설정 */
         th {
             background-color: #3498db;
             color: white;
-            white-space: nowrap;
+            position: sticky;
+            top: 0; /* 최상단에 고정 */
+            z-index: 100; /* 데이터 줄보다 위에 위치 */
+            box-shadow: 0 2px 2px rgba(0,0,0,0.1); /* 고정된 느낌을 주는 그림자 */
+        }
+        /* 일차 열(첫 번째 칸)도 왼쪽 고정하고 싶을 때를 대비한 설정 (선택사항) */
+        td:first-child {
+            background-color: #fefefe;
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            font-weight: bold;
+            border-right: 2px solid #3498db;
+        }
+        th:first-child {
+            left: 0;
+            z-index: 110; /* 헤더이면서 첫 열인 경우 가장 위에 */
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
         tr:hover {
             background-color: #f1f1f1;
         }
         input[type="text"] {
-            width: 80px;
-            padding: 4px;
+            width: 110px;
+            padding: 6px;
             border: 1px solid #ccc;
             border-radius: 4px;
-            font-size: 12px;
+            text-align: center;
         }
         input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
         }
         .reset-btn {
@@ -78,88 +89,83 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 15px;
         }
     </style>
 </head>
 <body>
 
-    <h1>📖 90일 성경통독 출석부 (가로형)</h1>
+    <h1>📖 90일 성경통독 출석부</h1>
     
     <div class="table-container">
         <table>
             <thead>
-                <tr id="header-row">
-                    <th>이름</th>
-                    <th>분량/일차</th>
-                    </tr>
+                <tr>
+                    <th>일차</th>
+                    <th>읽을 분량</th>
+                    <th>김사라</th>
+                    <th>김성은</th>
+                    <th>김정동</th>
+                    <th>김하정</th>
+                    <th>박금희</th>
+                    <th>유진헌</th>
+                    <th>이영숙</th>
+                    <th>한진경</th>
+                </tr>
             </thead>
             <tbody id="attendance-body">
                 </tbody>
         </table>
     </div>
 
-    <button class="reset-btn" onclick="resetData()">데이터 초기화</button>
+    <button class="reset-btn" onclick="resetData()">전체 초기화 (데이터 삭제)</button>
 
     <script>
-        const headerRow = document.getElementById('header-row');
         const tbody = document.getElementById('attendance-body');
         const members = ["김사라", "김성은", "김정동", "김하정", "박금희", "유진헌", "이영숙", "한진경"];
         const totalDays = 90;
 
-        // 1. 헤더 생성 (1일차 ~ 90일차)
-        for (let d = 1; d <= totalDays; d++) {
-            let th = document.createElement('th');
-            th.innerText = `${d}일`;
-            headerRow.appendChild(th);
-        }
-
-        // 2. 분량 입력 행 (이름 열은 비우고 두 번째 열에 입력칸 나열)
-        let portionRow = document.createElement('tr');
-        portionRow.innerHTML = `<td style="background:#2c3e50; font-weight:bold;">분량</td><td style="background:#fdfefe;">성경범위</td>`;
-        for (let d = 1; d <= totalDays; d++) {
-            let td = document.createElement('td');
-            let input = document.createElement('input');
-            input.type = 'text';
-            input.placeholder = '입력';
-            input.value = localStorage.getItem(`bible-portion-${d}`) || '';
-            input.oninput = function() { localStorage.setItem(`bible-portion-${d}`, this.value); };
-            td.appendChild(input);
-            portionRow.appendChild(td);
-        }
-        tbody.appendChild(portionRow);
-
-        // 3. 멤버별 출석 행 생성
-        members.forEach(name => {
+        for (let i = 1; i <= totalDays; i++) {
             let tr = document.createElement('tr');
             
-            // 이름 열
-            let tdName = document.createElement('td');
-            tdName.innerHTML = `<strong>${name}</strong>`;
-            tr.appendChild(tdName);
+            // 1. 일차
+            let tdDay = document.createElement('td');
+            tdDay.innerHTML = `${i}일차`;
+            tr.appendChild(tdDay);
 
-            // 보조 열 (체크 안내)
-            let tdInfo = document.createElement('td');
-            tdInfo.innerText = "완독여부";
-            tdInfo.style.fontSize = "12px";
-            tr.appendChild(tdInfo);
+            // 2. 분량
+            let tdPortion = document.createElement('td');
+            let inputPortion = document.createElement('input');
+            inputPortion.type = 'text';
+            inputPortion.placeholder = '분량 입력';
+            inputPortion.value = localStorage.getItem(`bible-portion-${i}`) || '';
+            inputPortion.addEventListener('input', function() {
+                localStorage.setItem(`bible-portion-${i}`, this.value);
+            });
+            tdPortion.appendChild(inputPortion);
+            tr.appendChild(tdPortion);
 
-            // 1~90일 체크박스
-            for (let d = 1; d <= totalDays; d++) {
+            // 3. 8명 체크박스
+            members.forEach((name) => {
                 let tdCheck = document.createElement('td');
                 let checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
-                const storageKey = `bible-check-${d}-${name}`;
+                const storageKey = `bible-check-${i}-${name}`;
                 checkbox.checked = localStorage.getItem(storageKey) === 'true';
-                checkbox.onchange = function() { localStorage.setItem(storageKey, this.checked); };
+                
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem(storageKey, this.checked);
+                });
                 
                 tdCheck.appendChild(checkbox);
                 tr.appendChild(tdCheck);
-            }
+            });
+
             tbody.appendChild(tr);
-        });
+        }
 
         function resetData() {
-            if (confirm("정말 모든 데이터를 초기화할까요?")) {
+            if (confirm("정말 모든 데이터를 삭제할까요?")) {
                 localStorage.clear();
                 location.reload();
             }
