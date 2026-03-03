@@ -74,4 +74,97 @@
             margin: 20px auto;
             padding: 10px 20px;
             background-color: #e74c3c;
-            color
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>📖 90일 성경통독 출석부 (가로형)</h1>
+    
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr id="header-row">
+                    <th>이름</th>
+                    <th>분량/일차</th>
+                    </tr>
+            </thead>
+            <tbody id="attendance-body">
+                </tbody>
+        </table>
+    </div>
+
+    <button class="reset-btn" onclick="resetData()">데이터 초기화</button>
+
+    <script>
+        const headerRow = document.getElementById('header-row');
+        const tbody = document.getElementById('attendance-body');
+        const members = ["김사라", "김성은", "김정동", "김하정", "박금희", "유진헌", "이영숙", "한진경"];
+        const totalDays = 90;
+
+        // 1. 헤더 생성 (1일차 ~ 90일차)
+        for (let d = 1; d <= totalDays; d++) {
+            let th = document.createElement('th');
+            th.innerText = `${d}일`;
+            headerRow.appendChild(th);
+        }
+
+        // 2. 분량 입력 행 (이름 열은 비우고 두 번째 열에 입력칸 나열)
+        let portionRow = document.createElement('tr');
+        portionRow.innerHTML = `<td style="background:#2c3e50; font-weight:bold;">분량</td><td style="background:#fdfefe;">성경범위</td>`;
+        for (let d = 1; d <= totalDays; d++) {
+            let td = document.createElement('td');
+            let input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = '입력';
+            input.value = localStorage.getItem(`bible-portion-${d}`) || '';
+            input.oninput = function() { localStorage.setItem(`bible-portion-${d}`, this.value); };
+            td.appendChild(input);
+            portionRow.appendChild(td);
+        }
+        tbody.appendChild(portionRow);
+
+        // 3. 멤버별 출석 행 생성
+        members.forEach(name => {
+            let tr = document.createElement('tr');
+            
+            // 이름 열
+            let tdName = document.createElement('td');
+            tdName.innerHTML = `<strong>${name}</strong>`;
+            tr.appendChild(tdName);
+
+            // 보조 열 (체크 안내)
+            let tdInfo = document.createElement('td');
+            tdInfo.innerText = "완독여부";
+            tdInfo.style.fontSize = "12px";
+            tr.appendChild(tdInfo);
+
+            // 1~90일 체크박스
+            for (let d = 1; d <= totalDays; d++) {
+                let tdCheck = document.createElement('td');
+                let checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                const storageKey = `bible-check-${d}-${name}`;
+                checkbox.checked = localStorage.getItem(storageKey) === 'true';
+                checkbox.onchange = function() { localStorage.setItem(storageKey, this.checked); };
+                
+                tdCheck.appendChild(checkbox);
+                tr.appendChild(tdCheck);
+            }
+            tbody.appendChild(tr);
+        });
+
+        function resetData() {
+            if (confirm("정말 모든 데이터를 초기화할까요?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+
+</body>
+</html>
