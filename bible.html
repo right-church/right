@@ -2,132 +2,123 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>90일 성경통독 출석부</title>
     <style>
         :root {
-            --primary-color: #3498db;
-            --bg-color: #f4f7f6;
-            --border-color: #ddd;
+            --primary: #3498db;
+            --secondary: #2980b9;
+            --bg: #f8f9fa;
+            --text: #333;
+            --border: #dee2e6;
         }
 
         body {
-            font-family: 'Malgun Gothic', sans-serif;
-            background-color: var(--bg-color);
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+            background-color: var(--bg);
             margin: 0;
-            padding: 10px;
-            color: #333;
-            -webkit-text-size-adjust: none;
+            padding: 20px;
+            color: var(--text);
         }
 
         h1 {
             text-align: center;
-            font-size: 1.5rem;
             color: #2c3e50;
-            margin: 15px 0;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
         }
 
-        /* 모바일 최적화 컨테이너 */
         .table-container {
-            width: 100%;
-            max-height: 75vh; 
-            overflow: auto; 
+            max-width: 1100px;
+            max-height: 80vh;
+            margin: 0 auto;
             background: #fff;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            border: 1px solid var(--border-color);
-            -webkit-overflow-scrolling: touch; /* 아이폰 부드러운 스크롤 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: auto;
+            border: 1px solid var(--border);
         }
 
         table {
+            width: 100%;
             border-collapse: separate;
             border-spacing: 0;
-            width: 100%;
         }
 
-        /* 상단 헤더 고정 (이름 줄) */
         th {
+            background-color: var(--primary);
+            color: white;
             position: sticky;
             top: 0;
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px 8px;
-            font-size: 14px;
             z-index: 100;
-            border-bottom: 2px solid #2980b9;
-            white-space: nowrap;
-        }
-
-        /* 좌측 일차 고정 (스크롤해도 일차가 보이게 함) */
-        td:first-child, th:first-child {
-            position: sticky;
-            left: 0;
-            z-index: 110;
-            background-color: #fff;
-            font-weight: bold;
-            border-right: 2px solid var(--primary-color);
-            min-width: 60px;
-        }
-
-        th:first-child {
-            background-color: var(--primary-color);
-            z-index: 120;
+            padding: 15px 12px;
+            font-weight: 600;
+            border-bottom: 2px solid var(--secondary);
         }
 
         td {
-            padding: 10px;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
             text-align: center;
-            border-bottom: 1px solid var(--border-color);
-            border-right: 1px solid var(--border-color);
-            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        /* 왼쪽 고정 열 */
+        td:first-child, th:first-child {
+            position: sticky;
+            left: 0;
             background-color: #fff;
+            z-index: 50;
+            border-right: 2px solid var(--primary);
+            font-weight: bold;
         }
+        th:first-child { background-color: var(--primary); z-index: 110; }
 
-        /* 입력칸 모바일 최적화 */
+        tr:hover td { background-color: #f1f7fd; }
+
         input[type="text"] {
-            width: 90px;
-            padding: 8px 4px;
-            border: 1px solid #ccc;
+            width: 100px;
+            padding: 6px;
+            border: 1px solid var(--border);
             border-radius: 6px;
-            font-size: 13px;
-            -webkit-appearance: none; /* iOS 기본 스타일 제거 */
+            text-align: center;
+            outline: none;
         }
+        input[type="text"]:focus { border-color: var(--primary); }
 
-        /* 체크박스 크기 키움 (터치 편의성) */
         input[type="checkbox"] {
-            width: 24px;
-            height: 24px;
+            width: 22px;
+            height: 22px;
             cursor: pointer;
-            accent-color: var(--primary-color); /* 체크박스 색상 변경 */
-        }
-
-        tr:nth-child(even) td {
-            background-color: #fcfdfe;
+            accent-color: var(--primary);
         }
 
         .reset-btn {
             display: block;
-            margin: 20px auto;
+            margin: 25px auto;
             padding: 12px 24px;
             background-color: #e74c3c;
             color: white;
             border: none;
             border-radius: 8px;
+            cursor: pointer;
             font-weight: bold;
-            font-size: 14px;
+            transition: 0.2s;
         }
+        .reset-btn:hover { background-color: #c0392b; }
     </style>
 </head>
 <body>
 
-    <h1>📖 90일 성경통독</h1>
+    <h1>📖 90일 성경통독 출석부</h1>
     
     <div class="table-container">
         <table>
             <thead>
                 <tr>
                     <th>일차</th>
-                    <th>분량</th>
+                    <th>읽을 분량</th>
                     <th>김사라</th>
                     <th>김성은</th>
                     <th>김정동</th>
@@ -142,27 +133,52 @@
         </table>
     </div>
 
-    <button class="reset-btn" onclick="resetData()">전체 데이터 초기화</button>
+    <button class="reset-btn" onclick="resetData()">모든 데이터 초기화</button>
 
     <script>
-        const tbody = document.getElementById('attendance-body');
         const members = ["김사라", "김성은", "김정동", "김하정", "박금희", "유진헌", "이영숙", "한진경"];
-        const totalDays = 90;
+        const tbody = document.getElementById('attendance-body');
 
-        for (let i = 1; i <= totalDays; i++) {
-            let tr = document.createElement('tr');
-            
-            // 1. 일차 (왼쪽 고정됨)
-            let tdDay = document.createElement('td');
-            tdDay.innerText = `${i}일`;
-            tr.appendChild(tdDay);
+        function initTable() {
+            for (let i = 1; i <= 90; i++) {
+                const tr = document.createElement('tr');
+                
+                // 일차
+                tr.innerHTML = `<td>${i}일차</td>`;
 
-            // 2. 분량
-            let tdPortion = document.createElement('td');
-            let inputPortion = document.createElement('input');
-            inputPortion.type = 'text';
-            inputPortion.placeholder = '분량';
-            inputPortion.value = localStorage.getItem(`bible-portion-${i}`) || '';
-            inputPortion.oninput = function() { localStorage.setItem(`bible-portion-${i}`, this.value); };
-            tdPortion.appendChild(inputPortion);
-            tr
+                // 분량
+                const tdPortion = document.createElement('td');
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = '분량';
+                input.value = localStorage.getItem(`bible-portion-${i}`) || '';
+                input.oninput = (e) => localStorage.setItem(`bible-portion-${i}`, e.target.value);
+                tdPortion.appendChild(input);
+                tr.appendChild(tdPortion);
+
+                // 체크박스
+                members.forEach(name => {
+                    const td = document.createElement('td');
+                    const cb = document.createElement('input');
+                    cb.type = 'checkbox';
+                    cb.checked = localStorage.getItem(`bible-check-${i}-${name}`) === 'true';
+                    cb.onchange = (e) => localStorage.setItem(`bible-check-${i}-${name}`, e.target.checked);
+                    td.appendChild(cb);
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            }
+        }
+
+        function resetData() {
+            if (confirm("정말 모든 데이터를 삭제하시겠습니까?")) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        initTable();
+    </script>
+</body>
+</html>
