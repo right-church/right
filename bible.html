@@ -98,7 +98,6 @@
             transition: background-color 0.2s;
         }
 
-        /* 체크 시 셀 배경색 */
         td.checked-cell {
             background-color: var(--highlight-yellow) !important;
         }
@@ -111,20 +110,23 @@
             white-space: nowrap;
         }
 
-        /* 체크박스 디자인 수정 */
         input[type="checkbox"] {
             width: 24px;
             height: 24px;
             cursor: pointer;
-            /* 메인 파란색으로 통일 */
             accent-color: var(--main-blue); 
             -webkit-appearance: checkbox;
             vertical-align: middle;
+            /* 기본 불투명도 설정 */
+            opacity: 1;
         }
 
+        /* 조회 모드(disabled)에서도 선명하게 보이도록 설정 */
         input[type="checkbox"]:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+            opacity: 1 !important; /* 흐릿함 제거 */
+            cursor: default;
+            /* iOS/Safari 등에서 흐려지는 현상 방지 */
+            filter: none;
         }
 
         .footer-action { 
