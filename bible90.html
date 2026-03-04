@@ -3,57 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="apple-touch-icon" href="icon.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>90일 성경통독 출석부</title>
     <style>
         :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f4f7f6; --border-color: #ddd; --admin-color: #27ae60; --highlight-yellow: #fff9c4; --container-width: 95%; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background-color: var(--light-bg); margin: 0; padding: 10px 0; }
         h1 { text-align: center; color: var(--dark-blue); font-size: 1.2rem; margin: 10px 0 20px 0; }
         
-        /* 공통 여백 설정: 모든 박스의 폭을 동일하게 맞춤 */
         .content-box { max-width: var(--container-width); margin: 0 auto 15px auto; width: var(--container-width); }
 
-        /* 통계 영역 */
+        /* 통계 및 진행바 */
         .stats-container { display: flex; justify-content: space-around; background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); box-sizing: border-box; }
         .stat-item { text-align: center; flex: 1; }
         .stat-value { font-size: 1.1rem; font-weight: bold; color: var(--main-blue); display: block; }
         .stat-label { font-size: 0.7rem; color: #7f8c8d; }
-
-        /* 진행바 영역 */
         .progress-section { text-align: center; margin-bottom: 25px; }
         .progress-bg { background: #eee; border-radius: 10px; height: 12px; width: 100%; overflow: hidden; }
         .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 1s; }
 
-        /* 표 영역: 내부 높이 제한 없이 전체 스크롤 */
+        /* 출석부 표 */
         .table-outer { background: #fff; border-radius: 10px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); box-sizing: border-box; }
         .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; }
-        
         th, td { padding: 0; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; vertical-align: middle; height: 46px; }
-        
-        /* 헤더 고정 */
         th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 30; font-size: 0.75rem; }
-        
-        /* 이름 열 고정 */
         th:first-child, td:first-child { width: 70px; position: sticky; left: 0; z-index: 31; background-color: #f8f9fa; border-right: 2px solid var(--main-blue); font-weight: bold; }
         th:first-child { z-index: 40; }
-        
         th:not(:first-child), td:not(:first-child) { width: 50px; min-width: 50px; }
         .plan-row td { background-color: #ebf5fb !important; color: #2980b9; font-size: 0.65rem; line-height: 1.2; font-weight: bold; padding: 0 2px; }
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
         input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--main-blue); cursor: pointer; }
 
-        /* 기도 게시판 영역 */
+        /* 기도 게시판 및 좋아요 */
         .board-container { background: #fff; border-radius: 10px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); box-sizing: border-box; }
         .board-title { font-size: 1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 12px; }
-        .board-list { margin-bottom: 15px; text-align: left; }
         .board-item { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 0.88rem; border-left: 4px solid var(--main-blue); position: relative; line-height: 1.5; }
         .btn-delete { background: #ff7675; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; float: right; margin-left: 10px; }
         
-        .board-input-group { display: flex; flex-direction: column; gap: 10px; }
+        .like-container { display: flex; align-items: center; justify-content: flex-end; margin-top: 8px; }
+        .btn-like { background: white; border: 1px solid #ff7675; color: #ff7675; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 4px; font-weight: bold; }
+        .btn-like:active { transform: scale(0.9); background: #ff7675; color: white; }
+
+        .board-input-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .board-input-group input, .board-input-group textarea { padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; -webkit-appearance: none; }
         .btn-post { background: var(--main-blue); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; }
 
@@ -101,11 +91,12 @@
     
     <div class="footer">
         <button id="admin-btn" class="nav-btn btn-admin" onclick="handleAdmin()">관리자 모드</button>
-        <button class="nav-btn btn-refresh" onclick="location.reload()">새로고침</button>
+        <button class="nav-btn btn-refresh" onclick="location.reload()">🔄 새로고침</button>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZCtyJc47SHdLr9VCKKcjuujm4nUMB1U9U185xCioqnvztB0OAkI6beBE-IDFshMA/exec";
+        // 새로운 배포 URL 반영
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbymFm-qPAVpZSVMxgZix7im1gM4RcrPP3WO4nWSIce9PL-lOlwIS2g7iSTjKQwv6hCo/exec";
         let isAdmin = false;
 
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
@@ -178,9 +169,23 @@
                 const item = document.createElement('div');
                 item.className = 'board-item';
                 let delBtn = isAdmin ? `<button class="btn-delete" onclick="deleteMessage('${m.id}')">삭제</button>` : '';
-                item.innerHTML = `${delBtn}<span style="font-weight:bold; color:var(--main-blue);">${m.name}:</span> ${m.content}`;
+                let likeCount = m.likes || 0;
+
+                item.innerHTML = `
+                    ${delBtn}
+                    <span style="font-weight:bold; color:var(--main-blue);">${m.name}:</span> ${m.content}
+                    <div class="like-container">
+                        <button class="btn-like" onclick="likeMessage('${m.id}')">❤️ <span>${likeCount}</span></button>
+                    </div>
+                `;
                 list.appendChild(item);
             });
+        }
+
+        async function likeMessage(msgId) {
+            document.getElementById('loading').style.display = 'flex';
+            await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'like_message', id:msgId}) });
+            init(); // 화면 갱신
         }
 
         async function postMessage() {
@@ -189,21 +194,22 @@
             if(!content) return alert("내용을 입력해주세요.");
             document.getElementById('loading').style.display = 'flex';
             await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'message', name:name, content:content}) });
-            location.reload();
+            document.getElementById('post-content').value = ""; // 입력창 비우기
+            init();
         }
 
         async function deleteMessage(msgId) {
             if(!confirm("이 글을 삭제하시겠습니까?")) return;
             document.getElementById('loading').style.display = 'flex';
             await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'delete_message', id:msgId}) });
-            location.reload();
+            init();
         }
 
         function handleAdmin() {
             const btn = document.getElementById('admin-btn');
             if (!isAdmin) {
                 let pw = prompt("관리자 암호");
-                if(pw === "9191") { isAdmin = true; btn.textContent = "해제"; btn.className = "nav-btn btn-logout"; init(); }
+                if(pw === "9191") { isAdmin = true; btn.textContent = "🔓 해제"; btn.className = "nav-btn btn-logout"; init(); }
             } else { isAdmin = false; btn.textContent = "관리자 모드"; btn.className = "nav-btn btn-admin"; init(); }
         }
         init();
