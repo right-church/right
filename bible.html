@@ -7,49 +7,52 @@
     <style>
         :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f4f7f6; --border-color: #ddd; --admin-color: #27ae60; --logout-color: #e67e22; --highlight-yellow: #fff9c4; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background-color: var(--light-bg); margin: 0; padding: 5px; }
-        h1 { text-align: center; color: var(--dark-blue); font-size: 1.5rem; margin: 20px 0; }
+        h1 { text-align: center; color: var(--dark-blue); font-size: 1.2rem; margin: 15px 0; }
         
-        .table-outer { max-width: 100%; margin: 0 auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid var(--border-color); overflow: hidden; }
+        .table-outer { max-width: 100%; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border: 1px solid var(--border-color); overflow: hidden; }
         .table-inner { max-height: 75vh; overflow: auto; -webkit-overflow-scrolling: touch; }
-        table { border-collapse: separate; border-spacing: 0; width: 100%; }
+        table { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; }
         
-        th, td { padding: 12px 5px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; min-width: 80px; vertical-align: middle; }
+        /* 전체 셀 공통: 좁은 간격 유지 */
+        th, td { padding: 6px 1px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; font-size: 0.8rem; vertical-align: middle; }
         
-        /* 첫 번째 열(이름) 고정 */
-        th:first-child, td:first-child { position: sticky; left: 0; z-index: 10; background-color: #f8f9fa; border-right: 2px solid var(--main-blue); font-weight: bold; min-width: 70px; }
+        /* 첫 번째 열(이름) 너비 고정 */
+        th:first-child, td:first-child { width: 60px; position: sticky; left: 0; z-index: 10; background-color: #f8f9fa; border-right: 2px solid var(--main-blue); font-weight: bold; }
         
-        /* 첫 번째 행(날짜) 고정 */
-        th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 5; white-space: nowrap; font-size: 0.9rem; }
+        /* 날짜 칸 너비 재축소 (45px) */
+        th:not(:first-child), td:not(:first-child) { width: 45px; }
+        th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 5; white-space: nowrap; font-size: 0.75rem; height: 35px; }
         
-        /* 읽을 말씀 행 스타일 (글자 크기 및 간격 최소화) */
+        /* 읽을 말씀 행 (초소형 정밀 정렬) */
         .plan-row td { 
             background-color: #ebf5fb; 
             color: #2980b9; 
-            font-size: 0.6rem; /* 글자 크기 대폭 축소 */
-            line-height: 1.0;  /* 줄 간격 최소화 */
-            padding: 4px 2px;
-            height: 40px;
-            word-break: keep-all;
+            font-size: 0.6rem; /* 글자 크기 최소화 */
+            line-height: 1.0;  /* 줄 간격 촘촘하게 */
+            padding: 3px 1px;
+            height: 38px;      /* 행 높이 최적화 */
+            word-break: break-all;
         }
         
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
-        input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--main-blue); cursor: pointer; margin: 0; vertical-align: middle; }
+        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--main-blue); cursor: pointer; margin: 0; vertical-align: middle; }
         
-        /* 하단 버튼 통일 */
-        .footer { text-align: center; margin-top: 20px; padding-bottom: 40px; display: flex; justify-content: center; gap: 10px; }
+        /* 버튼 디자인 유지 */
+        .footer { text-align: center; margin-top: 15px; padding-bottom: 30px; display: flex; justify-content: center; gap: 10px; }
         button { 
-            min-width: 160px; 
-            height: 48px; 
+            min-width: 140px; 
+            height: 42px; 
             border: none; 
-            border-radius: 8px; 
+            border-radius: 6px; 
             font-weight: bold; 
             cursor: pointer; 
             color: white; 
-            font-size: 0.95rem; 
+            font-size: 0.85rem; 
             transition: all 0.2s; 
             display: flex;
             align-items: center;
             justify-content: center;
+            box-sizing: border-box;
         }
         .btn-admin { background-color: var(--admin-color); }
         .btn-logout { background-color: var(--logout-color); }
@@ -85,7 +88,7 @@
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
                 render(data);
-            } catch (e) { alert("연동 실패!"); }
+            } catch (e) { alert("연동 실패! 구글 설정을 확인하세요."); }
             document.getElementById('loading').style.display = 'none';
         }
 
@@ -127,10 +130,15 @@
             const btn = document.getElementById('admin-btn');
             if (!isAdmin) {
                 let pw = prompt("비밀번호 입력");
-                if(pw === "9191") { isAdmin = true; btn.textContent = "🔓 관리자 모드 해제"; btn.className = "btn-logout"; }
-                else if(pw !== null) alert("오답입니다.");
+                if(pw === "9191") {
+                    isAdmin = true;
+                    btn.textContent = "🔓 관리자 모드 해제";
+                    btn.className = "btn-logout";
+                } else if(pw !== null) alert("비밀번호가 틀렸습니다.");
             } else {
-                isAdmin = false; btn.textContent = "관리자 모드 활성화"; btn.className = "btn-admin";
+                isAdmin = false;
+                btn.textContent = "관리자 모드 활성화";
+                btn.className = "btn-admin";
             }
         }
         init();
