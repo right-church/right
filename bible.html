@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>90일 성경통독 출석부</title>
+    <title>90일 성경통독 실시간 출석부</title>
     <style>
         :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f4f7f6; --border-color: #ddd; --admin-color: #27ae60; --logout-color: #e67e22; --highlight-yellow: #fff9c4; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background-color: var(--light-bg); margin: 0; padding: 5px; }
@@ -22,11 +22,28 @@
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
         input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--main-blue); cursor: pointer; margin: 0; vertical-align: middle; }
         
-        .footer { text-align: center; margin-top: 15px; padding-bottom: 30px; }
-        button { padding: 10px 18px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; margin: 3px; font-size: 0.9rem; transition: background 0.3s; }
+        /* 버튼 크기 통일 설정 */
+        .footer { text-align: center; margin-top: 20px; padding-bottom: 40px; display: flex; justify-content: center; gap: 10px; }
+        button { 
+            min-width: 150px; /* 버튼의 최소 너비를 똑같이 고정 */
+            height: 45px;    /* 버튼의 높이를 똑같이 고정 */
+            border: none; 
+            border-radius: 8px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: white; 
+            font-size: 0.9rem; 
+            transition: all 0.2s; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+        }
         .btn-admin { background-color: var(--admin-color); }
         .btn-logout { background-color: var(--logout-color); }
         .btn-refresh { background-color: #95a5a6; }
+        button:active { transform: scale(0.98); opacity: 0.9; }
+
         .loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); display:flex; justify-content:center; align-items:center; z-index:100; font-weight:bold; }
     </style>
 </head>
@@ -37,6 +54,7 @@
         <thead><tr id="header-row"><th>이름\일차</th></tr></thead>
         <tbody id="attendance-body"></tbody>
     </table></div></div>
+    
     <div class="footer">
         <button id="admin-btn" class="btn-admin" onclick="handleAdmin()">관리자 모드 활성화</button>
         <button class="btn-refresh" onclick="location.reload()">🔄 새로고침</button>
@@ -97,27 +115,19 @@
             }
         }
 
-        // 관리자 모드 핸들러 (켜기/끄기 통합)
         function handleAdmin() {
             const btn = document.getElementById('admin-btn');
-            
             if (!isAdmin) {
-                // 관리자 모드 켜기
                 let pw = prompt("관리자 비밀번호를 입력하세요.");
                 if(pw === "9191") {
                     isAdmin = true;
                     btn.textContent = "🔓 관리자 모드 해제";
                     btn.className = "btn-logout";
-                    alert("수정 모드가 활성화되었습니다.");
-                } else if(pw !== null) {
-                    alert("비밀번호가 틀렸습니다.");
-                }
+                } else if(pw !== null) alert("비밀번호가 틀렸습니다.");
             } else {
-                // 관리자 모드 끄기
                 isAdmin = false;
                 btn.textContent = "관리자 모드 활성화";
                 btn.className = "btn-admin";
-                alert("수정 모드가 해제되었습니다.");
             }
         }
         init();
