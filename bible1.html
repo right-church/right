@@ -3,97 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>90일 성경통독 가이드 (본문 연결)</title>
+    <title>올바른 90일 성경통독</title>
     <style>
-        :root { --primary-color: #4a90e2; --bg-color: #f4f7f6; --card-bg: #ffffff; }
-        body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg-color); padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 600px; width: 100%; }
-        h1 { text-align: center; color: #333; }
-        .sticky-header { position: sticky; top: 0; background: var(--bg-color); padding: 10px 0; z-index: 100; }
-        .progress-container { width: 100%; background: #e0e0e0; border-radius: 20px; height: 25px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); }
-        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #6dd5ed, #2193b0); transition: width 0.3s ease; }
-        .stats { text-align: center; margin: 10px 0; font-weight: bold; color: #555; }
-        .day-item { background: var(--card-bg); margin-bottom: 10px; padding: 15px 20px; border-radius: 12px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .day-item input[type="checkbox"] { width: 22px; height: 22px; margin-right: 15px; cursor: pointer; }
-        .day-text { flex-grow: 1; text-decoration: none; color: inherit; display: flex; align-items: center; }
-        .day-number { font-weight: bold; color: var(--primary-color); margin-right: 10px; min-width: 60px; }
-        .range-link { color: #2193b0; text-decoration: underline; font-weight: 500; }
-        .completed { background-color: #f0f0f0; opacity: 0.7; }
-        .completed .day-text { text-decoration: line-through; color: #bbb; }
+        :root { --primary: #2c3e50; --accent: #e67e22; --bg: #fdfcfb; }
+        body { font-family: 'Malgun Gothic', sans-serif; background-color: var(--bg); color: #333; line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px; }
+        .intro-box { background: #f9f9f9; padding: 15px; border-radius: 8px; font-size: 0.9em; margin-bottom: 20px; border-left: 5px solid var(--accent); }
+        .progress-section { position: sticky; top: 10px; background: white; padding: 10px; z-index: 10; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .progress-bar { width: 100%; height: 12px; background: #eee; border-radius: 6px; overflow: hidden; }
+        #fill { height: 100%; background: var(--accent); width: 0%; transition: 0.3s; }
+        .day-card { border: 1px solid #eee; margin-bottom: 15px; border-radius: 10px; padding: 15px; transition: 0.2s; }
+        .day-card:hover { border-color: var(--accent); }
+        .day-header { display: flex; align-items: center; justify-content: space-between; font-weight: bold; }
+        .summary { font-size: 0.85em; color: #666; margin-top: 8px; padding-left: 35px; }
+        .read-btn { font-size: 0.8em; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: 2px 8px; border-radius: 4px; }
+        .completed { background: #f4f4f4; opacity: 0.6; }
+        input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>📖 90일 성경통독</h1>
-    <div class="sticky-header">
-        <div class="progress-container"><div id="progress-bar"></div></div>
-        <div class="stats">진행률: <span id="percent">0</span>% (<span id="count">0</span>/90일)</div>
+    <div class="header">
+        <h1>📖 올바른 90일 성경통독</h1>
+        <p>Spring 2025: 3월 10일 ~ 6월 21일</p>
     </div>
-    <div id="plan-list"></div>
+
+    <div class="intro-box">
+        <strong>🙏 성경 읽기 전 1분 기도</strong><br>
+        "나의 지식적인 머리로 이해하지 않게 하시고, 성령님께서 조명해 주셔서 정확하게 깨닫고 말씀이 삶이 되는 하루를 살게 하소서." 
+    </div>
+
+    <div class="progress-section">
+        <div class="progress-bar"><div id="fill"></div></div>
+        <p style="text-align:right; font-size: 0.8em; margin: 5px 0;">달성률: <span id="percent">0</span>%</p>
+    </div>
+
+    <div id="list"></div>
 </div>
 
 <script>
-    // 구글 드라이브 '2025 봄, 90일 성경통독' 및 '올바른 90일 성경통독' 데이터를 기반으로 구성 
+    // PDF 소책자 기반 데이터 (5~9페이지 내용 반영)
     const bibleData = [
-        { day: 1, range: "창세기 1-11장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=1&sec=1" },
-        { day: 2, range: "창세기 12-23장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=12&sec=1" },
-        { day: 3, range: "창세기 24-36장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=24&sec=1" },
-        { day: 4, range: "창세기 37-50장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=37&sec=1" },
-        { day: 5, range: "출애굽기 1-15장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=exo&chap=1&sec=1" },
-        { day: 6, range: "출애굽기 16-27장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=exo&chap=16&sec=1" },
-        { day: 7, range: "출애굽기 28-40장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=exo&chap=28&sec=1" },
-        { day: 8, range: "레위기 1-14장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=lev&chap=1&sec=1" },
-        { day: 9, range: "레위기 15-27장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=lev&chap=15&sec=1" },
-        { day: 10, range: "민수기 1-12장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=num&chap=1&sec=1" }
-        // ... 실제 일정표의 범위를 90일까지 추가할 수 있습니다.
+        { day: 1, range: "창세기 1-13장", summary: "천지창조, 인간의 타락, 노아 홍수와 바벨탑 사건 ", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=1&sec=1" },
+        { day: 2, range: "창세기 14-26장", summary: "아브람의 부르심과 언약, 소돔과 고모라 심판, 이삭의 탄생 [cite: 19, 21, 22]", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=14&sec=1" },
+        { day: 3, range: "창세기 27-39장", summary: "야곱의 도망과 결혼, 12아들의 탄생, 요셉의 팔려감 [cite: 23, 24, 25]", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=27&sec=1" },
+        { day: 4, range: "창세기 40장-출애굽기 2장", summary: "요셉의 애굽 총리 등극과 가족 구원, 모세의 탄생 [cite: 27, 28, 29]", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=40&sec=1" },
+        { day: 5, range: "출애굽기 3-15장", summary: "모세의 부르심, 애굽의 10재앙, 홍해의 기적 [cite: 29, 30, 31]", link: "http://bible.godpia.com/read/reading.asp?ver=exo&chap=3&sec=1" },
+        { day: 6, range: "출애굽기 16-29장", summary: "만나와 메추라기, 시내산 언약과 십계명 [cite: 32, 33, 34]", link: "http://bible.godpia.com/read/reading.asp?ver=exo&chap=16&sec=1" }
+        // ... (나머지 90일까지의 데이터도 PDF 표에 맞춰 추가 가능)
     ];
 
-    // 데이터 보충 (90일까지)
-    for (let i = 11; i <= 90; i++) {
-        if(!bibleData[i-1]) bibleData.push({ day: i, range: `통독 ${i}일차 범위`, link: "http://bible.godpia.com/" });
+    // 나머지 90일까지의 범위 자동 추가 로직 (데이터가 없는 경우)
+    for(let i=7; i<=90; i++) {
+        if(!bibleData[i-1]) bibleData.push({ day: i, range: `통독 ${i}일차 범위`, summary: "소책자 일정표를 확인하세요.", link: "http://bible.godpia.com" });
     }
 
-    const planListDiv = document.getElementById('plan-list');
-    const progressBar = document.getElementById('progress-bar');
-    let completedDays = JSON.parse(localStorage.getItem('bibleProgress')) || [];
+    let storage = JSON.parse(localStorage.getItem('bible90')) || [];
 
-    function render() {
-        planListDiv.innerHTML = '';
+    function draw() {
+        const list = document.getElementById('list');
+        list.innerHTML = '';
         bibleData.forEach(item => {
-            const isChecked = completedDays.includes(item.day);
-            const div = document.createElement('div');
-            div.className = `day-item ${isChecked ? 'completed' : ''}`;
-            div.innerHTML = `
-                <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleDay(${item.day})">
-                <a href="${item.link}" target="_blank" class="day-text">
-                    <span class="day-number">Day ${item.day}</span>
-                    <span class="range-text">${item.range} <small>(본문읽기 🔗)</small></span>
-                </a>
+            const isDone = storage.includes(item.day);
+            const card = document.createElement('div');
+            card.className = `day-card ${isDone ? 'completed' : ''}`;
+            card.innerHTML = `
+                <div class="day-header">
+                    <span><input type="checkbox" ${isDone ? 'checked' : ''} onchange="toggle(${item.day})"> Day ${item.day} (${item.range})</span>
+                    <a href="${item.link}" target="_blank" class="read-btn">본문읽기</a>
+                </div>
+                <div class="summary">${item.summary}</div>
             `;
-            planListDiv.appendChild(div);
+            list.appendChild(card);
         });
-        updateProgress();
+        update();
     }
 
-    window.toggleDay = function(day) {
-        if (completedDays.includes(day)) {
-            completedDays = completedDays.filter(d => d !== day);
-        } else {
-            completedDays.push(day);
-        }
-        localStorage.setItem('bibleProgress', JSON.stringify(completedDays));
-        render();
-    };
-
-    function updateProgress() {
-        const percentage = Math.round((completedDays.length / bibleData.length) * 100);
-        progressBar.style.width = percentage + '%';
-        document.getElementById('percent').innerText = percentage;
-        document.getElementById('count').innerText = completedDays.length;
+    function toggle(day) {
+        if(storage.includes(day)) storage = storage.filter(d => d !== day);
+        else storage.push(day);
+        localStorage.setItem('bible90', JSON.stringify(storage));
+        draw();
     }
 
-    render();
+    function update() {
+        const per = Math.round((storage.length / bibleData.length) * 100);
+        document.getElementById('fill').style.width = per + '%';
+        document.getElementById('percent').innerText = per;
+    }
+
+    draw();
 </script>
+
 </body>
 </html>
