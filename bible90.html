@@ -33,15 +33,15 @@
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
         input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--main-blue); cursor: pointer; }
 
-        /* 기도 게시판 및 좋아요 */
+        /* 기도 게시판 및 좋아요 인라인 배치 */
         .board-container { background: #fff; border-radius: 10px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); box-sizing: border-box; }
         .board-title { font-size: 1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 12px; }
-        .board-item { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 0.88rem; border-left: 4px solid var(--main-blue); position: relative; line-height: 1.5; }
-        .btn-delete { background: #ff7675; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; float: right; margin-left: 10px; }
+        .board-item { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 0.88rem; border-left: 4px solid var(--main-blue); position: relative; line-height: 1.6; }
+        .btn-delete { background: #ff7675; color: white; border: none; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; float: right; margin-left: 10px; opacity: 0.8; }
         
-        .like-container { display: flex; align-items: center; justify-content: flex-end; margin-top: 8px; }
-        .btn-like { background: white; border: 1px solid #ff7675; color: #ff7675; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 4px; font-weight: bold; }
-        .btn-like:active { transform: scale(0.9); background: #ff7675; color: white; }
+        /* 좋아요 버튼을 텍스트 뒤에 붙이기 위한 스타일 */
+        .btn-like { display: inline-flex; align-items: center; gap: 3px; background: white; border: 1px solid #ffb3b3; color: #ff7675; padding: 1px 7px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; margin-left: 8px; vertical-align: middle; font-weight: bold; transition: 0.2s; }
+        .btn-like:active { transform: scale(0.9); background: #fff0f0; }
 
         .board-input-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .board-input-group input, .board-input-group textarea { padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; -webkit-appearance: none; }
@@ -57,7 +57,7 @@
     </style>
 </head>
 <body>
-    <div id="loading" class="loading">⏳ 올바른 데이터에 연결 중...</div>
+    <div id="loading" class="loading">⏳ 은혜의 말씀 연결 중...</div>
     <h1>📖 90일 성경통독 출석부</h1>
 
     <div class="stats-container content-box">
@@ -95,14 +95,14 @@
     </div>
 
     <script>
-        // 새로운 배포 URL 반영
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbymFm-qPAVpZSVMxgZix7im1gM4RcrPP3WO4nWSIce9PL-lOlwIS2g7iSTjKQwv6hCo/exec";
-        let isAdmin = false;
+        let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
 
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
 
         async function init() {
             try {
+                updateAdminUI();
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
                 render(data.attendance);
@@ -110,6 +110,17 @@
                 renderBoard(data.messages);
             } catch (e) { console.error(e); }
             document.getElementById('loading').style.display = 'none';
+        }
+
+        function updateAdminUI() {
+            const btn = document.getElementById('admin-btn');
+            if (isAdmin) {
+                btn.textContent = "🔓 관리자 해제";
+                btn.className = "nav-btn btn-logout";
+            } else {
+                btn.textContent = "관리자 모드";
+                btn.className = "nav-btn btn-admin";
+            }
         }
 
         function render(sheetData) {
@@ -139,7 +150,7 @@
                         if(!isAdmin) { e.preventDefault(); alert("관리자 모드가 필요합니다."); return; }
                         td.className = cb.checked ? 'checked-cell' : '';
                         await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'attendance', name:name, day:i, checked:cb.checked}) });
-                        location.reload();
+                        init();
                     };
                     td.appendChild(cb); tr.appendChild(td);
                 }
@@ -171,12 +182,12 @@
                 let delBtn = isAdmin ? `<button class="btn-delete" onclick="deleteMessage('${m.id}')">삭제</button>` : '';
                 let likeCount = m.likes || 0;
 
+                // 텍스트 바로 뒤에 버튼이 오도록 인라인 구조로 렌더링
                 item.innerHTML = `
                     ${delBtn}
-                    <span style="font-weight:bold; color:var(--main-blue);">${m.name}:</span> ${m.content}
-                    <div class="like-container">
-                        <button class="btn-like" onclick="likeMessage('${m.id}')">❤️ <span>${likeCount}</span></button>
-                    </div>
+                    <span style="font-weight:bold; color:var(--main-blue);">${m.name}:</span> 
+                    <span>${m.content}</span>
+                    <button class="btn-like" onclick="likeMessage('${m.id}')">❤️ <span>${likeCount}</span></button>
                 `;
                 list.appendChild(item);
             });
@@ -185,7 +196,7 @@
         async function likeMessage(msgId) {
             document.getElementById('loading').style.display = 'flex';
             await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'like_message', id:msgId}) });
-            init(); // 화면 갱신
+            init();
         }
 
         async function postMessage() {
@@ -194,7 +205,7 @@
             if(!content) return alert("내용을 입력해주세요.");
             document.getElementById('loading').style.display = 'flex';
             await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'message', name:name, content:content}) });
-            document.getElementById('post-content').value = ""; // 입력창 비우기
+            document.getElementById('post-content').value = "";
             init();
         }
 
@@ -206,11 +217,20 @@
         }
 
         function handleAdmin() {
-            const btn = document.getElementById('admin-btn');
             if (!isAdmin) {
                 let pw = prompt("관리자 암호");
-                if(pw === "9191") { isAdmin = true; btn.textContent = "🔓 해제"; btn.className = "nav-btn btn-logout"; init(); }
-            } else { isAdmin = false; btn.textContent = "관리자 모드"; btn.className = "nav-btn btn-admin"; init(); }
+                if(pw === "9191") { 
+                    isAdmin = true; 
+                    localStorage.setItem('bible_admin_mode', 'true');
+                    init(); 
+                } else {
+                    alert("비밀번호가 틀렸습니다.");
+                }
+            } else { 
+                isAdmin = false; 
+                localStorage.removeItem('bible_admin_mode');
+                init(); 
+            }
         }
         init();
     </script>
