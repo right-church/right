@@ -57,7 +57,7 @@
     </style>
 </head>
 <body>
-    <div id="loading">⏳ 은혜의 말씀 연결 중...</div>
+    <div id="loading">⏳ 올바른 데이터에 연결 중...</div>
     <h1>📖 90일 성경통독 출석부</h1>
 
     <div class="stats-container content-box">
@@ -122,7 +122,7 @@
         function updateAdminUI() {
             const btn = document.getElementById('admin-btn');
             if (isAdmin) {
-                btn.textContent = "🔓 관리자 해제";
+                btn.textContent = "관리자 해제";
                 btn.className = "nav-btn btn-logout";
             } else {
                 btn.textContent = "관리자 모드";
