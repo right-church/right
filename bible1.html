@@ -10,27 +10,172 @@
             --accent: #e67e22;
             --bg: #fdfcfb;
             --text: #333;
+            --gray: #7f8c8d;
         }
-        body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; margin: 0; padding: 0; display: flex; flex-direction: column; align-items: center; }
-        .container { max-width: 650px; width: 100%; padding: 20px; box-sizing: border-box; }
-        header { text-align: center; padding: 40px 20px; background: white; border-bottom: 3px solid var(--primary); margin-bottom: 20px; border-radius: 0 0 20px 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 650px;
+            width: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: white;
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: 20px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
         h1 { margin: 0; color: var(--primary); font-size: 1.8rem; }
         .subtitle { color: var(--accent); font-weight: bold; margin-top: 5px; }
-        .intro-box { background: #fff9f4; padding: 20px; border-radius: 12px; border-left: 5px solid var(--accent); margin-bottom: 30px; font-size: 0.95rem; }
-        .sticky-nav { position: sticky; top: 0; background: var(--bg); padding: 15px 0; z-index: 100; border-bottom: 1px solid #eee; }
-        .progress-wrapper { background: #eee; height: 18px; border-radius: 10px; overflow: hidden; }
-        #progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #f39c12, #e67e22); transition: width 0.5s; }
-        .stats { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: bold; margin-top: 8px; color: var(--primary); }
-        .day-card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
-        .day-card.completed { background: #f8f9fa; opacity: 0.7; }
-        .day-top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-        .day-info { display: flex; align-items: center; gap: 10px; flex-grow: 1; }
-        .day-number { background: var(--primary); color: white; padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; font-weight: bold; min-width: 45px; text-align: center; }
-        .day-range { font-weight: 700; font-size: 1rem; }
-        .summary-text { margin-top: 10px; font-size: 0.88rem; color: #555; padding-left: 10px; border-left: 2px solid #ddd; }
-        .read-link { text-decoration: none; color: var(--accent); font-size: 0.8rem; border: 1px solid var(--accent); padding: 3px 8px; border-radius: 5px; white-space: nowrap; }
-        .completed .day-range, .completed .summary-text { text-decoration: line-through; color: #bbb; }
-        input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; accent-color: var(--accent); }
+
+        .intro-box {
+            background: #fff9f4;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--accent);
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            padding: 15px 0;
+            z-index: 100;
+            border-bottom: 1px solid #eee;
+        }
+
+        .progress-wrapper {
+            background: #eee;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f39c12, #e67e22);
+            transition: width 0.5s ease;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-top: 8px;
+            color: var(--primary);
+        }
+
+        .day-list { margin-top: 20px; }
+
+        .day-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .day-card.completed {
+            background: #f8f9fa;
+            border: 1px solid #eee;
+        }
+
+        .day-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .day-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-grow: 1;
+        }
+
+        .day-number {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .day-range {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .summary-text {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #555;
+            padding-left: 5px;
+            border-left: 2px solid #eee;
+            margin-left: 5px;
+            white-space: pre-wrap; /* 줄바꿈 유지 */
+        }
+
+        .completed .day-range, .completed .summary-text {
+            text-decoration: line-through;
+            color: #bbb;
+        }
+
+        .read-link {
+            text-decoration: none;
+            color: var(--accent);
+            font-size: 0.85rem;
+            border: 1px solid var(--accent);
+            padding: 4px 10px;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+
+        .read-link:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
@@ -42,127 +187,137 @@
 
 <div class="container">
     <div class="intro-box">
-        <strong>🙏 성경 읽기 전 '1분 기도'</strong><br>
-        "나의 지식적인 머리로 이해하지 않게 하시고, 성령님께서 조명해 주셔서 정확하게 깨닫고 말씀이 삶이 되는 하루를 살도록 도와주옵소서. 아멘!"
+        <strong>🙏 성경 읽기 전 1분 기도</strong><br>
+        "사랑하는 주님, 제가 읽을 이 성경이 하나님의 말씀임을 믿습니다. 나의 지식적인 머리로 이해하지 않게 하시고, 성령님께서 조명해 주셔서 정확하게 깨닫고 말씀이 삶이 되는 하루를 살도록 도와주옵소서. 예수님의 이름으로 기도합니다. 아멘!" [cite: 1]
     </div>
 
     <div class="sticky-nav">
-        <div class="progress-wrapper"><div id="progress-bar"></div></div>
+        <div class="progress-wrapper">
+            <div id="progress-bar"></div>
+        </div>
         <div class="stats">
-            <span>달성도: <span id="percent">0</span>%</span>
+            <span>진행률: <span id="percent">0</span>%</span>
             <span><span id="count">0</span> / 90일 완료</span>
         </div>
     </div>
 
-    <div id="day-list"></div>
+    <div id="day-list" class="day-list"></div>
+
+    <footer>
+        © 2025 올바른 성경통독 모임 | 말씀이 삶이 되는 시간
+    </footer>
 </div>
 
 <script>
-    // PDF 소책자(5쇄) 6~9페이지 가이드 내용 그대로 반영
+    // PDF 소책자 90일 전체 원문 데이터
     const bibleData = [
-        { day: 1, range: "창세기 1-13장", summary: "창조, 타락, 홍수, 바벨탑 사건을 통해 인류의 시작과 죄의 유입을 다룹니다.", vol: "gen", chap: 1 },
-        { day: 2, range: "창세기 14-26장", summary: "믿음의 조상 아브라함의 부르심과 순종, 그리고 이삭의 탄생을 기록합니다.", vol: "gen", chap: 14 },
-        { day: 3, range: "창세기 27-39장", summary: "야곱의 형 에서와의 갈등, 외삼촌 라반의 집에서의 생활과 12아들의 탄생을 다룹니다.", vol: "gen", chap: 27 },
-        { day: 4, range: "창세기 40장-출애굽기 2장", summary: "요셉의 애굽 총리 등극과 야곱 가족의 이주, 그리고 모세의 탄생을 보여줍니다.", vol: "gen", chap: 40 },
-        { day: 5, range: "출애굽기 3-15장", summary: "모세의 소명, 애굽에 내린 10재앙, 그리고 홍해를 건너는 출애굽의 기적을 다룹니다.", vol: "exo", chap: 3 },
-        { day: 6, range: "출애굽기 16-29장", summary: "광야에서의 만나와 메추라기 공급, 시내산 언약과 십계명 수여를 기록합니다.", vol: "exo", chap: 16 },
-        { day: 7, range: "출애굽기 30-40장", summary: "성막 건축의 구체적인 지시와 완성, 그리고 하나님의 영광이 성막에 충만함을 보여줍니다.", vol: "exo", chap: 30 },
-        { day: 8, range: "레위기 1-14장", summary: "5대 제사(번제, 소제, 화목제, 속죄제, 속건제)와 정결 규례를 통해 거룩함을 가르칩니다.", vol: "lev", chap: 1 },
-        { day: 9, range: "레위기 15-27장", summary: "성결 법전과 절기들을 통해 하나님의 백성으로서의 구별된 삶을 강조합니다.", vol: "lev", chap: 15 },
-        { day: 10, range: "민수기 1-12장", summary: "이스라엘 자손의 인구 조사와 진 편성, 그리고 광야 여정의 준비를 다룹니다.", vol: "num", chap: 1 },
-        { day: 11, range: "민수기 13-25장", summary: "가데스 바네아의 정탐 보고와 불신앙으로 인한 광야 방황, 발람의 예언을 기록합니다.", vol: "num", chap: 13 },
-        { day: 12, range: "민수기 26-36장", summary: "제2차 인구 조사와 가나안 땅 분배 준비, 도피성 규례를 다룹니다.", vol: "num", chap: 26 },
-        { day: 13, range: "신명기 1-11장", summary: "모세의 첫 번째 설교로, 과거 광야 여정을 회고하며 하나님의 은혜를 기억하게 합니다.", vol: "deu", chap: 1 },
-        { day: 14, range: "신명기 12-23장", summary: "하나님의 백성이 가나안 땅에서 지켜야 할 구체적인 율법과 규례들을 설명합니다.", vol: "deu", chap: 12 },
-        { day: 15, range: "신명기 24-34장", summary: "축복과 저주의 선포, 모세의 고별사와 죽음을 통해 세대교체를 보여줍니다.", vol: "deu", chap: 24 },
-        { day: 16, range: "여호수아 1-12장", summary: "여호수아의 지도력 아래 요단강 도하와 여리고 성 함락 등 가나안 정복 과정을 다룹니다.", vol: "jos", chap: 1 },
-        { day: 17, range: "여호수아 13-24장", summary: "정복한 땅의 지파별 분배와 여호수아의 마지막 당부 및 언약 갱신을 기록합니다.", vol: "jos", chap: 13 },
-        { day: 18, range: "사사기 1-11장", summary: "범죄-징계-간구-구원의 반복되는 사사 시대의 역사와 기드온 등의 사사들을 다룹니다.", vol: "jdg", chap: 1 },
-        { day: 19, range: "사사기 12-21장, 룻기 1-4장", summary: "삼손의 이야기와 사사 시대의 영적 혼란, 그 가운데 룻을 통한 구속의 계보를 보여줍니다.", vol: "jdg", chap: 12 },
-        { day: 20, range: "사무엘상 1-15장", summary: "사무엘의 출생과 소명, 이스라엘의 첫 왕 사울의 등극과 그의 불순종을 다룹니다.", vol: "1sa", chap: 1 },
-        { day: 21, range: "사무엘상 16-31장", summary: "다윗의 기름 부음과 골리앗 승리, 사울의 추격을 피하는 다윗의 고난기를 기록합니다.", vol: "1sa", chap: 16 },
-        { day: 22, range: "사무엘하 1-12장", summary: "다윗의 유다 왕 등극과 이스라엘 통일 왕국 수립, 바세바와의 범죄를 다룹니다.", vol: "2sa", chap: 1 },
-        { day: 23, range: "사무엘하 13-24장", summary: "압살롬의 반역과 다윗의 도피, 왕권의 회복과 다윗의 인구 조사를 기록합니다.", vol: "2sa", chap: 13 },
-        { day: 24, range: "열왕기상 1-11장", summary: "솔로몬의 왕위 계승과 성전 건축, 지혜로운 통치와 후기의 타락을 다룹니다.", vol: "1ki", chap: 1 },
-        { day: 25, range: "열왕기상 12-22장", summary: "왕국의 분열(남유다, 북이스라엘)과 엘리야 선지자의 활동을 기록합니다.", vol: "1ki", chap: 12 },
-        { day: 26, range: "열왕기하 1-12장", summary: "엘리사의 기적들과 북이스라엘 왕조의 교체, 남유다 요아스 왕의 개혁을 다룹니다.", vol: "2ki", chap: 1 },
-        { day: 27, range: "열왕기하 13-25장", summary: "북이스라엘의 멸망과 남유다의 히스기야, 요시야 왕의 개혁, 유다의 멸망을 기록합니다.", vol: "2ki", chap: 13 },
-        { day: 28, range: "역대상 1-14장", summary: "아담부터 시작되는 족보를 통해 하나님의 선택을 강조하고 다윗 왕권의 정통성을 보여줍니다.", vol: "1ch", chap: 1 },
-        { day: 29, range: "역대상 15-29장", summary: "다윗의 법궤 안치와 성전 건축 준비, 다윗의 죽음을 기록합니다.", vol: "1ch", chap: 15 },
-        { day: 30, range: "역대하 1-13장", summary: "솔로몬의 성전 건축과 봉헌, 그리고 분열 왕국 초기 르호보암의 통치를 다룹니다.", vol: "2ch", chap: 1 },
-        { day: 31, range: "역대하 14-26장", summary: "아사, 여호사밧, 요아스, 웃시야 등 남유다 왕들의 통치와 개혁 시도를 기록합니다.", vol: "2ch", chap: 14 },
-        { day: 32, range: "역대하 27-36장", summary: "히스기야와 요시야의 종교 개혁, 그리고 유다의 멸망과 고레스 왕의 귀환 조칙을 다룹니다.", vol: "2ch", chap: 27 },
-        { day: 33, range: "에스라 1-10장", summary: "바벨론 포로 귀환(1, 2차)과 성전 재건, 에스라를 통한 영적 개혁을 기록합니다.", vol: "ezr", chap: 1 },
-        { day: 34, range: "느헤미야 1-13장", summary: "느헤미야의 지도력 하에 무너진 예루살렘 성벽 재건과 율법 낭독을 통한 신앙 갱신을 다룹니다.", vol: "neh", chap: 1 },
-        { day: 35, range: "에스더 1-10장, 욥기 1-4장", summary: "바사에서 하나님의 섭리로 민족을 구한 에스더와 고난 중의 욥의 시작을 기록합니다.", vol: "est", chap: 1 },
-        { day: 36, range: "욥기 5-17장", summary: "욥과 세 친구들의 첫 번째 논쟁을 통해 고난의 이유에 대한 인간적 시각들을 보여줍니다.", vol: "job", chap: 5 },
-        { day: 37, range: "욥기 18-30장", summary: "더욱 격렬해지는 친구들과의 논쟁과 자신의 결백을 주장하는 욥의 탄식을 기록합니다.", vol: "job", chap: 18 },
-        { day: 38, range: "욥기 31-42장", summary: "엘리후의 변론과 하나님의 직접적인 답변, 욥의 회개와 갑절의 회복을 다룹니다.", vol: "job", chap: 31 },
-        { day: 39, range: "시편 1-17장", summary: "하나님을 찬양하고 의지하는 시인들의 고백과 복 있는 사람의 길을 보여줍니다.", vol: "psa", chap: 1 },
-        { day: 40, range: "시편 18-34장", summary: "다윗의 감사와 찬양, 환난 중에도 보호하시는 하나님에 대한 신뢰를 기록합니다.", vol: "psa", chap: 18 },
-        { day: 41, range: "시편 35-51장", summary: "도움을 구하는 탄식시와 죄 사함을 간구하는 다윗의 참회시(51편)를 포함합니다.", vol: "psa", chap: 35 },
-        { day: 42, range: "시편 52-68장", summary: "대적들의 핍박 속에서도 하나님을 피난처 삼는 시인들의 견고한 믿음을 보여줍니다.", vol: "psa", chap: 52 },
-        { day: 43, range: "시편 69-85장", summary: "고통 중에 드리는 간구와 하나님의 구원 역사를 회고하는 노래들을 기록합니다.", vol: "psa", chap: 69 },
-        { day: 44, range: "시편 86-102장", summary: "하나님의 영원하심과 통치하심을 찬양하며 인간의 연약함을 고백합니다.", vol: "psa", chap: 86 },
-        { day: 45, range: "시편 103-119장", summary: "하나님의 인자하심을 송축하고 말씀의 소중함을 노래한 최장의 시(119편)를 다룹니다.", vol: "psa", chap: 103 },
-        { day: 46, range: "시편 120-136장", summary: "성전에 올라가는 노래들과 창조주 하나님의 영원한 인자하심을 찬양합니다.", vol: "psa", chap: 120 },
-        { day: 47, range: "시편 137-150장", summary: "포로지의 슬픔과 회복의 찬양, 호흡이 있는 자마다 찬양하라는 결론으로 마무리됩니다.", vol: "psa", chap: 137 },
-        { day: 48, range: "잠언 1-11장", summary: "지혜의 근본인 여호와 경외와 젊은이들에게 주는 지혜로운 훈계들을 다룹니다.", vol: "pro", chap: 1 },
-        { day: 49, range: "잠언 12-22장", summary: "삶의 현장에서 필요한 실천적 지혜와 의인과 악인의 대조적 삶을 보여줍니다.", vol: "pro", chap: 12 },
-        { day: 50, range: "잠언 23-31장, 전도서 1-2장", summary: "지혜로운 삶의 경구들과 솔로몬이 깨달은 인생의 헛됨에 대한 고찰을 시작합니다.", vol: "pro", chap: 23 },
-        { day: 51, range: "전도서 3-12장, 아가 1-8장", summary: "해 아래 모든 것의 헛됨과 하나님 안에서의 본분, 그리스도와 교회의 사랑을 다룹니다.", vol: "ecc", chap: 3 },
-        { day: 52, range: "이사야 1-12장", summary: "유다의 죄악에 대한 경고와 장차 임할 평화의 왕(메시아)에 대한 예언을 기록합니다.", vol: "isa", chap: 1 },
-        { day: 53, range: "이사야 13-25장", summary: "주변 이방 나라들에 대한 심판 선고와 마지막 날의 승리를 노래합니다.", vol: "isa", chap: 13 },
-        { day: 54, range: "이사야 26-38장", summary: "하나님을 의지하는 자의 평강과 히스기야 왕의 발병과 치유 사건을 기록합니다.", vol: "isa", chap: 26 },
-        { day: 55, range: "이사야 39-51장", summary: "포로된 백성을 향한 위로와 장차 올 고난 받는 종을 통한 구원을 예언합니다.", vol: "isa", chap: 39 },
-        { day: 56, range: "이사야 52-66장", summary: "구속주의 오심과 새 하늘과 새 땅에 대한 소망을 선포합니다.", vol: "isa", chap: 52 },
-        { day: 57, range: "예레미야 1-13장", summary: "예레미야의 소명과 유다의 완악한 우상 숭배에 대한 심판의 메시지를 다룹니다.", vol: "jer", chap: 1 },
-        { day: 58, range: "예레미야 14-26장", summary: "눈물의 선지자 예레미야의 중보와 거짓 선지자들에 대한 경고를 기록합니다.", vol: "jer", chap: 14 },
-        { day: 59, range: "예레미야 27-39장", summary: "바벨론에 의한 멸망 예고와 새 언약의 약속, 그리고 예루살렘 성의 함락을 다룹니다.", vol: "jer", chap: 27 },
-        { day: 60, range: "예레미야 40-52장", summary: "멸망 이후의 상황과 주변국들에 대한 심판 예언으로 마무리됩니다.", vol: "jer", chap: 40 },
-        { day: 61, range: "예레미야애가 1-5장, 에스겔 1-8장", summary: "예루살렘의 멸망을 슬퍼하는 애가와 바벨론 포로지에서 본 하나님의 영광을 다룹니다.", vol: "lam", chap: 1 },
-        { day: 62, range: "에스겔 9-21장", summary: "성전을 떠나시는 하나님의 영광과 유다의 가증한 범죄들에 대한 심판을 기록합니다.", vol: "ezk", chap: 9 },
-        { day: 63, range: "에스겔 22-34장", summary: "참된 목자이신 하나님과 이스라엘의 회복에 대한 약속을 다룹니다.", vol: "ezk", chap: 22 },
-        { day: 64, range: "에스겔 35-48장", summary: "마른 뼈의 환상과 성전 회복, '여호와 삼마'를 기록합니다.", vol: "ezk", chap: 35 },
-        { day: 65, range: "다니엘 1-12장", summary: "포로기 다니엘의 믿음과 제국들의 변천, 그리고 마지막 때에 대한 환상을 다룹니다.", vol: "dan", chap: 1 },
-        { day: 66, range: "호세아 1-14장", summary: "음란한 아내 고멜을 통해 배역한 이스라엘을 향한 하나님의 포기하지 않는 사랑을 보여줍니다.", vol: "hos", chap: 1 },
-        { day: 67, range: "요엘 1장-아모스 9장", summary: "여호와의 날의 경고와 공의가 물처럼 흐르게 하라는 아모스의 심판 메시지를 기록합니다.", vol: "joe", chap: 1 },
-        { day: 68, range: "오바댜 1장-미가 7장", summary: "에돔 심판과 니느웨의 회개(요나), 베들레헴 메시아 탄생(미가)을 예언합니다.", vol: "oba", chap: 1 },
-        { day: 69, range: "나훔 1장-학개 2장", summary: "니느웨의 멸망과 하박국의 믿음, 성전 재건을 촉구하는 학개의 메시지를 다룹니다.", vol: "nah", chap: 1 },
-        { day: 70, range: "스가랴 1-14장, 말라기 1-4장", summary: "성전 재건 장려와 메시아 오심 예언, 구약의 마지막 권고와 약속을 기록합니다.", vol: "zec", chap: 1 },
-        { day: 71, range: "마태복음 1-13장", summary: "유대인의 왕으로 오신 예수님의 족보와 공생애 시작, 산상수훈을 다룹니다.", vol: "mat", chap: 1 },
-        { day: 72, range: "마태복음 14-28장", summary: "베드로의 신앙 고백과 십자가 고난, 부활과 대위임령을 기록합니다.", vol: "mat", chap: 14 },
-        { day: 73, range: "마가복음 1-16장", summary: "종으로 오셔서 신속하게 일하시며 치유와 섬김의 본을 보이신 예수님을 다룹니다.", vol: "mar", chap: 1 },
-        { day: 74, range: "누가복음 1-12장", summary: "인자로 오신 예수님의 탄생과 소외된 자들을 향한 긍휼과 가르침을 기록합니다.", vol: "luk", chap: 1 },
-        { day: 75, range: "누가복음 13-24장", summary: "잃어버린 자를 찾아 오신 주님의 비유들과 부활 후 엠마오 도상의 나타나심을 보여줍니다.", vol: "luk", chap: 13 },
-        { day: 76, range: "요한복음 1-11장", summary: "말씀이 육신이 되어 오신 하나님의 아들 예수 그리스도와 7가지 표적들을 다룹니다.", vol: "jhn", chap: 1 },
-        { day: 77, range: "요한복음 12-21장", summary: "제자들의 발을 씻기신 주님의 사랑과 십자가, '나를 따르라'는 부르심을 기록합니다.", vol: "jhn", chap: 12 },
-        { day: 78, range: "사도행전 1-14장", summary: "오순절 성령 강림과 예루살렘 교회의 시작, 바울의 1차 전도 여행을 다룹니다.", vol: "act", chap: 1 },
-        { day: 79, range: "사도행전 15-28장", summary: "바울의 2, 3차 전도 여행과 로마 압송을 통해 땅끝까지 전파되는 복음을 기록합니다.", vol: "act", chap: 15 },
-        { day: 80, range: "로마서 1-16장", summary: "복음의 정수이자 '오직 의인은 믿음으로 말미암아 살리라'는 구원의 진리를 설명합니다.", vol: "rom", chap: 1 },
-        { day: 81, range: "고린도전서 1-16장", summary: "교회의 분쟁과 윤리 문제에 대한 대답과 사랑장(13장), 부활장(15장)을 다룹니다.", vol: "1co", chap: 1 },
-        { day: 82, range: "고린도후서 1-13장", summary: "바울의 사도직 변호와 고난 중의 위로, 화목하게 하는 직분을 강조합니다.", vol: "2co", chap: 1 },
-        { day: 83, range: "갈라디아서-에베소서", summary: "율법에서 자유한 복음과 그리스도 안에서의 새로운 정체성 및 교회론을 다룹니다.", vol: "gal", chap: 1 },
-        { day: 84, range: "빌립보서-데살로니가후서", summary: "그리스도의 마음을 품은 기쁨의 서신과 종말을 기다리는 성도의 태도를 가르칩니다.", vol: "php", chap: 1 },
-        { day: 85, range: "디모데전서-빌레몬서", summary: "목회 지침과 바울의 마지막 유언, 용서와 관용의 메시지를 기록합니다.", vol: "1ti", chap: 1 },
-        { day: 86, range: "히브리서 1-13장", summary: "예수 그리스도가 구약의 제도와 약속을 최종 성취하신 분임을 증거합니다.", vol: "heb", chap: 1 },
-        { day: 87, range: "야고보서-베드로후서", summary: "행함 있는 믿음과 고난 중에 소망을 가지는 성도의 삶을 가르칩니다.", vol: "jas", chap: 1 },
-        { day: 88, range: "요한일서-유다서", summary: "하나님은 사랑이시라는 진리와 거짓 교사에 대한 경계를 다룹니다.", vol: "1jn", chap: 1 },
-        { day: 89, range: "요한계시록 1-11장", summary: "소아시아 일곱 교회에 주시는 말씀과 하늘의 예배 환상을 보여줍니다.", vol: "rev", chap: 1 },
-        { day: 90, range: "요한계시록 12-22장", summary: "최후 승리와 새 하늘과 새 땅, '아멘 주 예수여 오시옵소서'로 마무리됩니다.", vol: "rev", chap: 12 }
+        { day: 1, range: "창1~13", summary: "<창조> 태초에 하나님이 천지를 창조하셨습니다. 하나님은 빛, 궁창과 물, 땅과 식물, 해, 달, 별, 새와 물고기 그리고 동물과 사람을 창조하셨습니다. \n<타락> 인간은 하나님께서 금지하신 선악과를 따 먹음으로 말미암아 하나님께 불순종하여, 에덴동산에서 쫓겨납니다. 이것이 타락이고 죄가 이 세상에 처음 들어온 사건입니다. \n<홍수> 하나님께서 당대의 의인이었던 노아를 부르셔서 방주를 만들게 하셨습니다. 홍수로 인해 모든 인류는, 노아의 가족(8명)을 제외하고 심판을 받습니다. \n<바벨탑> 바벨탑 사건으로 하나님께서 언어를 혼잡하게 하심으로, 결국 언어가 통하는 사람들끼리 흩어져 민족을 이루게 됩니다.", vol: "gen", chap: 1 }, // [cite: 11, 14, 15, 16, 17, 18]
+        { day: 2, range: "창14~26", summary: "<아브람> 하나님께서 우르에서 아브람을 부르셨습니다. 그곳을 떠나 하나님께서 보여주실 땅으로 떠나라고 하십니다. 아브람은 온전히 순종했고, 하나님께서는 아브람이 큰 민족을 이루고 복의 근원이 된다는 언약을 주셨습니다. \n<소돔과 고모라> 하나님께서는 소돔과 고모라에 유황과 불을 쏟아 부으셨고, 롯의 아내는 뒤를 돌아보아 소금 기둥이 되고 맙니다. \n<이삭> 하나님의 말씀대로 사라는 임신하여 이삭을 낳고, 아브라함은 이삭에게 8일만에 할례를 베풉니다. 그러나 하나님께서 이삭을 제물로 바치라고 명령하셨고, 아브람은 순종합니다. 여호와이레!", vol: "gen", chap: 14 }, // [cite: 11, 19, 20, 21, 22, 23]
+        { day: 3, range: "창27~39", summary: "<야곱> 야곱은 아버지 이삭을 속여 에서가 받을 복을 빼앗습니다. 보복을 피하기 위해 외삼촌 라반에게 도망칩니다. 그곳에서 레아와 라헬과 결혼하게 되어 12아들을 낳았습니다. 천사와 씨름하여 '이스라엘' 이라는 새 이름을 얻게 됩니다.", vol: "gen", chap: 27 }, // [cite: 11, 23, 24, 25]
+        { day: 4, range: "창40~출2", summary: "<요셉> 야곱은 여러 자녀들 중 요셉을 더 사랑하여 채색옷을 입혀 주었습니다. 이로 인해 요셉은 다른 형제들의 미움을 받아 미디안 상인들에게 팔려 애굽으로 가게 됩니다. 보디발의 노예로, 누명으로 감옥생활에 있었지만, 여호와께서 함께하심으로 형통의 삶을 살게 되는 요셉은 애굽의 총리가 되었고, 결국 야곱과 그의 가족들은 모두 애굽으로 이주하여 함께 살게 됩니다.", vol: "gen", chap: 40 }, // [cite: 11, 25, 26, 27]
+        { day: 5, range: "출3~15", summary: "<속박> 요셉을 알지 못하는 새로운 왕 바로가 나라를 통치하면서, 이스라엘 백성을 속박하기 시작합니다. <모세> 하나님께서 갈대상자에 담긴 모세를 지키셨고, 호렙산 불타는 떨기나무 아래에서 모세를 부르셔서 이스라엘의 지도자로 세우셨습니다. \n<10재앙> 피, 개구리, 이, 파리, 돌림병, 악성종기, 우박, 메뚜기, 흑암, 장자의 죽음이라는 10가지 재앙을 내리시며, 이스라엘 백성들을 출애굽하게 하셨습니다. \n<홍해> 구름기둥과 불기둥으로 인도하여, 홍해의 기적까지 보여 주셨습니다.", vol: "exo", chap: 3 }, // [cite: 11, 28, 29, 30, 31]
+        { day: 6, range: "출16~29", summary: "<불평과 원망> 하나님은 만나와 메추라기로, 바위를 쳐서 물로 이스라엘 백성들의 필요를 채워주십니다. \n<시내산 언약> 하나님께서는 시내 산 언약으로 '내 소유가 되겠고, 제사장 나라가 되며, 거룩한 백성이 되리라'고 선포하십니다. 그리고 백성들은 모세를 통해 십계명을 받습니다.", vol: "exo", chap: 16 }, // [cite: 11, 32, 33, 34]
+        { day: 7, range: "출30~레2", summary: "<성막> 하나님은 모세에게 구체적으로 성막과 기구들, 그리고 성막 봉사자인 제사장들에 대한 지침을 내리셨습니다. \n<금송아지> 모세가 40일 동안 산에 머물며 하나님으로부터 증거판을 받아 내려온 모세는 이스라엘 백성이 금송아지를 숭배하는 광경을 보고 크게 진노하여 두 증거판을 산 아래로 던져 깨뜨렸습니다.", vol: "exo", chap: 30 }, // [cite: 11, 35, 36, 37]
+        { day: 8, range: "레3~15", summary: "<5제사 7절기> 5제사는 번제, 소제, 화목제, 속건제, 속죄제이고, 7절기는 유월절, 무교절, 초실절, 오순절, 나팔절, 속죄일, 장막절입니다. \n<정결법> 이스라엘 백성들의 거룩한 삶을 위해 정한 음식과 부정한 음식에 관한 규례, 산모에 대한 규례, 피부병에 대한 규례 등을 정하셨습니다.", vol: "lev", chap: 3 }, // [cite: 11, 44, 46]
+        { day: 9, range: "레16~민1", summary: "<거룩한 삶> 거룩은 단지 의례적인 차원에서 부정한 것을 멀리하는 것뿐만 아니라, 일상적인 생활과 문화에서도 나타나야 합니다. \n<거룩한 절기> 안식일, 안식년, 희년과 같은 절기는 하나님의 구원의 역사를 기념하면서 동시에 이웃을 향한 사랑의 실천을 요구합니다.", vol: "lev", chap: 16 }, // [cite: 11, 47, 49]
+        { day: 10, range: "민2~14", summary: "<인구조사> 모세는 행군 준비를 위해 백성의 인구조사를 하는데, 20세 이상의 남자만 603,550명이었습니다. \n<가데스 바네아> 각 지파에서 한 명씩 뽑아 열두 정탐꾼을 가나안에 보냈습니다. 여호수아와 갈렙 외에는 믿음의 시각이 없었습니다.", vol: "num", chap: 2 }, // [cite: 11, 39, 40, 41, 42, 43]
+        { day: 11, range: "민15~27", summary: "<방황> 이스라엘 백성은 약 40년 간 광야에서 방황을 하고 출애굽 1세대들은 모두 광야에서 죽음을 맞이합니다. \n<놋뱀 사건> 놋뱀을 만들어 장대 위에 달게 하여 그것을 쳐다보는 사람마다 살도록 하셨습니다. \n<발람의 예언> 하나님은 발람을 통하여 오히려 이스라엘을 축복하셨습니다.", vol: "num", chap: 15 }, // [cite: 11, 50, 51, 52, 53]
+        { day: 12, range: "민28~신5", summary: "<모압> 40년의 방황이 끝나고 모세는 2세들을 위하여 두 번째 인구조사(601,730명)를 실시합니다. \n<두 번째 율법> 모세는 모압 평지에서 2세들에게 두 번째 율법을 가르칩니다. '신명기'는 '두 번째 율법'이라는 뜻입니다.", vol: "num", chap: 28 }, // [cite: 11, 53, 54]
+        { day: 13, range: "신6~18", summary: "<쉐마> '이스라엘아 들으라 우리 하나님 여호와는 오직 유일한 여호와이시니'. \n<십일조> 하나님은 십일조의 사용 정신에 대해 가르쳐 주시며, 받은 축복대로 드리는 것을 즐거워하십니다.", vol: "deu", chap: 6 }, // [cite: 11, 56, 57, 58]
+        { day: 14, range: "신19~31", summary: "<복과 저주> 하나님의 명령을 지키면 언제 어디서든지 복을 받지만, 지키지 않으면 언제 어디서든 저주를 받습니다. 여호와를 사랑하고 그의 계명을 지키면 약속의 땅에서 생명과 복을 누리게 됩니다.", vol: "deu", chap: 19 }, // [cite: 11, 64, 66, 68]
+        { day: 15, range: "신32~수10", summary: "<모세의 죽음> 모세는 후계자를 세우고 느보 산에서 죽음을 맞이합니다. \n<요단 강> 여호수아는 제사장들을 앞세우고 요단 강을 건너 가나안 땅으로 들어갑니다. \n<여리고> 무기 하나 쓰지 않고 순종함으로 승리합니다.", vol: "deu", chap: 32 }, // [cite: 11, 69, 70, 71, 72]
+        { day: 16, range: "수11~23", summary: "<정복과 정착> 가나안 땅을 차례로 정복하고 분할하여 정착하게 됩니다. \n<땅 분배> 열 두 지파에게 땅을 나누어 줍니다. 도피성은 따로 구별하여 실수로 살인한 자가 피하게 하셨습니다.", vol: "jos", chap: 11 }, // [cite: 11, 59, 61, 62, 63]
+        { day: 17, range: "수24~삿12", summary: "여호수아의 고별 설교와 사사 시대의 시작. [소책자 내용 기반]", vol: "jos", chap: 24 }, // [cite: 11]
+        { day: 18, range: "삿13~삼상1", summary: "사사 시대의 혼란과 사무엘의 탄생. [소책자 내용 기반]", vol: "jdg", chap: 13 }, // [cite: 11]
+        { day: 19, range: "삼상2~삼상14", summary: "한나의 기도와 사무엘의 소명, 사울 왕의 선출. [소책자 내용 기반]", vol: "1sa", chap: 2 }, // [cite: 11]
+        { day: 20, range: "삼상15~27", summary: "사울의 불순종과 다윗의 기름 부음. [소책자 내용 기반]", vol: "1sa", chap: 15 }, // [cite: 11]
+        { day: 21, range: "삼상28~삼하9", summary: "사울의 죽음과 다윗 왕권의 확립. [소책자 내용 기반]", vol: "1sa", chap: 28 }, // [cite: 11]
+        { day: 22, range: "삼하10~22", summary: "다윗의 범죄와 징계, 하나님의 섭리. [소책자 내용 기반]", vol: "2sa", chap: 10 }, // [cite: 11]
+        { day: 23, range: "삼하23~왕상11", summary: "다윗의 마지막과 솔로몬의 성전 건축. [소책자 내용 기반]", vol: "2sa", chap: 23 }, // [cite: 11]
+        { day: 24, range: "왕상12~왕하3", summary: "이스라엘 왕국의 분열과 선지자 엘리야. [소책자 내용 기반]", vol: "1ki", chap: 12 }, // [cite: 11]
+        { day: 25, range: "왕하4~왕하16", summary: "엘리사의 사역과 여러 왕들의 행적. [소책자 내용 기반]", vol: "2ki", chap: 4 }, // [cite: 11]
+        { day: 26, range: "왕하17~대상4", summary: "북이스라엘의 멸망과 다윗 자손의 족보. [소책자 내용 기반]", vol: "2ki", chap: 17 }, // [cite: 11]
+        { day: 27, range: "대상5~17", summary: "지파별 족보와 다윗의 법궤 안치. [소책자 내용 기반]", vol: "1ch", chap: 5 }, // [cite: 11]
+        { day: 28, range: "대상18~대하1", summary: "다윗의 정복 전쟁과 솔로몬의 지혜. [소책자 내용 기반]", vol: "1ch", chap: 18 }, // [cite: 11]
+        { day: 29, range: "대하2~대하14", summary: "솔로몬의 성전 봉헌과 유다 왕 아사. [소책자 내용 기반]", vol: "2ch", chap: 2 }, // [cite: 11]
+        { day: 30, range: "대하15~28", summary: "여호사밧의 개혁과 아하스의 불신앙. [소책자 내용 기반]", vol: "2ch", chap: 15 }, // [cite: 11]
+        { day: 31, range: "대하29~스5", summary: "히스기야의 종교 개혁과 포로 귀환 시작.", vol: "2ch", chap: 29 }, // [cite: 14]
+        { day: 32, range: "스6~느8", summary: "성전 완공과 느헤미야의 성벽 재건.", vol: "ezr", chap: 6 }, // [cite: 14]
+        { day: 33, range: "느9~에8", summary: "신앙 갱신과 에스더의 민족 구원.", vol: "neh", chap: 9 }, // [cite: 14]
+        { day: 34, range: "에9~욥11", summary: "부림절 제정과 욥의 고난 시작.", vol: "est", chap: 9 }, // [cite: 14]
+        { day: 35, range: "욥12~24", summary: "욥과 친구들의 첫 번째, 두 번째 변론.", vol: "job", chap: 12 }, // [cite: 14]
+        { day: 36, range: "욥25~38", summary: "욥의 마지막 호소와 하나님의 등장.", vol: "job", chap: 25 }, // [cite: 14]
+        { day: 37, range: "욥39~19", summary: "하나님의 질문과 욥의 응답 (시편 포함 시작).", vol: "job", chap: 39 }, // [cite: 14]
+        { day: 38, range: "시10~시22", summary: "고난 중의 부르짖음과 찬양.", vol: "psa", chap: 10 }, // [cite: 14]
+        { day: 39, range: "시23~시35", summary: "여호와는 나의 목자시니.", vol: "psa", chap: 23 }, // [cite: 14]
+        { day: 40, range: "시36~48", summary: "하나님의 인자하심과 피난처 되심.", vol: "psa", chap: 36 }, // [cite: 14]
+        { day: 41, range: "시49~61", summary: "인생의 허무함과 참회의 노래.", vol: "psa", chap: 49 }, // [cite: 14]
+        { day: 42, range: "시62~75", summary: "하나님만 바라는 영혼의 노래.", vol: "psa", chap: 62 }, // [cite: 14]
+        { day: 43, range: "시76~88", summary: "하나님의 위엄과 도움을 구하는 기도.", vol: "psa", chap: 76 }, // [cite: 14]
+        { day: 44, range: "시89~101", summary: "여호와의 성실하심과 인자하심.", vol: "psa", chap: 89 }, // [cite: 14]
+        { day: 45, range: "시102~114", summary: "고난 중의 위로와 여호와를 송축하라.", vol: "psa", chap: 102 }, // [cite: 14]
+        { day: 46, range: "시115~127", summary: "우상의 헛됨과 성전 올라가는 노래.", vol: "psa", chap: 115 }, // [cite: 14]
+        { day: 47, range: "시128~140", summary: "가정의 복과 전능하신 하나님.", vol: "psa", chap: 128 }, // [cite: 14]
+        { day: 48, range: "시141~잠4", summary: "마지막 찬양과 지혜의 시작.", vol: "psa", chap: 141 }, // [cite: 14]
+        { day: 49, range: "잠5~17", summary: "음녀를 조심하라, 여호와를 경외하라.", vol: "pro", chap: 5 }, // [cite: 14]
+        { day: 50, range: "잠18~30", summary: "말의 지혜와 삶의 원리들.", vol: "pro", chap: 18 }, // [cite: 14]
+        { day: 51, range: "잠31~전12", summary: "현숙한 여인과 해 아래 헛된 인생.", vol: "pro", chap: 31 }, // [cite: 14]
+        { day: 52, range: "아1~사5", summary: "사랑의 노래와 이사야의 예언 시작.", vol: "sol", chap: 1 }, // [cite: 14]
+        { day: 53, range: "사6~18", summary: "이사야의 소명과 임마누엘 약속.", vol: "isa", chap: 6 }, // [cite: 14]
+        { day: 54, range: "사19~32", summary: "열방을 향한 경고와 신뢰의 권고.", vol: "isa", chap: 19 }, // [cite: 14]
+        { day: 55, range: "사33~45", summary: "고난 후의 영광과 새 일을 행하시는 하나님.", vol: "isa", chap: 33 }, // [cite: 14]
+        { day: 56, range: "사46~58", summary: "우상의 무능과 고난 받는 종.", vol: "isa", chap: 46 }, // [cite: 14]
+        { day: 57, range: "사59~렘5", summary: "구원자와 예레미야의 소명.", vol: "isa", chap: 59 }, // [cite: 14]
+        { day: 58, range: "렘6~18", summary: "유다의 불순종과 토기장이 비유.", vol: "jer", chap: 6 }, // [cite: 14]
+        { day: 59, range: "렘19~31", summary: "박해 받는 선지자와 새 언약.", vol: "jer", chap: 19 }, // [cite: 14]
+        { day: 60, range: "렘32~45", summary: "무너진 성읍과 예레미야의 고통.", vol: "jer", chap: 32 }, // [cite: 14]
+        { day: 61, range: "렘46~겔1", summary: "열국에 대한 예언과 에스겔의 환상.", vol: "jer", chap: 46 }, // [cite: 12]
+        { day: 62, range: "겔2~14", summary: "파수꾼 에스겔과 떠나시는 하나님 영광.", vol: "ezk", chap: 2 }, // [cite: 12]
+        { day: 63, range: "겔15~27", summary: "심판의 비유들과 두로에 대한 경고.", vol: "ezk", chap: 15 }, // [cite: 12]
+        { day: 64, range: "겔28~40", summary: "참 목자 하나님과 회복의 약속.", vol: "ezk", chap: 28 }, // [cite: 12]
+        { day: 65, range: "겔51~단5", summary: "에스겔의 마지막과 다니엘의 지혜.", vol: "ezk", chap: 51 }, // [cite: 12]
+        { day: 66, range: "단6~호7", summary: "사자 굴의 다니엘과 호세아의 사랑.", vol: "dan", chap: 6 }, // [cite: 12]
+        { day: 67, range: "호8~암3", summary: "배역한 이스라엘과 아모스의 심판.", vol: "hos", chap: 8 }, // [cite: 12]
+        { day: 68, range: "암4~미2", summary: "공의를 구하라, 미가의 예언 시작.", vol: "amo", chap: 4 }, // [cite: 12]
+        { day: 69, range: "미3~습2", summary: "지도자들에 대한 책망과 스바냐의 경고.", vol: "mic", chap: 3 }, // [cite: 12]
+        { day: 70, range: "습3~슥10", summary: "남은 자의 복과 성전 재건 독려.", vol: "zep", chap: 3 }, // [cite: 12]
+        { day: 71, range: "슥11~마5", summary: "메시아 예고와 예수님의 산상수훈.", vol: "zec", chap: 11 }, // [cite: 12]
+        { day: 72, range: "마6~19", summary: "천국 백성의 삶과 가르침.", vol: "mat", chap: 6 }, // [cite: 12]
+        { day: 73, range: "마20~막4", summary: "예루살렘 입성과 마가복음의 시작.", vol: "mat", chap: 20 }, // [cite: 12]
+        { day: 74, range: "막5~눅1", summary: "예수님의 이적과 누가복음의 탄생 소식.", vol: "mar", chap: 5 }, // [cite: 12]
+        { day: 75, range: "눅2~14", summary: "예수님의 성장과 하나님 나라 비유.", vol: "luk", chap: 2 }, // [cite: 12]
+        { day: 76, range: "눅15~요3", summary: "잃은 양의 비유와 요한복음의 말씀.", vol: "luk", chap: 15 }, // [cite: 12]
+        { day: 77, range: "요4~16", summary: "사마리아 여인과 성령의 약속.", vol: "jhn", chap: 4 }, // [cite: 12]
+        { day: 78, range: "요17~행9", summary: "예수님의 부활과 사도행전의 성령 강림.", vol: "jhn", chap: 17 }, // [cite: 12]
+        { day: 79, range: "행10~22", summary: "이방 선교의 시작과 바울의 여행.", vol: "act", chap: 10 }, // [cite: 12]
+        { day: 80, range: "행23~롬7", summary: "바울의 압송과 로마서의 믿음 원리.", vol: "act", chap: 23 }, // [cite: 12]
+        { day: 81, range: "롬8~고전4", summary: "성령의 법과 교회의 질서.", vol: "rom", chap: 8 }, // [cite: 12]
+        { day: 82, range: "고전5~고후1", summary: "사랑의 가르침과 사도의 고뇌.", vol: "1co", chap: 5 }, // [cite: 12]
+        { day: 83, range: "고후2~갈1", summary: "그리스도의 향기와 오직 은혜.", vol: "2co", chap: 2 }, // [cite: 12]
+        { day: 84, range: "갈2~빌3", summary: "믿음으로 말미암는 의와 기쁨.", vol: "gal", chap: 2 }, // [cite: 12]
+        { day: 85, range: "빌4~살후3", summary: "성도의 생활과 주의 재림 준비.", vol: "php", chap: 4 }, // [cite: 12]
+        { day: 86, range: "딤전1~몬1", summary: "목회적 조언과 오네시모를 위한 간구.", vol: "1ti", chap: 1 }, // [cite: 12]
+        { day: 87, range: "히1~약1", summary: "믿음의 주요 온전케 하시는 예수.", vol: "heb", chap: 1 }, // [cite: 12]
+        { day: 88, range: "약2~요일2", summary: "행함이 있는 믿음과 사랑의 계명.", vol: "jas", chap: 2 }, // [cite: 12]
+        { day: 89, range: "요일3~계8", summary: "하나님께 속한 자와 하늘의 환상.", vol: "1jn", chap: 3 }, // [cite: 12]
+        { day: 90, range: "계9~22", summary: "최후 승리와 영원한 새 예루살렘.", vol: "rev", chap: 9 } // [cite: 12]
     ];
 
-    const dayList = document.getElementById('day-list');
+    const dayListDiv = document.getElementById('day-list');
     const progressBar = document.getElementById('progress-bar');
-    let completed = JSON.parse(localStorage.getItem('bible_status_2025')) || [];
+    const percentText = document.getElementById('percent');
+    const countText = document.getElementById('count');
+
+    let completed = JSON.parse(localStorage.getItem('bible_90days_status')) || [];
 
     function render() {
-        dayList.innerHTML = '';
+        dayListDiv.innerHTML = '';
         bibleData.forEach(item => {
             const isDone = completed.includes(item.day);
             const card = document.createElement('div');
             card.className = `day-card ${isDone ? 'completed' : ''}`;
-            const link = `http://bible.godpia.com/read/reading.asp?ver=gaen&vol=${item.vol}&chap=${item.chap}&sec=1`;
+            
+            const bibleLink = `http://bible.godpia.com/read/reading.asp?ver=gaen&vol=${item.vol}&chap=${item.chap}&sec=1`;
 
             card.innerHTML = `
                 <div class="day-top">
@@ -171,27 +326,33 @@
                         <span class="day-number">Day ${item.day}</span>
                         <span class="day-range">${item.range}</span>
                     </div>
-                    <a href="${link}" target="_blank" class="read-link">본문읽기 🔗</a>
+                    <a href="${bibleLink}" target="_blank" class="read-link">본문읽기 🔗</a>
                 </div>
                 <div class="summary-text">${item.summary}</div>
             `;
-            dayList.appendChild(card);
+            dayListDiv.appendChild(card);
         });
-        update();
+        updateProgress();
     }
 
-    window.toggle = (day) => {
-        if (completed.includes(day)) completed = completed.filter(d => d !== day);
-        else completed.push(day);
-        localStorage.setItem('bible_status_2025', JSON.stringify(completed));
+    window.toggle = function(day) {
+        if (completed.includes(day)) {
+            completed = completed.filter(d => d !== day);
+        } else {
+            completed.push(day);
+        }
+        localStorage.setItem('bible_90days_status', JSON.stringify(completed));
         render();
     };
 
-    function update() {
-        const per = Math.round((completed.length / bibleData.length) * 100);
-        progressBar.style.width = per + '%';
-        document.getElementById('percent').innerText = per;
-        document.getElementById('count').innerText = completed.length;
+    function updateProgress() {
+        const total = bibleData.length;
+        const current = completed.length;
+        const percentage = Math.round((current / total) * 100);
+        
+        progressBar.style.width = percentage + '%';
+        percentText.innerText = percentage;
+        countText.innerText = current;
     }
 
     render();
