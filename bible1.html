@@ -9,16 +9,18 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background-color: var(--light-bg); margin: 0; padding: 5px; }
         h1 { text-align: center; color: var(--dark-blue); font-size: 1.4rem; margin: 15px 0 5px 0; }
         
-        /* 통계 및 진행바 (이전과 동일) */
+        /* 통계 섹션 */
         .stats-container { display: flex; justify-content: space-around; background: white; margin: 10px auto; padding: 15px; border-radius: 10px; max-width: 95%; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .stat-item { text-align: center; }
-        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--main-blue); }
-        .stat-label { font-size: 0.75rem; color: #7f8c8d; display: block; }
+        .stat-value { font-size: 1.2rem; font-weight: bold; color: var(--main-blue); display: block; }
+        .stat-label { font-size: 0.75rem; color: #7f8c8d; }
+
+        /* 진행바 */
         .progress-section { max-width: 95%; margin: 10px auto 20px; text-align: center; }
         .progress-bg { background: #eee; border-radius: 10px; height: 12px; width: 100%; overflow: hidden; margin-top: 5px; }
-        .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 1s; }
+        .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 1s ease-in-out; }
 
-        /* 출석부 테이블 스타일 */
+        /* 테이블 스타일 (좁은 간격 & 위아래 정렬) */
         .table-outer { max-width: 100%; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border: 1px solid var(--border-color); overflow: hidden; }
         .table-inner { max-height: 50vh; overflow: auto; -webkit-overflow-scrolling: touch; }
         table { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; }
@@ -30,17 +32,17 @@
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
         input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--main-blue); }
 
-        /* 🙏 은혜 나눔 게시판 스타일 */
+        /* 🙏 기도 게시판 스타일 */
         .board-container { max-width: 95%; margin: 25px auto; background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .board-title { font-size: 1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-        .board-list { max-height: 200px; overflow-y: auto; margin-bottom: 15px; border-top: 1px solid #eee; padding-top: 10px; }
-        .board-item { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem; border-left: 4px solid var(--main-blue); }
-        .board-item-name { font-weight: bold; color: var(--dark-blue); margin-right: 5px; }
+        .board-title { font-size: 1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 10px; }
+        .board-list { max-height: 200px; overflow-y: auto; margin-bottom: 15px; border-top: 1px solid #eee; padding-top: 10px; text-align: left; }
+        .board-item { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem; border-left: 4px solid var(--main-blue); line-height: 1.4; }
+        .board-item-name { font-weight: bold; color: var(--dark-blue); }
         .board-input-group { display: flex; flex-direction: column; gap: 8px; }
-        .board-input-group input, .board-input-group textarea { padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; font-size: 0.85rem; }
+        .board-input-group input, .board-input-group textarea { padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; }
         .btn-post { background: var(--main-blue); color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
-        .footer { text-align: center; margin-top: 20px; padding-bottom: 40px; display: flex; justify-content: center; gap: 10px; }
+        .footer { text-align: center; margin: 20px 0 40px; display: flex; justify-content: center; gap: 10px; }
         button { min-width: 140px; height: 45px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; font-size: 0.85rem; }
         .btn-admin { background-color: var(--admin-color); }
         .btn-refresh { background-color: #95a5a6; }
@@ -69,11 +71,11 @@
     <div class="board-container">
         <div class="board-title">🙏 오늘의 은혜 & 기도</div>
         <div id="board-list" class="board-list">
-            <div class="board-item">첫 은혜를 남겨주세요!</div>
+            <div class="board-item">통독하며 받은 은혜를 나누어 보아요!</div>
         </div>
         <div class="board-input-group">
             <input type="text" id="post-name" placeholder="이름 (또는 익명)">
-            <textarea id="post-content" rows="2" placeholder="받은 은혜나 기도제목을 나눠주세요..."></textarea>
+            <textarea id="post-content" rows="2" placeholder="기도 제목이나 은혜 받은 구절을 남겨주세요..."></textarea>
             <button class="btn-post" onclick="postMessage()">나누기 등록</button>
         </div>
     </div>
@@ -84,7 +86,8 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjz4t-fQ7Er58KcjStP812ThiglBruPCrjaG7wQm0TYKnYjEgTZscJwntIHlPjXCBt/exec";
+        // 요청하신 새로운 URL 적용
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJNhtUiLLSItUcB-fSRhqosbYF7JrC84zWPctGUbqQctA4K6Lk5hsC1rkWNulmyUK_/exec";
         let isAdmin = false;
 
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
@@ -96,7 +99,7 @@
                 render(data.attendance);
                 calculateStats(data.attendance);
                 renderBoard(data.messages);
-            } catch (e) { console.error(e); }
+            } catch (e) { console.error("데이터 초기화 실패:", e); }
             document.getElementById('loading').style.display = 'none';
         }
 
@@ -118,6 +121,7 @@
             const list = document.getElementById('board-list');
             if(!messages || messages.length === 0) return;
             list.innerHTML = "";
+            // 최신 메시지가 위로 오도록 반전
             messages.reverse().forEach(m => {
                 const item = document.createElement('div');
                 item.className = 'board-item';
@@ -127,13 +131,20 @@
         }
 
         async function postMessage() {
-            const name = document.getElementById('post-name').value || "익명";
-            const content = document.getElementById('post-content').value;
+            const nameInput = document.getElementById('post-name');
+            const contentInput = document.getElementById('post-content');
+            const name = nameInput.value || "익명";
+            const content = contentInput.value;
             if(!content) return alert("내용을 입력해주세요.");
             
             document.getElementById('loading').style.display = 'flex';
-            await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'message', name:name, content:content}) });
-            location.reload();
+            try {
+                await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'message', name:name, content:content}) });
+                location.reload();
+            } catch(e) { 
+                alert("등록 실패!");
+                document.getElementById('loading').style.display = 'none';
+            }
         }
 
         function render(sheetData) {
@@ -172,9 +183,17 @@
         function handleAdmin() {
             const btn = document.getElementById('admin-btn');
             if (!isAdmin) {
-                let pw = prompt("관리자 암호");
-                if(pw === "9191") { isAdmin = true; btn.textContent = "🔓 관리자 해제"; }
-            } else { isAdmin = false; btn.textContent = "관리자 모드 활성화"; }
+                let pw = prompt("관리자 암호를 입력하세요.");
+                if(pw === "9191") {
+                    isAdmin = true;
+                    btn.textContent = "🔓 관리자 해제";
+                    btn.style.backgroundColor = "#e67e22";
+                } else if(pw !== null) alert("암호가 틀렸습니다.");
+            } else {
+                isAdmin = false;
+                btn.textContent = "관리자 모드 활성화";
+                btn.style.backgroundColor = "#27ae60";
+            }
         }
         init();
     </script>
