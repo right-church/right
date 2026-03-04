@@ -203,7 +203,7 @@
             const btn = document.getElementById('admin-btn');
             if (!isAdmin) {
                 let pw = prompt("관리자 암호");
-                if(pw === "9191") { isAdmin = true; btn.textContent = "🔓 해제"; btn.className = "nav-btn btn-logout"; init(); }
+                if(pw === "9191") { isAdmin = true; btn.textContent = "해제"; btn.className = "nav-btn btn-logout"; init(); }
             } else { isAdmin = false; btn.textContent = "관리자 모드"; btn.className = "nav-btn btn-admin"; init(); }
         }
         init();
