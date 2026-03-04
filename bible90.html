@@ -9,7 +9,6 @@
         body { font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background-color: var(--light-bg); margin: 0; padding: 5px; }
         h1 { text-align: center; color: var(--dark-blue); font-size: 1.2rem; margin: 15px 0 5px 0; }
         
-        /* 통계 및 진행바 */
         .stats-container { display: flex; justify-content: space-around; background: white; margin: 10px auto; padding: 12px; border-radius: 10px; max-width: 95%; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .stat-item { text-align: center; flex: 1; }
         .stat-value { font-size: 1.1rem; font-weight: bold; color: var(--main-blue); display: block; }
@@ -19,45 +18,54 @@
         .progress-bg { background: #eee; border-radius: 10px; height: 10px; width: 100%; overflow: hidden; }
         .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 1s; }
 
-        /* 표 영역: 내부 높이 제한 제거, 전체 스크롤 활용 */
-        .table-outer { width: 100%; background: #fff; border-radius: 8px; border: 1px solid var(--border-color); overflow: visible; margin-bottom: 20px; }
+        /* 표 영역: 전체 스크롤 활용 */
+        .table-outer { width: 100%; background: #fff; border-radius: 8px; border: 1px solid var(--border-color); overflow: hidden; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; }
         
-        th, td { padding: 0; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; vertical-align: middle; height: 42px; }
+        th, td { padding: 0; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; vertical-align: middle; height: 44px; }
         
-        /* 헤더 고정 (전체 스크롤 시 상단에 붙음) */
-        th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 30; font-size: 0.75rem; }
+        /* 헤더 고정 */
+        th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 30; font-size: 0.75rem; border-top: 1px solid var(--main-blue); }
         
-        /* 이름 열 고정 */
-        th:first-child, td:first-child { width: 65px; position: sticky; left: 0; z-index: 31; background-color: #f8f9fa; border-right: 2px solid var(--main-blue); font-weight: bold; }
-        th:first-child { z-index: 40; } /* 이름 헤더는 최상단 */
+        /* 이름 열 고정 (그림자 효과 추가) */
+        th:first-child, td:first-child { 
+            width: 70px; 
+            position: sticky; 
+            left: 0; 
+            z-index: 31; 
+            background-color: #f8f9fa; 
+            border-right: 2px solid var(--main-blue); 
+            font-weight: bold;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        }
+        th:first-child { z-index: 40; }
         
         th:not(:first-child), td:not(:first-child) { width: 48px; min-width: 48px; }
-        .plan-row td { background-color: #ebf5fb !important; color: #2980b9; font-size: 0.62rem; line-height: 1.1; font-weight: bold; padding: 0 2px; }
+        .plan-row td { background-color: #ebf5fb !important; color: #2980b9; font-size: 0.62rem; line-height: 1.2; font-weight: bold; padding: 0 2px; }
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
-        input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--main-blue); cursor: pointer; }
+        input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--main-blue); cursor: pointer; vertical-align: middle; }
 
         /* 기도 게시판 */
         .board-container { max-width: 95%; margin: 20px auto; background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .board-title { font-size: 1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 10px; }
         .board-list { margin-bottom: 15px; text-align: left; }
-        .board-item { background: #f9f9f9; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem; border-left: 4px solid var(--main-blue); position: relative; line-height: 1.4; }
-        .btn-delete { background: #ff7675; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; float: right; margin-left: 10px; }
+        .board-item { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 8px; font-size: 0.85rem; border-left: 4px solid var(--main-blue); position: relative; line-height: 1.5; }
+        .btn-delete { background: #ff7675; color: white; border: none; padding: 5px 9px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; float: right; margin-left: 10px; font-weight: bold; }
         .board-input-group { display: flex; flex-direction: column; gap: 8px; }
-        .board-input-group input, .board-input-group textarea { padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; }
-        .btn-post { background: var(--main-blue); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .board-input-group input, .board-input-group textarea { padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.9rem; -webkit-appearance: none; }
+        .btn-post { background: var(--main-blue); color: white; border: none; padding: 14px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 1rem; }
 
         .footer { text-align: center; margin: 20px 0 40px; display: flex; justify-content: center; gap: 10px; }
-        button.nav-btn { min-width: 130px; height: 45px; border: none; border-radius: 6px; font-weight: bold; color: white; cursor: pointer; }
+        button.nav-btn { min-width: 130px; height: 48px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; font-size: 0.9rem; }
         .btn-admin { background-color: var(--admin-color); }
         .btn-logout { background-color: #e67e22; }
         .btn-refresh { background-color: #95a5a6; }
-        .loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); display:flex; justify-content:center; align-items:center; z-index:1000; font-weight:bold; }
+        .loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); display:flex; justify-content:center; align-items:center; z-index:1000; font-weight:bold; color: var(--dark-blue); }
     </style>
 </head>
 <body>
-    <div id="loading" class="loading">⏳ 올바른 데이터에 연결 중...</div>
+    <div id="loading" class="loading">⏳ 은혜를 연결 중...</div>
     <h1>📖 90일 성경통독 출석부</h1>
 
     <div class="stats-container">
@@ -69,7 +77,7 @@
 
     <div class="table-outer">
         <div class="table-inner">
-            <table>
+            <table id="target-table">
                 <thead><tr id="header-row"><th>이름\일차</th></tr></thead>
                 <tbody id="attendance-body"></tbody>
             </table>
@@ -81,7 +89,7 @@
         <div id="board-list" class="board-list"></div>
         <div class="board-input-group">
             <input type="text" id="post-name" placeholder="이름 (또는 익명)">
-            <textarea id="post-content" rows="2" placeholder="말씀의 은혜, 기도제목을 나눠주세요..."></textarea>
+            <textarea id="post-content" rows="3" placeholder="말씀의 은혜, 기도제목을 나눠주세요..."></textarea>
             <button class="btn-post" onclick="postMessage()">등록하기</button>
         </div>
     </div>
@@ -92,7 +100,6 @@
     </div>
 
     <script>
-        // 요청하신 새로운 URL 적용 완료
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyZCtyJc47SHdLr9VCKKcjuujm4nUMB1U9U185xCioqnvztB0OAkI6beBE-IDFshMA/exec";
         let isAdmin = false;
 
@@ -169,7 +176,7 @@
                 const item = document.createElement('div');
                 item.className = 'board-item';
                 let delBtn = isAdmin ? `<button class="btn-delete" onclick="deleteMessage('${m.id}')">삭제</button>` : '';
-                item.innerHTML = `${delBtn}<span class="board-item-name">${m.name}:</span> ${m.content}`;
+                item.innerHTML = `${delBtn}<span class="board-item-name" style="font-weight:bold; color:var(--main-blue);">${m.name}:</span> ${m.content}`;
                 list.appendChild(item);
             });
         }
@@ -198,7 +205,7 @@
                     isAdmin = true;
                     btn.textContent = "🔓 해제";
                     btn.className = "nav-btn btn-logout";
-                    init(); // 게시판 리렌더링 (삭제 버튼 표시용)
+                    init();
                 } else if(pw !== null) alert("암호가 틀렸습니다.");
             } else {
                 isAdmin = false;
