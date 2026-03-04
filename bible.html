@@ -13,20 +13,29 @@
         .table-inner { max-height: 75vh; overflow: auto; -webkit-overflow-scrolling: touch; }
         table { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; }
         
-        th, td { padding: 8px 2px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; font-size: 0.85rem; }
+        th, td { padding: 8px 2px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; font-size: 0.85rem; vertical-align: middle; }
         th:first-child, td:first-child { width: 60px; position: sticky; left: 0; z-index: 10; background-color: #f8f9fa; border-right: 2px solid var(--main-blue); font-weight: bold; }
         th:not(:first-child), td:not(:first-child) { width: 45px; }
-        th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 5; white-space: nowrap; font-size: 0.8rem; }
+        th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 5; white-space: nowrap; font-size: 0.8rem; height: 40px; }
         
-        .plan-row td { background-color: #ebf5fb; color: #2980b9; font-size: 0.65rem; line-height: 1.1; word-break: break-all; }
+        /* 읽을 말씀 행 정렬 개선 */
+        .plan-row td { 
+            background-color: #ebf5fb; 
+            color: #2980b9; 
+            font-size: 0.7rem; 
+            line-height: 1.2; 
+            word-break: keep-all; /* 단어 단위 줄바꿈으로 더 깔끔하게 */
+            height: 45px; /* 높이 고정으로 통일감 부여 */
+            padding: 4px 2px;
+        }
+        
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
         input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--main-blue); cursor: pointer; margin: 0; vertical-align: middle; }
         
-        /* 버튼 크기 통일 설정 */
         .footer { text-align: center; margin-top: 20px; padding-bottom: 40px; display: flex; justify-content: center; gap: 10px; }
         button { 
-            min-width: 150px; /* 버튼의 최소 너비를 똑같이 고정 */
-            height: 45px;    /* 버튼의 높이를 똑같이 고정 */
+            min-width: 150px; 
+            height: 45px; 
             border: none; 
             border-radius: 8px; 
             font-weight: bold; 
