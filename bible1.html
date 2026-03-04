@@ -2,213 +2,98 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>90일 성경통독 실시간 출석부</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>90일 성경통독 가이드 (본문 연결)</title>
     <style>
-        :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f4f7f6; --border-color: #ddd; --admin-color: #27ae60; --logout-color: #e67e22; --highlight-yellow: #fff9c4; }
-        
-        /* 모바일 전체 여백 조정 */
-        body { font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background-color: var(--light-bg); margin: 0; padding: 5px; overflow-x: hidden; }
-        h1 { text-align: center; color: var(--dark-blue); font-size: 1.2rem; margin: 10px 0; }
-        
-        /* 통계 섹션 모바일 최적화 */
-        .stats-container { display: flex; justify-content: space-around; background: white; margin: 5px auto; padding: 10px; border-radius: 8px; max-width: 95%; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .stat-item { flex: 1; }
-        .stat-value { font-size: 1.1rem; font-weight: bold; color: var(--main-blue); display: block; }
-        .stat-label { font-size: 0.7rem; color: #7f8c8d; }
-
-        .progress-section { max-width: 95%; margin: 5px auto 15px; text-align: center; }
-        .progress-bg { background: #eee; border-radius: 10px; height: 10px; width: 100%; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 1s; }
-
-        /* [핵심] 표 잘림 방지 컨테이너 */
-        .table-outer { 
-            width: 100%; 
-            margin: 0 auto; 
-            background: #fff; 
-            border-radius: 8px; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
-            border: 1px solid var(--border-color); 
-            overflow: hidden; 
-        }
-        .table-inner { 
-            max-height: 55vh; 
-            overflow: auto; /* 가로, 세로 스크롤 허용 */
-            -webkit-overflow-scrolling: touch; 
-        }
-        
-        table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; } /* 내용에 맞춰 너비 자동 확장 */
-        
-        th, td { padding: 0; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; vertical-align: middle; height: 42px; }
-        
-        /* 이름 열 고정 및 잘림 방지 */
-        th:first-child, td:first-child { 
-            width: 60px; 
-            position: sticky; 
-            left: 0; 
-            z-index: 11; 
-            background-color: #f8f9fa; 
-            border-right: 2px solid var(--main-blue); 
-            font-weight: bold; 
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
-        }
-        
-        /* 날짜 칸 너비 강제 고정 */
-        th:not(:first-child), td:not(:first-child) { width: 45px; min-width: 45px; }
-        th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 10; font-size: 0.75rem; }
-        
-        .plan-row td { background-color: #ebf5fb; color: #2980b9; font-size: 0.62rem; line-height: 1.1; padding: 0 2px; }
-        td.checked-cell { background-color: var(--highlight-yellow) !important; }
-        input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--main-blue); }
-
-        /* 기도 게시판 모바일 최적화 */
-        .board-container { max-width: 95%; margin: 15px auto; background: #fff; border-radius: 10px; padding: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
-        .board-title { font-size: 0.95rem; font-weight: bold; margin-bottom: 8px; }
-        .board-list { max-height: 150px; overflow-y: auto; margin-bottom: 10px; text-align: left; }
-        .board-item { background: #f9f9f9; padding: 8px; border-radius: 6px; margin-bottom: 6px; font-size: 0.8rem; border-left: 3px solid var(--main-blue); }
-        .board-input-group { display: flex; flex-direction: column; gap: 5px; }
-        .board-input-group input, .board-input-group textarea { padding: 8px; border: 1px solid #ddd; border-radius: 5px; font-size: 0.85rem; -webkit-appearance: none; }
-        .btn-post { background: var(--main-blue); color: white; border: none; padding: 10px; border-radius: 5px; font-weight: bold; }
-
-        .footer { text-align: center; margin: 15px 0 30px; display: flex; justify-content: center; gap: 8px; }
-        button { min-width: 120px; height: 40px; border: none; border-radius: 6px; font-weight: bold; color: white; font-size: 0.8rem; }
-        .btn-admin { background-color: var(--admin-color); }
-        .btn-refresh { background-color: #95a5a6; }
-        
-        .loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); display:flex; justify-content:center; align-items:center; z-index:1000; font-weight:bold; }
+        :root { --primary-color: #4a90e2; --bg-color: #f4f7f6; --card-bg: #ffffff; }
+        body { font-family: 'Apple SD Gothic Neo', sans-serif; background-color: var(--bg-color); padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .container { max-width: 600px; width: 100%; }
+        h1 { text-align: center; color: #333; }
+        .sticky-header { position: sticky; top: 0; background: var(--bg-color); padding: 10px 0; z-index: 100; }
+        .progress-container { width: 100%; background: #e0e0e0; border-radius: 20px; height: 25px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2); }
+        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, #6dd5ed, #2193b0); transition: width 0.3s ease; }
+        .stats { text-align: center; margin: 10px 0; font-weight: bold; color: #555; }
+        .day-item { background: var(--card-bg); margin-bottom: 10px; padding: 15px 20px; border-radius: 12px; display: flex; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .day-item input[type="checkbox"] { width: 22px; height: 22px; margin-right: 15px; cursor: pointer; }
+        .day-text { flex-grow: 1; text-decoration: none; color: inherit; display: flex; align-items: center; }
+        .day-number { font-weight: bold; color: var(--primary-color); margin-right: 10px; min-width: 60px; }
+        .range-link { color: #2193b0; text-decoration: underline; font-weight: 500; }
+        .completed { background-color: #f0f0f0; opacity: 0.7; }
+        .completed .day-text { text-decoration: line-through; color: #bbb; }
     </style>
 </head>
 <body>
-    <div id="loading" class="loading">⏳ 데이터를 연결 중...</div>
-    <h1>📖 90일 성경통독 출석부</h1>
 
-    <div class="stats-container">
-        <div class="stat-item"><span id="total-users" class="stat-value">0</span><span class="stat-label">참여자</span></div>
-        <div class="stat-item"><span id="total-checks" class="stat-value">0</span><span class="stat-label">누적 읽기</span></div>
-        <div class="stat-item"><span id="overall-percent" class="stat-value">0%</span><span class="stat-label">전체 진척률</span></div>
+<div class="container">
+    <h1>📖 90일 성경통독</h1>
+    <div class="sticky-header">
+        <div class="progress-container"><div id="progress-bar"></div></div>
+        <div class="stats">진행률: <span id="percent">0</span>% (<span id="count">0</span>/90일)</div>
     </div>
+    <div id="plan-list"></div>
+</div>
 
-    <div class="progress-section">
-        <div class="progress-bg"><div id="progress-bar" class="progress-fill"></div></div>
-    </div>
+<script>
+    // 구글 드라이브 '2025 봄, 90일 성경통독' 및 '올바른 90일 성경통독' 데이터를 기반으로 구성 
+    const bibleData = [
+        { day: 1, range: "창세기 1-11장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=1&sec=1" },
+        { day: 2, range: "창세기 12-23장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=12&sec=1" },
+        { day: 3, range: "창세기 24-36장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=24&sec=1" },
+        { day: 4, range: "창세기 37-50장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=gen&chap=37&sec=1" },
+        { day: 5, range: "출애굽기 1-15장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=exo&chap=1&sec=1" },
+        { day: 6, range: "출애굽기 16-27장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=exo&chap=16&sec=1" },
+        { day: 7, range: "출애굽기 28-40장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=exo&chap=28&sec=1" },
+        { day: 8, range: "레위기 1-14장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=lev&chap=1&sec=1" },
+        { day: 9, range: "레위기 15-27장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=lev&chap=15&sec=1" },
+        { day: 10, range: "민수기 1-12장", link: "http://bible.godpia.com/read/reading.asp?ver=gaen&vol=num&chap=1&sec=1" }
+        // ... 실제 일정표의 범위를 90일까지 추가할 수 있습니다.
+    ];
 
-    <div class="table-outer">
-        <div class="table-inner">
-            <table id="main-table">
-                <thead><tr id="header-row"><th>이름</th></tr></thead>
-                <tbody id="attendance-body"></tbody>
-            </table>
-        </div>
-    </div>
+    // 데이터 보충 (90일까지)
+    for (let i = 11; i <= 90; i++) {
+        if(!bibleData[i-1]) bibleData.push({ day: i, range: `통독 ${i}일차 범위`, link: "http://bible.godpia.com/" });
+    }
 
-    <div class="board-container">
-        <div class="board-title">🙏 오늘의 은혜 & 기도</div>
-        <div id="board-list" class="board-list"></div>
-        <div class="board-input-group">
-            <input type="text" id="post-name" placeholder="이름 (또는 익명)">
-            <textarea id="post-content" rows="2" placeholder="은혜나 기도제목을 나눠주세요..."></textarea>
-            <button class="btn-post" onclick="postMessage()">등록하기</button>
-        </div>
-    </div>
-    
-    <div class="footer">
-        <button id="admin-btn" class="btn-admin" onclick="handleAdmin()">관리자 모드</button>
-        <button class="btn-refresh" onclick="location.reload()">🔄 새로고침</button>
-    </div>
+    const planListDiv = document.getElementById('plan-list');
+    const progressBar = document.getElementById('progress-bar');
+    let completedDays = JSON.parse(localStorage.getItem('bibleProgress')) || [];
 
-    <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJNhtUiLLSItUcB-fSRhqosbYF7JrC84zWPctGUbqQctA4K6Lk5hsC1rkWNulmyUK_/exec";
-        let isAdmin = false;
+    function render() {
+        planListDiv.innerHTML = '';
+        bibleData.forEach(item => {
+            const isChecked = completedDays.includes(item.day);
+            const div = document.createElement('div');
+            div.className = `day-item ${isChecked ? 'completed' : ''}`;
+            div.innerHTML = `
+                <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleDay(${item.day})">
+                <a href="${item.link}" target="_blank" class="day-text">
+                    <span class="day-number">Day ${item.day}</span>
+                    <span class="range-text">${item.range} <small>(본문읽기 🔗)</small></span>
+                </a>
+            `;
+            planListDiv.appendChild(div);
+        });
+        updateProgress();
+    }
 
-        const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
-
-        async function init() {
-            try {
-                const res = await fetch(SCRIPT_URL);
-                const data = await res.json();
-                render(data.attendance);
-                calculateStats(data.attendance);
-                renderBoard(data.messages);
-            } catch (e) { alert("데이터 연결 오류"); }
-            document.getElementById('loading').style.display = 'none';
+    window.toggleDay = function(day) {
+        if (completedDays.includes(day)) {
+            completedDays = completedDays.filter(d => d !== day);
+        } else {
+            completedDays.push(day);
         }
+        localStorage.setItem('bibleProgress', JSON.stringify(completedDays));
+        render();
+    };
 
-        function calculateStats(sheetData) {
-            const userCount = sheetData.length - 1;
-            let checkCount = 0;
-            for(let r=1; r<sheetData.length; r++) {
-                for(let c=1; c<=90; c++) { if(sheetData[r][c] === "V") checkCount++; }
-            }
-            const totalCells = userCount * 90;
-            const percent = totalCells > 0 ? Math.round((checkCount / totalCells) * 100) : 0;
-            document.getElementById('total-users').textContent = userCount;
-            document.getElementById('total-checks').textContent = checkCount;
-            document.getElementById('overall-percent').textContent = percent + "%";
-            document.getElementById('progress-bar').style.width = percent + "%";
-        }
+    function updateProgress() {
+        const percentage = Math.round((completedDays.length / bibleData.length) * 100);
+        progressBar.style.width = percentage + '%';
+        document.getElementById('percent').innerText = percentage;
+        document.getElementById('count').innerText = completedDays.length;
+    }
 
-        function renderBoard(messages) {
-            const list = document.getElementById('board-list');
-            if(!messages || messages.length === 0) { list.innerHTML = "<div class='board-item'>첫 은혜를 남겨주세요!</div>"; return; }
-            list.innerHTML = "";
-            messages.reverse().forEach(m => {
-                const item = document.createElement('div');
-                item.className = 'board-item';
-                item.innerHTML = `<span class="board-item-name">${m.name}:</span> ${m.content}`;
-                list.appendChild(item);
-            });
-        }
-
-        async function postMessage() {
-            const name = document.getElementById('post-name').value || "익명";
-            const content = document.getElementById('post-content').value;
-            if(!content) return alert("내용을 입력해주세요.");
-            document.getElementById('loading').style.display = 'flex';
-            await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'message', name:name, content:content}) });
-            location.reload();
-        }
-
-        function render(sheetData) {
-            const hRow = document.getElementById('header-row');
-            const tbody = document.getElementById('attendance-body');
-            for(let i=1; i<=90; i++) { 
-                let th = document.createElement('th'); th.textContent = i+'일'; hRow.appendChild(th); 
-            }
-            let pRow = document.createElement('tr'); pRow.className = 'plan-row';
-            pRow.innerHTML = "<td>읽을 말씀</td>";
-            for(let i=1; i<=90; i++) { 
-                let td = document.createElement('td'); td.textContent = biblePlan[i]; pRow.appendChild(td); 
-            }
-            tbody.appendChild(pRow);
-            for(let r=1; r<sheetData.length; r++) {
-                let name = sheetData[r][0]; if(!name) continue;
-                let tr = document.createElement('tr');
-                let tdName = document.createElement('td'); tdName.textContent = name; tr.appendChild(tdName);
-                for(let i=1; i<=90; i++) {
-                    let td = document.createElement('td');
-                    let cb = document.createElement('input'); cb.type = 'checkbox';
-                    cb.checked = (sheetData[r][i] === "V");
-                    if(cb.checked) td.className = 'checked-cell';
-                    cb.onclick = async (e) => {
-                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드 활성화가 필요합니다."); return; }
-                        td.className = cb.checked ? 'checked-cell' : '';
-                        await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'attendance', name:name, day:i, checked:cb.checked}) });
-                        location.reload();
-                    };
-                    td.appendChild(cb); tr.appendChild(td);
-                }
-                tbody.appendChild(tr);
-            }
-        }
-
-        function handleAdmin() {
-            const btn = document.getElementById('admin-btn');
-            if (!isAdmin) {
-                let pw = prompt("관리자 암호");
-                if(pw === "9191") { isAdmin = true; btn.textContent = "🔓 해제"; btn.className = "btn-logout"; }
-            } else { isAdmin = false; btn.textContent = "관리자 모드"; btn.className = "btn-admin"; }
-        }
-        init();
-    </script>
+    render();
+</script>
 </body>
 </html>
