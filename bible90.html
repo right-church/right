@@ -81,7 +81,7 @@
         <div id="board-list" class="board-list"></div>
         <div class="board-input-group">
             <input type="text" id="post-name" placeholder="이름 (또는 익명)">
-            <textarea id="post-content" rows="2" placeholder="은혜나 기도제목을 나눠주세요..."></textarea>
+            <textarea id="post-content" rows="2" placeholder="말씀의 은혜, 기도제목을 나눠주세요..."></textarea>
             <button class="btn-post" onclick="postMessage()">등록하기</button>
         </div>
     </div>
@@ -163,7 +163,7 @@
 
         function renderBoard(messages) {
             const list = document.getElementById('board-list');
-            if(!messages || messages.length === 0) { list.innerHTML = "<div class='board-item'>첫 은혜를 나눠주세요!</div>"; return; }
+            if(!messages || messages.length === 0) { list.innerHTML = "<div class='board-item'>말씀의 은혜를 나눠주세요!</div>"; return; }
             list.innerHTML = "";
             messages.reverse().forEach(m => {
                 const item = document.createElement('div');
