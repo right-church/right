@@ -2,160 +2,146 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>90일 성경통독 출석부</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>90일 성경통독 실시간 출석부</title>
     <style>
-        body {
-            font-family: 'Malgun Gothic', sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            color: #333;
+        :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f4f7f6; --border-color: #ddd; --admin-color: #27ae60; --logout-color: #e67e22; --highlight-yellow: #fff9c4; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background-color: var(--light-bg); margin: 0; padding: 5px; }
+        h1 { text-align: center; color: var(--dark-blue); font-size: 1.2rem; margin: 15px 0; }
+        
+        .table-outer { max-width: 100%; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); border: 1px solid var(--border-color); overflow: hidden; }
+        .table-inner { max-height: 75vh; overflow: auto; -webkit-overflow-scrolling: touch; }
+        table { border-collapse: separate; border-spacing: 0; width: 100%; table-layout: fixed; }
+        
+        /* 전체 셀 공통: 좁은 간격 유지 */
+        th, td { padding: 6px 1px; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; font-size: 0.8rem; vertical-align: middle; }
+        
+        /* 첫 번째 열(이름) 너비 고정 */
+        th:first-child, td:first-child { width: 60px; position: sticky; left: 0; z-index: 10; background-color: #f8f9fa; border-right: 2px solid var(--main-blue); font-weight: bold; }
+        
+        /* 날짜 칸 너비 재축소 (45px) */
+        th:not(:first-child), td:not(:first-child) { width: 45px; }
+        th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 5; white-space: nowrap; font-size: 0.75rem; height: 35px; }
+        
+        /* 읽을 말씀 행 (초소형 정밀 정렬) */
+        .plan-row td { 
+            background-color: #ebf5fb; 
+            color: #2980b9; 
+            font-size: 0.6rem; /* 글자 크기 최소화 */
+            line-height: 1.0;  /* 줄 간격 촘촘하게 */
+            padding: 3px 1px;
+            height: 38px;      /* 행 높이 최적화 */
+            word-break: break-all;
         }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
+        
+        td.checked-cell { background-color: var(--highlight-yellow) !important; }
+        input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--main-blue); cursor: pointer; margin: 0; vertical-align: middle; }
+        
+        /* 버튼 디자인 유지 */
+        .footer { text-align: center; margin-top: 15px; padding-bottom: 30px; display: flex; justify-content: center; gap: 10px; }
+        button { 
+            min-width: 140px; 
+            height: 42px; 
+            border: none; 
+            border-radius: 6px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: white; 
+            font-size: 0.85rem; 
+            transition: all 0.2s; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
-        .table-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: center;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            white-space: nowrap;
-        }
-        th {
-            background-color: #3498db;
-            color: white;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        input[type="text"] {
-            width: 130px;
-            padding: 6px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            text-align: center;
-        }
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-        }
-        .reset-btn {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 15px;
-            transition: 0.3s;
-        }
-        .reset-btn:hover {
-            background-color: #c0392b;
-        }
+        .btn-admin { background-color: var(--admin-color); }
+        .btn-logout { background-color: var(--logout-color); }
+        .btn-refresh { background-color: #95a5a6; }
+        button:active { transform: scale(0.98); }
+
+        .loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.8); display:flex; justify-content:center; align-items:center; z-index:100; font-weight:bold; }
     </style>
 </head>
 <body>
-
+    <div id="loading" class="loading">⏳ 데이터를 연결 중...</div>
     <h1>📖 90일 성경통독 출석부</h1>
+    <div class="table-outer"><div class="table-inner"><table>
+        <thead><tr id="header-row"><th>이름\일차</th></tr></thead>
+        <tbody id="attendance-body"></tbody>
+    </table></div></div>
     
-    <div class="table-container">
-        <table>
-            <thead>
-                <tr>
-                    <th>일차</th>
-                    <th>읽을 분량</th>
-                    <th>김사라</th>
-                    <th>김성은</th>
-                    <th>김정동</th>
-                    <th>김하정</th>
-                    <th>박금희</th>
-                    <th>유진헌</th>
-                    <th>이영숙</th>
-                    <th>한진경</th>
-                </tr>
-            </thead>
-            <tbody id="attendance-body">
-                </tbody>
-        </table>
+    <div class="footer">
+        <button id="admin-btn" class="btn-admin" onclick="handleAdmin()">관리자 모드 활성화</button>
+        <button class="btn-refresh" onclick="location.reload()">🔄 새로고침</button>
     </div>
 
-    <button class="reset-btn" onclick="resetData()">전체 초기화 (데이터 삭제)</button>
-
     <script>
-        const tbody = document.getElementById('attendance-body');
-        const members = ["김사라", "김성은", "김정동", "김하정", "박금희", "유진헌", "이영숙", "한진경"];
-        const totalDays = 90;
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzjz4t-fQ7Er58KcjStP812ThiglBruPCrjaG7wQm0TYKnYjEgTZscJwntIHlPjXCBt/exec";
+        let isAdmin = false;
 
-        for (let i = 1; i <= totalDays; i++) {
-            let tr = document.createElement('tr');
-            
-            // 1. 일차 표시
-            let tdDay = document.createElement('td');
-            tdDay.innerHTML = `<strong>${i}일차</strong>`;
-            tr.appendChild(tdDay);
+        const biblePlan = {
+            1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22"
+        };
 
-            // 2. 분량 입력칸
-            let tdPortion = document.createElement('td');
-            let inputPortion = document.createElement('input');
-            inputPortion.type = 'text';
-            inputPortion.placeholder = '분량 입력';
-            inputPortion.value = localStorage.getItem(`bible-portion-${i}`) || '';
-            inputPortion.addEventListener('input', function() {
-                localStorage.setItem(`bible-portion-${i}`, this.value);
-            });
-            tdPortion.appendChild(inputPortion);
-            tr.appendChild(tdPortion);
-
-            // 3. 8명 이름별 체크박스
-            members.forEach((name, index) => {
-                let tdCheck = document.createElement('td');
-                let checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                // 저장 키값에 이름을 포함하여 데이터 혼선을 방지합니다.
-                const storageKey = `bible-check-${i}-${name}`;
-                checkbox.checked = localStorage.getItem(storageKey) === 'true';
-                
-                checkbox.addEventListener('change', function() {
-                    localStorage.setItem(storageKey, this.checked);
-                });
-                
-                tdCheck.appendChild(checkbox);
-                tr.appendChild(tdCheck);
-            });
-
-            tbody.appendChild(tr);
+        async function init() {
+            try {
+                const res = await fetch(SCRIPT_URL);
+                const data = await res.json();
+                render(data);
+            } catch (e) { alert("연동 실패! 구글 설정을 확인하세요."); }
+            document.getElementById('loading').style.display = 'none';
         }
 
-        function resetData() {
-            if (confirm("모든 참석 데이터와 분량 기록을 삭제할까요?")) {
-                localStorage.clear();
-                location.reload();
+        function render(sheetData) {
+            const hRow = document.getElementById('header-row');
+            const tbody = document.getElementById('attendance-body');
+            for(let i=1; i<=90; i++) { 
+                let th = document.createElement('th'); th.textContent = i+'일'; hRow.appendChild(th); 
+            }
+
+            let pRow = document.createElement('tr'); pRow.className = 'plan-row';
+            pRow.innerHTML = "<td>읽을 말씀</td>";
+            for(let i=1; i<=90; i++) { 
+                let td = document.createElement('td'); td.textContent = biblePlan[i]; pRow.appendChild(td); 
+            }
+            tbody.appendChild(pRow);
+
+            for(let r=1; r<sheetData.length; r++) {
+                let name = sheetData[r][0]; if(!name) continue;
+                let tr = document.createElement('tr');
+                let tdName = document.createElement('td'); tdName.textContent = name; tr.appendChild(tdName);
+                for(let i=1; i<=90; i++) {
+                    let td = document.createElement('td');
+                    let cb = document.createElement('input'); cb.type = 'checkbox';
+                    cb.checked = (sheetData[r][i] === "V");
+                    if(cb.checked) td.className = 'checked-cell';
+                    cb.onclick = async (e) => {
+                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드 활성화가 필요합니다."); return; }
+                        td.className = cb.checked ? 'checked-cell' : '';
+                        await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({name:name, day:i, checked:cb.checked}) });
+                    };
+                    td.appendChild(cb); tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
             }
         }
-    </script>
 
+        function handleAdmin() {
+            const btn = document.getElementById('admin-btn');
+            if (!isAdmin) {
+                let pw = prompt("비밀번호 입력");
+                if(pw === "9191") {
+                    isAdmin = true;
+                    btn.textContent = "🔓 관리자 모드 해제";
+                    btn.className = "btn-logout";
+                } else if(pw !== null) alert("비밀번호가 틀렸습니다.");
+            } else {
+                isAdmin = false;
+                btn.textContent = "관리자 모드 활성화";
+                btn.className = "btn-admin";
+            }
+        }
+        init();
+    </script>
 </body>
 </html>
