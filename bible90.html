@@ -18,28 +18,29 @@
         .stat-label { font-size: 0.7rem; color: #7f8c8d; }
         .progress-section { text-align: center; margin-bottom: 25px; }
         .progress-bg { background: #eee; border-radius: 10px; height: 12px; width: 100%; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 0.5s; }
+        .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 1s; }
 
-        /* 출석부 표 디자인 */
+        /* 출석부 표 */
         .table-outer { background: #fff; border-radius: 10px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); box-sizing: border-box; }
         .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; }
         th, td { padding: 0; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; vertical-align: middle; height: 46px; }
         th { background-color: var(--main-blue); color: white; position: sticky; top: 0; z-index: 30; font-size: 0.75rem; }
-        th:first-child, td:first-child { width: 75px; position: sticky; left: 0; z-index: 31; background-color: #f8f9fa; border-right: 2px solid var(--main-blue); font-weight: bold; }
+        th:first-child, td:first-child { width: 70px; position: sticky; left: 0; z-index: 31; background-color: #f8f9fa; border-right: 2px solid var(--main-blue); font-weight: bold; }
         th:first-child { z-index: 40; }
         th:not(:first-child), td:not(:first-child) { width: 50px; min-width: 50px; }
         .plan-row td { background-color: #ebf5fb !important; color: #2980b9; font-size: 0.65rem; line-height: 1.2; font-weight: bold; padding: 0 2px; }
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
         input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--main-blue); cursor: pointer; }
 
-        /* 게시판 및 좋아요 */
+        /* 기도 게시판 */
         .board-container { background: #fff; border-radius: 10px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); box-sizing: border-box; }
         .board-title { font-size: 1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 12px; }
-        .board-item { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 0.88rem; border-left: 4px solid var(--main-blue); position: relative; line-height: 1.6; transition: opacity 0.3s; }
-        .btn-delete { background: #ff7675; color: white; border: none; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; float: right; margin-left: 10px; opacity: 0.7; }
+        .board-item { background: #f9f9f9; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-size: 0.88rem; border-left: 4px solid var(--main-blue); position: relative; line-height: 1.6; transition: all 0.2s; }
+        .btn-delete { background: #ff7675; color: white; border: none; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; float: right; margin-left: 10px; opacity: 0.8; }
+        
         .btn-like { display: inline-flex; align-items: center; gap: 3px; background: white; border: 1px solid #ffb3b3; color: #ff7675; padding: 1px 7px; border-radius: 12px; font-size: 0.75rem; cursor: pointer; margin-left: 8px; vertical-align: middle; font-weight: bold; transition: 0.2s; }
-        .btn-like:active { transform: scale(1.3); }
+        .btn-like:active { transform: scale(1.2); }
 
         .board-input-group { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
         .board-input-group input, .board-input-group textarea { padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; -webkit-appearance: none; }
@@ -51,11 +52,12 @@
         .btn-logout { background-color: #e67e22; }
         .btn-refresh { background-color: #95a5a6; }
         
-        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.85); display:flex; justify-content:center; align-items:center; z-index:1000; font-weight:bold; color: var(--dark-blue); transition: opacity 0.4s; }
+        /* 로딩 애니메이션 개선 */
+        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.85); display:flex; justify-content:center; align-items:center; z-index:1000; font-weight:bold; color: var(--dark-blue); transition: opacity 0.3s; }
     </style>
 </head>
 <body>
-    <div id="loading">⏳ 은혜의 말씀 연결 중...</div>
+    <div id="loading">⏳ 올바른 데이터에 연결 중...</div>
     <h1>📖 90일 성경통독 출석부</h1>
 
     <div class="stats-container content-box">
@@ -71,7 +73,7 @@
     <div class="table-outer content-box">
         <div class="table-inner">
             <table>
-                <thead><tr id="header-row"></tr></thead>
+                <thead><tr id="header-row"><th>이름\일차</th></tr></thead>
                 <tbody id="attendance-body"></tbody>
             </table>
         </div>
@@ -82,14 +84,14 @@
         <div id="board-list" class="board-list"></div>
         <div class="board-input-group">
             <input type="text" id="post-name" placeholder="이름 (또는 익명)">
-            <textarea id="post-content" rows="3" placeholder="말씀의 은혜를 나눠주세요..."></textarea>
+            <textarea id="post-content" rows="3" placeholder="말씀의 은혜, 기도제목을 나눠주세요..."></textarea>
             <button class="btn-post" id="post-btn" onclick="postMessage()">등록하기</button>
         </div>
     </div>
     
     <div class="footer">
         <button id="admin-btn" class="nav-btn btn-admin" onclick="handleAdmin()">관리자 모드</button>
-        <button class="nav-btn btn-refresh" onclick="location.reload()">🔄 새로고침</button>
+        <button class="nav-btn btn-refresh" onclick="location.reload()">새로고침</button>
     </div>
 
     <script>
@@ -100,29 +102,27 @@
 
         async function init() {
             updateAdminUI();
-            preRenderTable(); // [최적화] 데이터 오기 전 틀 먼저 표시
-            
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
-                
                 render(data.attendance);
                 calculateStats(data.attendance);
                 renderBoard(data.messages);
                 
+                // 로딩 부드럽게 제거
                 const loading = document.getElementById('loading');
                 loading.style.opacity = '0';
-                setTimeout(() => { loading.style.display = 'none'; }, 400);
+                setTimeout(() => { loading.style.display = 'none'; }, 300);
             } catch (e) { 
                 console.error(e); 
-                document.getElementById('loading').textContent = "연결 오류. 새로고침 해주세요.";
+                document.getElementById('loading').textContent = "연결이 원활하지 않습니다. 새로고침 해주세요.";
             }
         }
 
         function updateAdminUI() {
             const btn = document.getElementById('admin-btn');
             if (isAdmin) {
-                btn.textContent = "🔓 관리자 해제";
+                btn.textContent = "관리자 해제";
                 btn.className = "nav-btn btn-logout";
             } else {
                 btn.textContent = "관리자 모드";
@@ -130,11 +130,11 @@
             }
         }
 
-        // [최적화] 틀 미리 그리기
-        function preRenderTable() {
+        function render(sheetData) {
             const hRow = document.getElementById('header-row');
             const tbody = document.getElementById('attendance-body');
             hRow.innerHTML = "<th>이름\\일차</th>";
+            tbody.innerHTML = "";
             for(let i=1; i<=90; i++) { 
                 let th = document.createElement('th'); th.textContent = i+'일'; hRow.appendChild(th); 
             }
@@ -144,15 +144,6 @@
                 let td = document.createElement('td'); td.textContent = biblePlan[i] || ""; pRow.appendChild(td); 
             }
             tbody.appendChild(pRow);
-        }
-
-        function render(sheetData) {
-            const tbody = document.getElementById('attendance-body');
-            // '읽을 말씀' 행만 남기고 초기화 (Pre-render 유지)
-            const planRow = tbody.querySelector('.plan-row');
-            tbody.innerHTML = "";
-            tbody.appendChild(planRow);
-
             for(let r=1; r<sheetData.length; r++) {
                 let name = sheetData[r][0]; if(!name) continue;
                 let tr = document.createElement('tr');
@@ -164,7 +155,7 @@
                     if(cb.checked) td.className = 'checked-cell';
                     cb.onclick = async (e) => {
                         if(!isAdmin) { e.preventDefault(); alert("관리자 모드가 필요합니다."); return; }
-                        // [낙관적 업데이트] 체크 시 즉시 색상 반영
+                        // 낙관적 업데이트: 화면 먼저 변경
                         td.className = cb.checked ? 'checked-cell' : '';
                         fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'attendance', name:name, day:i, checked:cb.checked}) });
                     };
@@ -196,25 +187,28 @@
                 const item = document.createElement('div');
                 item.className = 'board-item';
                 let delBtn = isAdmin ? `<button class="btn-delete" onclick="deleteMessage('${m.id}', this)">삭제</button>` : '';
+                let likeCount = m.likes || 0;
+
                 item.innerHTML = `
                     ${delBtn}
                     <span style="font-weight:bold; color:var(--main-blue);">${m.name}:</span> 
                     <span>${m.content}</span>
-                    <button class="btn-like" onclick="likeMessage('${m.id}', this)">❤️ <span>${m.likes || 0}</span></button>
+                    <button class="btn-like" onclick="likeMessage('${m.id}', this)">❤️ <span>${likeCount}</span></button>
                 `;
                 list.appendChild(item);
             });
         }
 
-        // [낙관적 업데이트] 하트 클릭 즉시 숫자 증가
-        function likeMessage(msgId, btn) {
+        // [속도 최적화] 낙관적 업데이트: 서버 응답 전 화면 먼저 변경
+        async function likeMessage(msgId, btn) {
             const countSpan = btn.querySelector('span');
             countSpan.textContent = parseInt(countSpan.textContent) + 1;
             btn.style.color = "#ff4757";
+            
+            // 서버에 조용히 전송
             fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'like_message', id:msgId}) });
         }
 
-        // [낙관적 업데이트] 등록 버튼 즉시 화면에 반영
         async function postMessage() {
             const nameInput = document.getElementById('post-name');
             const contentInput = document.getElementById('post-content');
@@ -222,23 +216,27 @@
             const content = contentInput.value;
             if(!content) return alert("내용을 입력해주세요.");
             
-            const list = document.getElementById('board-list');
-            const tempDiv = document.createElement('div');
-            tempDiv.className = 'board-item';
-            tempDiv.style.opacity = '0.5';
-            tempDiv.innerHTML = `<span style="font-weight:bold; color:var(--main-blue);">${name}:</span> <span>${content}</span> <button class="btn-like">❤️ 0</button>`;
-            list.insertBefore(tempDiv, list.firstChild);
-
-            contentInput.value = "";
+            const btn = document.getElementById('post-btn');
+            btn.disabled = true;
+            btn.textContent = "등록 중...";
+            
             await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'message', name:name, content:content}) });
-            tempDiv.style.opacity = '1';
+            
+            contentInput.value = "";
+            btn.disabled = false;
+            btn.textContent = "등록하기";
+            
+            // 게시판만 조용히 갱신
+            const res = await fetch(SCRIPT_URL);
+            const data = await res.json();
+            renderBoard(data.messages);
         }
 
-        function deleteMessage(msgId, btn) {
+        async function deleteMessage(msgId, btn) {
             if(!confirm("이 글을 삭제하시겠습니까?")) return;
             btn.parentElement.style.opacity = '0.3';
-            fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'delete_message', id:msgId}) });
-            setTimeout(() => btn.parentElement.remove(), 300);
+            await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'delete_message', id:msgId}) });
+            btn.parentElement.remove();
         }
 
         function handleAdmin() {
@@ -247,11 +245,13 @@
                 if(pw === "9191") { 
                     isAdmin = true; 
                     localStorage.setItem('bible_admin_mode', 'true');
-                    location.reload(); 
-                } else { alert("비밀번호 틀림!"); }
+                    updateAdminUI();
+                    location.reload(); // 관리자 권한 반영을 위해 1회 새로고침
+                } else { alert("비밀번호가 틀렸습니다."); }
             } else { 
                 isAdmin = false; 
                 localStorage.removeItem('bible_admin_mode');
+                updateAdminUI();
                 location.reload();
             }
         }
