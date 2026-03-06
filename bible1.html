@@ -73,7 +73,6 @@
             font-style: italic;
         }
 
-        /* 카드 스타일 */
         .day-card {
             background: var(--card-bg);
             border-radius: 12px;
@@ -98,7 +97,6 @@
             flex-shrink: 0;
         }
 
-        /* 1일차 + 성경범위 레이아웃 */
         .header-text {
             display: flex;
             flex-direction: column;
@@ -143,10 +141,9 @@
 
         .day-card.open .chevron { transform: rotate(180deg); }
 
-        /* 본문 내용 */
         .day-content {
             display: none;
-            padding: 0 20px 20px 52px; /* 체크박스 라인 맞춤 */
+            padding: 0 20px 20px 52px;
             background: #ffffff;
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
@@ -186,47 +183,126 @@
     <div id="accordion-list"></div>
 
     <footer>
-        © 2025 Bible Guide | 소책자 원문 텍스트 수록
+        © 2025 Bible Guide | 90일 전체 데이터 수록
     </footer>
 </div>
 
 <script>
     const bibleData = [
-        { day: 1, range: "창세기 1장 ~ 13장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BMuRE3pIOyTsa8tH7bvui6d", text: "<창조> 태초에 하나님이 천지를 창조하셨습니다.\n<타락> 인간은 하나님께 불순종하여 에덴에서 쫓겨납니다.\n<홍수> 노아의 가족을 제외하고 심판을 받습니다.\n<바벨탑> 언어를 혼잡하게 하심으로 흩어지게 됩니다." },
-        { day: 2, range: "창세기 13장 ~ 26장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BO_pXDFxy81YLl2SOvx8S0J", text: "<아브람> 아브람을 부르시고 복의 근원이 된다는 언약을 주셨습니다.\n<소돔과 고모라> 하나님께서 유황과 불을 쏟아 부으셨습니다.\n<이삭> 하나님께서 이삭을 제물로 바치라고 명령하셨고 순종합니다." },
-        { day: 3, range: "창세기 27장 ~ 39장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BMjdfSI8Wtwof9hlHRNx6U7", text: "<야곱> 야곱은 아버지 이삭을 속여 에서가 받을 복을 빼앗습니다. 이후 '이스라엘'이라는 이름을 얻게 됩니다." },
-        { day: 4, range: "창세기 40장 ~ 출애굽기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNiYvL8yM-429YkakNPbmz2", text: "<요셉> 애굽의 총리가 되어 가족들을 구원하게 됩니다." },
-        { day: 5, range: "출애굽기 3장 ~ 15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPUC7oPQjmdgrP_H1PLkvOP", text: "<모세> 떨기나무 아래에서 모세를 부르셨습니다.\n<10재앙> 이스라엘 백성을 출애굽하게 하셨습니다." },
-        { day: 6, range: "출애굽기 16장 ~ 29장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPzdRpYDnrlt4B-KPKOujuP", text: "<시내산 언약> 하나님의 법, 십계명을 받습니다." },
-        { day: 7, range: "출애굽기 30장 ~ 레위기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNVg8d8MhrMJPBaXPc9eDdF", text: "<성막> 하나님이 거하실 성막의 구체적 지침을 받습니다." },
-        { day: 8, range: "레위기 3장 ~ 15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNbc9odp9p3K_eKmoT5Puer", text: "<5제사 7절기> 거룩한 예배와 절기에 대해 배웁니다." },
-        { day: 9, range: "레위기 16장 ~ 민수기 1장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNvkm3WXStB1h17LOAthoKM", text: "<거룩한 삶> 일상과 공동체 속에서의 정결함을 배웁니다." },
-        { day: 10, range: "민수기 2장 ~ 14장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPDpVAe4KSLM11H-5bU1Dn5", text: "<가데스 바네아> 약속의 땅 앞에서 열두 정탐꾼이 보고합니다." },
-        { day: 11, range: "민수기 15장 ~ 27장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BOM1XqaRzkAkYmfK3HeBfbT", text: "<광야 생활> 불순종으로 인한 40년의 방황이 시작됩니다." },
-        { day: 12, range: "민수기 28장 ~ 신명기 4장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPRpt6Ph5r5Vbap1Y1KV0Xg", text: "<회고> 모세가 지난 세월의 은혜를 다음 세대에게 전합니다." },
-        { day: 13, range: "신명기 5장 ~ 17장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BM6Px2xlKgl1M0kMIxpsNkG", text: "<쉐마> 마음을 다해 하나님을 사랑할 것을 가르칩니다." }
+        { day: 1, range: "창세기 1~13장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BMuRE3pIOyTsa8tH7bvui6d", text: "<창조/타락/홍수/바벨탑>\n천지창조와 인간의 불순종, 그리고 노아의 방주와 바벨탑 사건을 통해 인류의 시작과 죄의 확산을 읽습니다." },
+        { day: 2, range: "창세기 14~26장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BO_pXDFxy81YLl2SOvx8S0J", text: "<아브라함과 이삭>\n믿음의 조상 아브라함의 부르심과 언약, 그리고 이삭을 통한 하나님의 신실한 약속을 확인합니다." },
+        { day: 3, range: "창세기 27~39장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BMjdfSI8Wtwof9hlHRNx6U7", text: "<야곱과 요셉의 시작>\n야곱의 변화와 이스라엘의 열두 지파의 형성, 그리고 요셉이 애굽으로 팔려가는 과정을 읽습니다." },
+        { day: 4, range: "창세기 40~출애굽기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNiYvL8yM-429YkakNPbmz2", text: "<요셉의 승리와 모세의 탄생>\n애굽의 총리가 된 요셉을 통한 민족 보존과, 새 시대를 여는 모세의 탄생을 봅니다." },
+        { day: 5, range: "출애굽기 3~15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPUC7oPQjmdgrP_H1PLkvOP", text: "<출애굽과 홍해>\n열 재앙을 통한 하나님의 권능과 홍해를 가르시는 구원의 기적을 체험합니다." },
+        { day: 6, range: "출애굽기 16~29장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPzdRpYDnrlt4B-KPKOujuP", text: "<광야와 십계명>\n만나와 메추라기, 그리고 시내산에서 주시는 거룩한 법 십계명을 읽습니다." },
+        { day: 7, range: "출애굽기 30~레위기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNVg8d8MhrMJPBaXPc9eDdF", text: "<성막과 제사>\n하나님이 거하시는 성막의 지침과 거룩한 예배의 시작인 제사 규례를 봅니다." },
+        { day: 8, range: "레위기 3~15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNbc9odp9p3K_eKmoT5Puer", text: "<제사법과 정결례>\n하나님께 나아가는 5대 제사와 일상의 정결을 유지하는 법을 읽습니다." },
+        { day: 9, range: "레위기 16~민수기 1장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNvkm3WXStB1h17LOAthoKM", text: "<거룩한 절기와 인구조사>\n속죄일과 절기를 통해 거룩을 배우고, 광야 행군을 위한 진영을 정비합니다." },
+        { day: 10, range: "민수기 2~14장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPDpVAe4KSLM11H-5bU1Dn5", text: "<가데스 바네아의 불신앙>\n정탐꾼들의 보고와 백성들의 원망으로 인한 40년 광야 방황의 원인을 봅니다." },
+        { day: 11, range: "민수기 15~27장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BOM1XqaRzkAkYmfK3HeBfbT", text: "<광야의 연단>\n반역과 심판, 그리고 놋뱀 사건을 통해 연단하시는 하나님을 만납니다." },
+        { day: 12, range: "민수기 28~신명기 4장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPRpt6Ph5r5Vbap1Y1KV0Xg", text: "<광야의 회고>\n모압 평지에서 지난 광야 길을 회상하며 하나님의 신실하심을 기억합니다." },
+        { day: 13, range: "신명기 5~17장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BM6Px2xlKgl1M0kMIxpsNkG", text: "<쉐마와 율법>\n마음을 다해 하나님을 사랑하라는 권면과 삶의 지침들을 다시 듣습니다." },
+        { day: 14, range: "신명기 18~30장", text: "<축복과 저주>\n하나님의 말씀에 순종할 때 주어지는 복과 불순종의 경고를 읽습니다." },
+        { day: 15, range: "신명기 31~여호수아 9장", text: "<가나안 정복의 시작>\n모세의 죽음과 여호수아의 승계, 여리고 성 함락을 통한 정복의 시작을 봅니다." },
+        { day: 16, range: "여호수아 10~22장", text: "<땅의 분배>\n가나안 땅을 점령하고 각 지파에게 기업을 나누어 주시는 약속의 성취를 봅니다." },
+        { day: 17, range: "여호수아 23~사사기 11장", text: "<사사 시대의 서막>\n여호수아의 고별사와 사사들의 활동을 통해 반복되는 죄와 구원을 봅니다." },
+        { day: 18, range: "사사기 12~사무엘상 2장", text: "<삼손과 한나>\n사사 시대의 혼란함 속에서도 한나의 기도를 통해 새 시대를 준비하심을 봅니다." },
+        { day: 19, range: "사무엘상 3~15장", text: "<사무엘과 사울>\n마지막 사사 사무엘과 이스라엘의 첫 번째 왕 사울의 등장을 읽습니다." },
+        { day: 20, range: "사무엘상 16~28장", text: "<다윗의 고난>\n기름 부음 받은 다윗이 사울의 추격을 피해 광야에서 연단받는 과정을 봅니다." },
+        { day: 21, range: "사무엘상 29~사무엘하 10장", text: "<다윗 왕조의 확립>\n사울의 죽음과 다윗의 즉위, 그리고 예루살렘으로 법궤를 옮기는 기쁨을 봅니다." },
+        { day: 22, range: "사무엘하 11~23장", text: "<다윗의 범죄와 시련>\n다윗의 밧세바 범죄와 그로 인한 가정의 비극, 압살롬의 반역을 읽습니다." },
+        { day: 23, range: "사무엘하 24~열왕기상 11장", text: "<솔로몬의 영광과 타락>\n다윗의 마지막과 솔로몬의 성전 건축, 그러나 그의 말년의 변질을 봅니다." },
+        { day: 24, range: "열왕기상 12~열왕기하 2장", text: "<분열 왕국과 엘리야>\n이스라엘의 남북 분열과 우상숭배에 맞선 선지자 엘리야의 사역을 읽습니다." },
+        { day: 25, range: "열왕기하 3~15장", text: "<엘리사와 여러 왕들>\n엘리사의 기적과 북이스라엘 및 남유다 왕들의 영적 상태를 봅니다." },
+        { day: 26, range: "열왕기하 16~역대상 4장", text: "<멸망과 족보>\n북이스라엘의 멸망과 역대기의 족보를 통해 뿌리를 확인합니다." },
+        { day: 27, range: "역대상 5~17장", text: "<다윗의 준비>\n역대기 관점에서 본 다윗의 통치와 성전 예배를 위한 준비를 봅니다." },
+        { day: 28, range: "역대상 18~역대하 1장", text: "<성전 건축의 인계>\n다윗의 마지막 준비와 솔로몬의 지혜로운 통치 시작을 읽습니다." },
+        { day: 29, range: "역대하 2~14장", text: "<솔로몬 성전과 분열>\n화려한 성전 봉헌식과 이후 유다 왕들의 신앙 개혁 시도를 봅니다." },
+        { day: 30, range: "역대하 15~28장", text: "<유다의 왕들>\n여호사밧, 히스기야 등 선한 왕들의 개혁과 위기를 읽습니다." },
+        { day: 31, range: "역대하 29~에스라 5장", text: "<포로 귀환>\n예루살렘 멸망 후 포로에서 돌아와 성전을 재건하는 희망을 봅니다." },
+        { day: 32, range: "에스라 6~느헤미야 8장", text: "<성벽 재건과 말씀>\n느헤미야의 성벽 재건과 에스라의 율법 낭독을 통한 영적 부흥을 읽습니다." },
+        { day: 33, range: "느헤미야 9~욥기 9장", text: "<개혁과 고난>\n공동체의 정결 개혁과 욥의 고난을 통한 하나님의 주권을 묵상합니다." },
+        { day: 34, range: "욥기 10~22장", text: "<욥의 논쟁>\n욥과 세 친구들의 치열한 변론 속에서 인간의 한계를 봅니다." },
+        { day: 35, range: "욥기 23~35장", text: "<고통 중의 부르짖음>\n침묵하시는 하나님 앞에서 욥이 겪는 영적 갈등과 호소를 읽습니다." },
+        { day: 36, range: "욥기 36~시편 6편", text: "<하나님의 대답>\n폭풍 가운데 말씀하시는 하나님과 다윗의 참회 기도를 읽습니다." },
+        { day: 37, range: "시편 7~19편", text: "<찬양과 신뢰>\n주의 위대하심과 공의로운 통치를 찬양하는 시편들을 묵상합니다." },
+        { day: 38, range: "시편 20~32편", text: "<목자 되신 하나님>\n푸른 풀밭으로 인도하시는 하나님에 대한 신뢰와 기쁨을 노래합니다." },
+        { day: 39, range: "시편 33~45편", text: "<목마른 사슴처럼>\n하나님을 갈망하는 마음과 고난 중의 소망을 읽습니다." },
+        { day: 40, range: "시편 46~58편", text: "<우리의 피난처>\n환난 중에 만날 큰 도움 되시는 하나님을 의지하는 노래입니다." },
+        { day: 41, range: "시편 59~71편", text: "<영혼의 찬양>\n대적의 위협 속에서도 하나님만을 바라보는 다윗의 고백입니다." },
+        { day: 42, range: "시편 72~84편", text: "<성전 사모>\n주의 장막이 어찌 그리 아름다운지요! 하나님 나라를 사모하는 노래입니다." },
+        { day: 43, range: "시편 85~97편", text: "<온 땅의 왕>\n여호와께서 다스리시니 온 땅은 즐거워할지어다! 왕권 찬양입니다." },
+        { day: 44, range: "시편 98~110편", text: "<감사와 송축>\n인자하심이 영원하신 하나님께 드리는 감사의 제사입니다." },
+        { day: 45, range: "시편 111~123편", text: "<말씀의 빛>\n주의 말씀은 내 발에 등이요 내 길에 빛이니이다. (시 119편)" },
+        { day: 46, range: "시편 124~136편", text: "<성전에 올라가는 노래>\n이스라엘을 지키시는 하나님의 세밀한 돌보심을 찬양합니다." },
+        { day: 47, range: "시편 137~잠언 11장", text: "<지혜의 근본>\n여호와를 경외하는 것이 지혜의 근본임을 배우는 잠언의 시작입니다." },
+        { day: 48, range: "잠언 12~24장", text: "<명철한 삶>\n부지런함과 겸손, 말의 절제 등 구체적인 삶의 지혜를 읽습니다." },
+        { day: 49, range: "잠언 25~전도서 5장", text: "<해 아래의 허무>\n모든 것이 헛되나 하나님을 경외하는 것이 사람의 본분임을 읽습니다." },
+        { day: 50, range: "전도서 6~이사야 4장", text: "<심판과 소망>\n세상의 허무를 지나 이사야가 선포하는 하나님의 심판과 회복을 봅니다." },
+        { day: 51, range: "이사야 5~17장", text: "<임마누엘>\n거룩하신 하나님의 임재와 메시아 탄생의 예언을 읽습니다." },
+        { day: 52, range: "이사야 18~30장", text: "<열방의 심판>\n세상 나라들의 교만을 꺾으시고 홀로 높임 받으실 주를 봅니다." },
+        { day: 53, range: "이사야 31~43장", text: "<새 일의 행하심>\n광야에 길을, 사막에 강을 내시는 하나님의 위로를 읽습니다." },
+        { day: 54, range: "이사야 44~56장", text: "<고난받는 종>\n우리의 죄를 대신 지신 어린 양 메시아의 고난과 영광을 봅니다." },
+        { day: 55, range: "이사야 57~66장", text: "<새 하늘과 새 땅>\n영원한 기쁨이 넘치는 시온의 영광과 종말론적 회복을 노래합니다." },
+        { day: 56, range: "예레미야 1~12장", text: "<눈물의 선지자>\n심판을 선포하며 가슴 아파하는 예레미야의 소명과 애통을 봅니다." },
+        { day: 57, range: "예레미야 13~25장", text: "<토기장이와 진흙>\n하나님의 주권적 통치와 유다의 고집스러운 죄악을 대조하여 읽습니다." },
+        { day: 58, range: "예레미야 26~38장", text: "<새 언약>\n마음에 새겨질 새 언약과 소망의 말씀, 그러나 계속되는 박해를 봅니다." },
+        { day: 59, range: "예레미야 39~51장", text: "<멸망과 탄식>\n예루살렘의 함락과 열방에 대한 하나님의 준엄한 심판을 읽습니다." },
+        { day: 60, range: "예레미야 52~에스겔 12장", text: "<에스겔의 환상>\n바벨론 포로지에서 본 하나님의 영광과 파수꾼의 사명을 읽습니다." },
+        { day: 61, range: "에스겔 13~25장", text: "<우상숭배의 결과>\n성전을 떠나시는 하나님의 영광과 이스라엘의 영적 간음을 봅니다." },
+        { day: 62, range: "에스겔 26~38장", text: "<마른 뼈의 부활>\n에스겔 골짜기의 마른 뼈들이 살아나 군대가 되는 회복의 환상을 봅니다." },
+        { day: 63, range: "에스겔 39~다니엘 3장", text: "<다니엘의 신앙>\n새 성전의 환상과 풀무불 속에서도 지켜주시는 다니엘 친구들의 믿음을 봅니다." },
+        { day: 64, range: "다니엘 4~호세아 4장", text: "<하나님은 사랑이시라>\n다니엘의 환상과 음란한 아내를 끝까지 사랑하는 호세아의 사랑을 봅니다." },
+        { day: 65, range: "호세아 5~아모스 3장", text: "<정의의 외침>\n오직 정의를 물 같이, 공의를 마르지 않는 강 같이 흐르게 하라!" },
+        { day: 66, range: "아모스 4~미가 2장", text: "<미가의 탄식>\n불의한 지도자들에 대한 규탄과 평화의 왕에 대한 예언을 읽습니다." },
+        { day: 67, range: "미가 3~나훔 3장", text: "<니느웨의 심판>\n앗수르의 수도 니느웨의 교만을 심판하시는 공의의 하나님을 봅니다." },
+        { day: 68, range: "하박국 1~학개 2장", text: "<오직 의인은 믿음으로>\n이해가 안 되는 현실 속에서도 하나님으로 즐거워하는 하박국의 노래입니다." },
+        { day: 69, range: "스가랴 1~13장", text: "<성전 재건의 환상>\n밤의 환상들을 통해 성전 재건을 독려하시는 소망의 메시지입니다." },
+        { day: 70, range: "스가랴 14~마태복음 12장", text: "<그리스도의 오심>\n말라기의 경고를 끝으로 구약이 닫히고, 왕으로 오신 예수님의 탄생과 사역이 시작됩니다." },
+        { day: 71, range: "마태복음 13~25장", text: "<천국 비유와 교훈>\n비유를 통해 천국을 가르치시고 제자들을 훈련시키시는 주님을 만납니다." },
+        { day: 72, range: "마태복음 26~마가복음 10장", text: "<고난과 섬김>\n십자가 죽음과 부활, 그리고 섬기러 오신 인자 예수님을 봅니다." },
+        { day: 73, range: "마가복음 11~누가복음 1장", text: "<누가의 기록>\n예루살렘 입성과 인류의 구주로 오신 예수님의 정교한 탄생 기록을 봅니다." },
+        { day: 74, range: "누가복음 2~14장", text: "<잃어버린 자를 찾아>\n가난하고 소외된 자들을 긍휼히 여기시는 예수님의 사랑을 읽습니다." },
+        { day: 75, range: "누가복음 15~24장", text: "<부활의 증인>\n탕자의 비유와 십자가 사건, 그리고 엠마오로 가는 제자들과 함께하신 주님을 봅니다." },
+        { day: 76, range: "요한복음 1~12장", text: "<말씀이 육신이 되어>\n태초부터 계신 말씀, 하나님의 아들 예수 그리스도의 표적들을 봅니다." },
+        { day: 77, range: "요한복음 13~사도행전 3장", text: "<성령의 강림>\n주님의 고별 설교와 승천, 그리고 마가 다락방에 임한 성령의 역사를 읽습니다." },
+        { day: 78, range: "사도행전 4~16장", text: "<복음의 확장>\n스데반의 순교와 바울의 회심, 그리고 이방인에게로 퍼져가는 복음의 파도를 봅니다." },
+        { day: 79, range: "사도행전 17~28장", text: "<땅 끝까지>\n바울의 전도 여행과 로마 압송 중에도 멈추지 않는 하나님 나라의 전파를 봅니다." },
+        { day: 80, range: "로마서 1~12장", text: "<오직 믿음으로>\n죄인 된 인간이 믿음으로 말미암아 의롭게 되는 복음의 정수를 읽습니다." },
+        { day: 81, range: "로마서 13~고린도전서 9장", text: "<교회의 질서>\n사랑의 빚 외에는 지지 말라는 권면과 고린도 교회의 분쟁에 대한 대답입니다." },
+        { day: 82, range: "고린도전서 10~고린도후서 6장", text: "<사랑과 화목>\n사랑 장(13장)과 부활 소망, 그리고 화목하게 하는 직분을 읽습니다." },
+        { day: 83, range: "고린도후서 7~갈라디아서 6장", text: "<자유의 복음>\n율법의 멍에를 벗고 그리스도 안에서 누리는 참된 자유를 노래합니다." },
+        { day: 84, range: "에베소서 1~골로새서 4장", text: "<교회의 머리 되신 주>\n그리스도 안에서 하나 된 교회와 만물의 머리 되신 예수님을 찬양합니다." },
+        { day: 85, range: "데살로니가전서 1~디모데전서 6장", text: "<다시 오실 주님>\n주님의 재림을 기다리는 태도와 믿음의 아들 디모데를 향한 목회적 권면입니다." },
+        { day: 86, range: "디모데후서 1~히브리서 3장", text: "<더 뛰어난 예수>\n디모데를 향한 마지막 부탁과 천사보다, 모세보다 뛰어난 예수님을 봅니다." },
+        { day: 87, range: "히브리서 4~야고보서 1장", text: "<대제사장과 믿음>\n영원한 대제사장 되신 주님과 시련 중에 인내하는 믿음의 도를 읽습니다." },
+        { day: 88, range: "야고보서 2~요한일서 2장", text: "<행함과 사랑>\n행함이 있는 믿음과 하나님은 사랑이시라는 사도 요한의 고백을 봅니다." },
+        { day: 89, range: "요한일서 3~요한계시록 8장", text: "<이기는 자>\n서로 사랑하라는 계명과 마지막 때에 일곱 인을 떼시는 어린 양을 봅니다." },
+        { day: 90, range: "요한계시록 9~22장", text: "<새 예루살렘>\n모든 눈물을 닦아주시는 새 하늘과 새 땅, 다시 오실 주님을 찬양하며 마칩니다." }
     ];
 
     const list = document.getElementById('accordion-list');
-    let checks = JSON.parse(localStorage.getItem('bible_final_check')) || [];
+    let checks = JSON.parse(localStorage.getItem('bible_90day_complete')) || [];
 
     bibleData.forEach(item => {
         const isChecked = checks.includes(item.day);
         const card = document.createElement('div');
         card.className = 'day-card';
+        if(isChecked) card.style.opacity = "0.8";
         
         card.innerHTML = `
             <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
                 <input type="checkbox" ${isChecked ? 'checked' : ''} 
-                       onclick="event.stopPropagation(); saveCheck(${item.day}, this.checked)">
+                       onclick="event.stopPropagation(); saveCheck(${item.day}, this.checked, this)">
                 <div class="header-text">
                     <span class="day-num">${item.day}일차</span>
                     <span class="bible-range">${item.range}</span>
                 </div>
                 <div class="right-icons">
+                    ${item.yt ? `
                     <a href="${item.yt}" target="_blank" class="yt-btn" onclick="event.stopPropagation();">
                         <svg class="yt-icon" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-                    </a>
+                    </a>` : ''}
                     <span class="chevron">▼</span>
                 </div>
             </div>
@@ -237,13 +313,15 @@
         list.appendChild(card);
     });
 
-    function saveCheck(day, isChecked) {
+    function saveCheck(day, isChecked, el) {
         if (isChecked) {
             if (!checks.includes(day)) checks.push(day);
+            el.closest('.day-card').style.opacity = "0.8";
         } else {
             checks = checks.filter(d => d !== day);
+            el.closest('.day-card').style.opacity = "1";
         }
-        localStorage.setItem('bible_final_check', JSON.stringify(checks));
+        localStorage.setItem('bible_90day_complete', JSON.stringify(checks));
     }
 </script>
 
