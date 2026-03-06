@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>90일 성경통독 가이드</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #34495e;
-            --accent: #d35400;
-            --yt-red: #FF0000;
-            --bg: #f4f7f6;
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --yt-red: #ff0000;
+            --bg: #f8fafc;
             --card-bg: #ffffff;
-            --text-main: #2c3e50;
-            --text-sub: #7f8c8d;
-            --border: #e1e8ed;
+            --text-main: #334155;
+            --text-sub: #64748b;
+            --border: #e2e8f0;
         }
 
         body {
@@ -23,45 +23,45 @@
             color: var(--text-main);
             margin: 0; padding: 0;
             line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .wrapper {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 0 20px;
+            max-width: 650px;
+            margin: 30px auto;
+            padding: 0 15px;
         }
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         header h1 {
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             color: var(--primary);
-            margin-bottom: 8px;
-            letter-spacing: -1px;
+            margin: 0 0 8px 0;
+            font-weight: 700;
         }
 
         header p {
             color: var(--accent);
-            font-weight: 700;
             font-size: 0.9rem;
-            text-transform: uppercase;
+            font-weight: 500;
+            margin: 0;
         }
 
-        /* 인트로 박스 */
         .prayer-box {
             background: var(--card-bg);
             border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-            border-left: 6px solid var(--accent);
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid var(--accent);
         }
 
         .prayer-box h3 {
-            margin: 0 0 10px 0;
+            margin: 0 0 8px 0;
             font-size: 1rem;
             color: var(--primary);
         }
@@ -69,71 +69,75 @@
         .prayer-box p {
             margin: 0;
             font-size: 0.95rem;
-            color: #555;
+            color: #475569;
             font-style: italic;
         }
 
-        /* 아코디언 카드 스타일 */
+        /* 카드 스타일 */
         .day-card {
             background: var(--card-bg);
             border-radius: 12px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 10px;
             border: 1px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .day-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.2s ease;
         }
 
         .day-header {
-            padding: 18px 20px;
+            padding: 16px;
             display: flex;
             align-items: center;
             cursor: pointer;
-            gap: 15px;
+            gap: 12px;
         }
 
-        /* 체크박스 커스텀 */
         input[type="checkbox"] {
-            width: 22px;
-            height: 22px;
+            width: 20px;
+            height: 20px;
             cursor: pointer;
             accent-color: var(--accent);
             flex-shrink: 0;
         }
 
-        .day-title {
+        /* 1일차 + 성경범위 레이아웃 */
+        .header-text {
+            display: flex;
+            flex-direction: column;
             flex-grow: 1;
+            gap: 2px;
+        }
+
+        .day-num {
+            font-size: 0.8rem;
+            color: var(--accent);
             font-weight: 700;
+        }
+
+        .bible-range {
             font-size: 1rem;
+            font-weight: 500;
             color: var(--primary);
         }
 
         .right-icons {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            flex-shrink: 0;
         }
 
-        /* 유튜브 로고 스타일 */
         .yt-btn {
             display: flex;
             align-items: center;
-            text-decoration: none;
-            transition: opacity 0.2s;
+            transition: transform 0.2s;
         }
-        
-        .yt-btn:hover { opacity: 0.7; }
 
-        /* SVG 유튜브 아이콘 */
-        .yt-icon { width: 26px; height: 26px; fill: var(--yt-red); }
+        .yt-btn:hover { transform: scale(1.1); }
+
+        .yt-icon { width: 24px; height: 24px; fill: var(--yt-red); }
 
         .chevron {
             font-size: 0.7rem;
-            color: #bdc3c7;
+            color: #94a3b8;
             transition: transform 0.3s ease;
         }
 
@@ -141,29 +145,26 @@
 
         /* 본문 내용 */
         .day-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-            background: #fafafa;
+            display: none;
+            padding: 0 20px 20px 52px; /* 체크박스 라인 맞춤 */
+            background: #ffffff;
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
         }
 
-        .day-card.open .day-content {
-            max-height: 1000px;
-            border-top: 1px solid var(--border);
-        }
+        .day-card.open .day-content { display: block; }
 
         .inner-text {
-            padding: 20px;
             font-size: 0.95rem;
-            color: #444;
+            color: #334155;
             white-space: pre-wrap;
+            border-top: 1px solid #f1f5f9;
+            padding-top: 15px;
         }
 
         footer {
             text-align: center;
-            padding: 50px 0;
+            padding: 40px 0;
             color: var(--text-sub);
             font-size: 0.8rem;
         }
@@ -173,41 +174,41 @@
 
 <div class="wrapper">
     <header>
-        <p>THE HOLY BIBLE 90 DAYS</p>
-        <h1>올바른 성경통독 가이드</h1>
+        <h1>90일 성경통독 가이드</h1>
+        <p>SPRING 2025 JOURNEY</p>
     </header>
 
     <div class="prayer-box">
-        <h3>🙏 읽기 전 '1분 기도'</h3>
-        <p>"성령님께서 조명해 주셔서 정확하게 깨닫고 말씀이 삶이 되는 하루를 살도록 도와주옵소서. 아멘!"</p>
+        <h3>🙏 통독을 위한 '1분 기도'</h3>
+        <p>"말씀이 삶이 되는 하루를 살도록 도와주옵소서. 아멘!"</p>
     </div>
 
     <div id="accordion-list"></div>
 
     <footer>
-        © 2025 Bible Reading Guide | 소책자 5쇄 원문 수록
+        © 2025 Bible Guide | 소책자 원문 텍스트 수록
     </footer>
 </div>
 
 <script>
     const bibleData = [
         { day: 1, range: "창세기 1장 ~ 13장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BMuRE3pIOyTsa8tH7bvui6d", text: "<창조> 태초에 하나님이 천지를 창조하셨습니다.\n<타락> 인간은 하나님께 불순종하여 에덴에서 쫓겨납니다.\n<홍수> 노아의 가족을 제외하고 심판을 받습니다.\n<바벨탑> 언어를 혼잡하게 하심으로 흩어지게 됩니다." },
-        { day: 2, range: "창세기 13장 ~ 26장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BO_pXDFxy81YLl2SOvx8S0J", text: "<아브람> 아브람을 부르시고 복의 근원이 된다는 언약을 주셨습니다.\n<소돔과 고모라> 하나님께서 유황과 불을 쏟아 부으셨습니다.\n<이삭> 하나님께서 이삭을 제물로 바치라고 명령하셨고 아브라함은 순종합니다." },
+        { day: 2, range: "창세기 13장 ~ 26장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BO_pXDFxy81YLl2SOvx8S0J", text: "<아브람> 아브람을 부르시고 복의 근원이 된다는 언약을 주셨습니다.\n<소돔과 고모라> 하나님께서 유황과 불을 쏟아 부으셨습니다.\n<이삭> 하나님께서 이삭을 제물로 바치라고 명령하셨고 순종합니다." },
         { day: 3, range: "창세기 27장 ~ 39장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BMjdfSI8Wtwof9hlHRNx6U7", text: "<야곱> 야곱은 아버지 이삭을 속여 에서가 받을 복을 빼앗습니다. 이후 '이스라엘'이라는 이름을 얻게 됩니다." },
         { day: 4, range: "창세기 40장 ~ 출애굽기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNiYvL8yM-429YkakNPbmz2", text: "<요셉> 애굽의 총리가 되어 가족들을 구원하게 됩니다." },
         { day: 5, range: "출애굽기 3장 ~ 15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPUC7oPQjmdgrP_H1PLkvOP", text: "<모세> 떨기나무 아래에서 모세를 부르셨습니다.\n<10재앙> 이스라엘 백성을 출애굽하게 하셨습니다." },
-        { day: 6, range: "출애굽기 16장 ~ 29장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPzdRpYDnrlt4B-KPKOujuP", text: "<시내산 언약> 십계명을 받습니다." },
-        { day: 7, range: "출애굽기 30장 ~ 레위기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNVg8d8MhrMJPBaXPc9eDdF", text: "<성막> 하나님이 설계하신 성막 규례를 받습니다." },
-        { day: 8, range: "레위기 3장 ~ 15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNbc9odp9p3K_eKmoT5Puer", text: "<5제사 7절기> 하나님께 예배하는 법을 배웁니다." },
-        { day: 9, range: "레위기 16장 ~ 민수기 1장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNvkm3WXStB1h17LOAthoKM", text: "<거룩한 삶> 일상에서 하나님의 거룩함을 구현합니다." },
-        { day: 10, range: "민수기 2장 ~ 14장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPDpVAe4KSLM11H-5bU1Dn5", text: "<가데스 바네아> 열두 정탐꾼의 보고가 나뉩니다." },
-        { day: 11, range: "민수기 15장 ~ 27장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BOM1XqaRzkAkYmfK3HeBfbT", text: "<방황> 불순종으로 40년 광야 생활을 합니다." },
-        { day: 12, range: "민수기 28장 ~ 신명기 4장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPRpt6Ph5r5Vbap1Y1KV0Xg", text: "<회고> 지난 광야 길의 하나님의 은혜를 기억합니다." },
-        { day: 13, range: "신명기 5장 ~ 17장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BM6Px2xlKgl1M0kMIxpsNkG", text: "<쉐마> 오직 하나님만을 사랑할 것을 가르칩니다." }
+        { day: 6, range: "출애굽기 16장 ~ 29장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPzdRpYDnrlt4B-KPKOujuP", text: "<시내산 언약> 하나님의 법, 십계명을 받습니다." },
+        { day: 7, range: "출애굽기 30장 ~ 레위기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNVg8d8MhrMJPBaXPc9eDdF", text: "<성막> 하나님이 거하실 성막의 구체적 지침을 받습니다." },
+        { day: 8, range: "레위기 3장 ~ 15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNbc9odp9p3K_eKmoT5Puer", text: "<5제사 7절기> 거룩한 예배와 절기에 대해 배웁니다." },
+        { day: 9, range: "레위기 16장 ~ 민수기 1장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNvkm3WXStB1h17LOAthoKM", text: "<거룩한 삶> 일상과 공동체 속에서의 정결함을 배웁니다." },
+        { day: 10, range: "민수기 2장 ~ 14장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPDpVAe4KSLM11H-5bU1Dn5", text: "<가데스 바네아> 약속의 땅 앞에서 열두 정탐꾼이 보고합니다." },
+        { day: 11, range: "민수기 15장 ~ 27장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BOM1XqaRzkAkYmfK3HeBfbT", text: "<광야 생활> 불순종으로 인한 40년의 방황이 시작됩니다." },
+        { day: 12, range: "민수기 28장 ~ 신명기 4장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPRpt6Ph5r5Vbap1Y1KV0Xg", text: "<회고> 모세가 지난 세월의 은혜를 다음 세대에게 전합니다." },
+        { day: 13, range: "신명기 5장 ~ 17장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BM6Px2xlKgl1M0kMIxpsNkG", text: "<쉐마> 마음을 다해 하나님을 사랑할 것을 가르칩니다." }
     ];
 
     const list = document.getElementById('accordion-list');
-    let checks = JSON.parse(localStorage.getItem('bible_modern_v1')) || [];
+    let checks = JSON.parse(localStorage.getItem('bible_final_check')) || [];
 
     bibleData.forEach(item => {
         const isChecked = checks.includes(item.day);
@@ -218,7 +219,10 @@
             <div class="day-header" onclick="this.parentElement.classList.toggle('open')">
                 <input type="checkbox" ${isChecked ? 'checked' : ''} 
                        onclick="event.stopPropagation(); saveCheck(${item.day}, this.checked)">
-                <div class="day-title">Day ${item.day}</div>
+                <div class="header-text">
+                    <span class="day-num">${item.day}일차</span>
+                    <span class="bible-range">${item.range}</span>
+                </div>
                 <div class="right-icons">
                     <a href="${item.yt}" target="_blank" class="yt-btn" onclick="event.stopPropagation();">
                         <svg class="yt-icon" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
@@ -227,9 +231,7 @@
                 </div>
             </div>
             <div class="day-content">
-                <div class="inner-text">
-                    <strong>${item.range}</strong>\n\n${item.text}
-                </div>
+                <div class="inner-text">${item.text}</div>
             </div>
         `;
         list.appendChild(card);
@@ -241,7 +243,7 @@
         } else {
             checks = checks.filter(d => d !== day);
         }
-        localStorage.setItem('bible_modern_v1', JSON.stringify(checks));
+        localStorage.setItem('bible_final_check', JSON.stringify(checks));
     }
 </script>
 
