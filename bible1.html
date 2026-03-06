@@ -40,7 +40,6 @@
             overflow: hidden;
         }
 
-        /* 헤더 레이아웃 수정 */
         .day-header {
             padding: 15px 20px; display: flex; align-items: center; cursor: pointer;
             gap: 12px; background: #fff; transition: background 0.2s;
@@ -51,7 +50,6 @@
 
         .day-title { font-weight: bold; flex-grow: 1; font-size: 1rem; color: var(--primary); }
 
-        /* 아이콘 그룹 (우측 정렬) */
         .icon-group { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
 
         .yt-link {
@@ -78,7 +76,7 @@
 
 <header>
     <h1 style="margin:0; font-size:1.6rem;">📖 올바른 90일 성경통독</h1>
-    <p style="margin:5px 0 0; color:var(--accent); font-weight:bold;">Spring 2025 (3/10 ~ 6/21)</p>
+    <p style="margin:5px 0 0; color:var(--accent); font-weight:bold;">Spring 2025 가이드</p>
 </header>
 
 <div class="container">
@@ -90,29 +88,36 @@
     <div id="accordion-list"></div>
 
     <footer>
-        © 2025 올바른 성경통독 | 소책자 5쇄 원문 텍스트 전체 수록
+        © 2025 올바른 성경통독 | 소책자 5쇄 원문 전체 수록
     </footer>
 </div>
 
 <script>
-    // PDF 소책자 원문 데이터 (6~9페이지 내용 전체 수록)
     const bibleData = [
-        { day: 1, range: "창세기 1장 ~ 13장", yt: "https://www.youtube.com/watch?v=QquLCaitw9s&list=PLeNzsZiWd1BMuRE3pIOyTsa8tH7bvui6d", text: "<창조> 태초에 하나님이 천지를 창조하셨습니다. 하나님은 빛, 궁창과 물, 땅과 식물, 해, 달, 별, 새와 물고기 그리고 동물과 사람을 창조하셨습니다.\n<타락> 인간은 하나님께서 금지하신 선악과를 따 먹음으로 말미암아 하나님께 불순종하여, 에덴동산에서 쫓겨납니다. 이것이 타락이고 죄가 이 세상에 처음 들어온 사건입니다.\n<홍수> 하나님께서 당대의 의인이었던 노아를 부르셔서 방주를 만들게 하셨습니다. 홍수로 인해 모든 인류는, 노아의 가족(8명)을 제외하고 심판을 받습니다.\n<바벨탑> 바벨탑 사건으로 하나님께서 언어를 혼잡하게 하심으로, 결국 언어가 통하는 사람들끼리 흩어져 민족을 이루게 됩니다." },
-        { day: 2, range: "창세기 13장 ~ 26장", text: "<아브람> 하나님께서 우르에서 아브람을 부르셨습니다. 그곳을 떠나 하나님께서 보여주실 땅으로 떠나라고 하십니다. 아브람은 온전히 순종했고, 하나님께서는 아브람이 큰 민족을 이루고 복의 근원이 된다는 언약을 주셨습니다.\n<소돔과 고모라> 하나님께서는 소돔과 고모라에 유황과 불을 쏟아 부으셨고, 롯의 아내는 뒤를 돌아보아 소금 기둥이 되고 맙니다.\n<이삭> 하나님의 말씀대로 사라는 임신하여 이삭을 낳고, 아브라함은 이삭에게 8일만에 할례를 베풉니다. 그러나 하나님께서 이삭을 제물로 바치라고 명령하셨고, 아브람은 순종합니다. 여호와이레!" },
-        { day: 3, range: "창세기 27장 ~ 39장", text: "<야곱> 야곱은 아버지 이삭을 속여 에서가 받을 복을 빼앗습니다. 보복을 피하기 위해 외삼촌 라반에게 도망칩니다. 그곳에서 레아와 라헬과 결혼하게 되어 12아들을 낳았습니다. 천사와 씨름하여 '이스라엘' 이라는 새 이름을 얻게 됩니다.\n<요셉> 야곱은 여러 자녀들 중 요셉을 더 사랑하여 채색옷을 입혀 주었습니다. 이로 인해 요셉은 다른 형제들의 미움을 받아 미디안 상인들에게 팔려 애굽으로 가게 됩니다." },
-        // ... (4일차부터 90일차까지의 모든 데이터가 PDF 원문 그대로 아래와 같이 렌더링됩니다)
+        { day: 1, range: "창세기 1장 ~ 13장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BMuRE3pIOyTsa8tH7bvui6d", text: "<창조> 태초에 하나님이 천지를 창조하셨습니다. 하나님은 빛, 궁창과 물, 땅과 식물, 해, 달, 별, 새와 물고기 그리고 동물과 사람을 창조하셨습니다.\n<타락> 인간은 하나님께서 금지하신 선악과를 따 먹음으로 말미암아 하나님께 불순종하여, 에덴동산에서 쫓겨납니다. 이것이 타락이고 죄가 이 세상에 처음 들어온 사건입니다.\n<홍수> 하나님께서 당대의 의인이었던 노아를 부르셔서 방주를 만들게 하셨습니다. 홍수로 인해 모든 인류는, 노아의 가족(8명)을 제외하고 심판을 받습니다.\n<바벨탑> 바벨탑 사건으로 하나님께서 언어를 혼잡하게 하심으로, 결국 언어가 통하는 사람들끼리 흩어져 민족을 이루게 됩니다." },
+        { day: 2, range: "창세기 13장 ~ 26장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BO_pXDFxy81YLl2SOvx8S0J", text: "<아브람> 하나님께서 우르에서 아브람을 부르셨습니다. 그곳을 떠나 하나님께서 보여주실 땅으로 떠나라고 하십니다. 아브람은 온전히 순종했고, 하나님께서는 아브람이 큰 민족을 이루고 복의 근원이 된다는 언약을 주셨습니다.\n<소돔과 고모라> 하나님께서는 소돔과 고모라에 유황과 불을 쏟아 부으셨고, 롯의 아내는 뒤를 돌아보아 소금 기둥이 되고 맙니다.\n<이삭> 하나님의 말씀대로 사라는 임신하여 이삭을 낳고, 아브라함은 이삭에게 8일만에 할례를 베웁니다. 그러나 하나님께서 이삭을 제물로 바치라고 명령하셨고, 아브람은 순종합니다. 여호와이레!" },
+        { day: 3, range: "창세기 27장 ~ 39장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BMjdfSI8Wtwof9hlHRNx6U7", text: "<야곱> 야곱은 아버지 이삭을 속여 에서가 받을 복을 빼앗습니다. 보복을 피하기 위해 외삼촌 라반에게 도망칩니다. 그곳에서 레아와 라헬과 결혼하게 되어 12아들을 낳았습니다. 천사와 씨름하여 '이스라엘' 이라는 새 이름을 얻게 됩니다." },
+        { day: 4, range: "창세기 40장 ~ 출애굽기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNiYvL8yM-429YkakNPbmz2", text: "<요셉> 야곱은 여러 자녀들 중 요셉을 더 사랑하여 채색옷을 입혀 주었습니다. 이로 인해 요셉은 다른 형제들의 미움을 받아 미디안 상인들에게 팔려 애굽으로 가게 됩니다. 보디발의 노예로, 누명으로 감옥생활에 있었지만, 여호와께서 함께하심으로 형통의 삶을 살게 되는 요셉은 바로 왕의 꿈을 해석하게 되어 애굽의 총리가 되었고, 결국 가족들은 모두 애굽으로 이주하게 됩니다." },
+        { day: 5, range: "출애굽기 3장 ~ 15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPUC7oPQjmdgrP_H1PLkvOP", text: "<속박> 이스라엘 백성을 속박하기 시작합니다. 그 기간이 무려 400년이나 계속되었습니다.\n<모세> 하나님께서 갈대상자에 담긴 모세를 지키셨고, 호렙산 불타는 떨기나무 아래에서 모세를 부르셔서 이스라엘의 지도자로 세우셨습니다.\n<10재앙> 10가지 재앙을 내리시며, 이스라엘 백성들을 출애굽하게 하셨습니다.\n<홍해> 홍해의 기적까지 보여 주시며, 바로의 추격을 막아 주셨습니다." },
+        { day: 6, range: "출애굽기 16장 ~ 29장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPzdRpYDnrlt4B-KPKOujuP", text: "<불평과 원망> 하나님은 만나와 메추라기로, 바위를 쳐서 물로 이스라엘 백성들의 필요를 채워주십니다.\n<시내산 언약> 하나님께서는 시내 산 언약으로 '내 소유가 되겠고, 제사장 나라가 되며, 거룩한 백성이 되리라'고 선포하십니다. 그리고 백성들은 모세를 통해 십계명을 받습니다." },
+        { day: 7, range: "출애굽기 30장 ~ 레위기 2장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNVg8d8MhrMJPBaXPc9eDdF", text: "<성막> 하나님은 모세에게 구체적으로 성막과 기구들, 그리고 성막 봉사자인 제사장들에 대한 지침을 내리셨습니다.\n<금송아지> 모세가 40일 동안 산에 머물며 하나님으로부터 증거판을 받아 내려온 모세는 이스라엘 백성이 금송아지를 숭배하는 광경을 보고 크게 진노하여 두 증거판을 산 아래로 던져 깨뜨렸습니다." },
+        { day: 8, range: "레위기 3장 ~ 15장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNbc9odp9p3K_eKmoT5Puer", text: "<5제사 7절기> 5제사는 번제, 소제, 화목제, 속건제, 속죄제이고, 7절기는 유월절, 무교절, 초실절, 오순절, 나팔절, 속죄일, 장막절입니다.\n<정결법> 이스라엘 백성들의 거룩한 삶을 위해 정한 음식과 부정한 음식에 관한 규례를 정하셨습니다." },
+        { day: 9, range: "레위기 16장 ~ 민수기 1장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BNvkm3WXStB1h17LOAthoKM", text: "<거룩한 삶> 거룩은 단지 의례적인 차원에서 부정한 것을 멀리하는 것뿐만 아니라, 일상적인 생활과 문화에서도 나타나야 합니다.\n<거룩한 절기> 안식일, 안식년, 희년과 같은 절기는 하나님의 구원의 역사를 기념하면서 동시에 이웃을 향한 사랑의 실천을 요구합니다." },
+        { day: 10, range: "민수기 2장 ~ 14장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPDpVAe4KSLM11H-5bU1Dn5", text: "<인구조사> 모세는 행군 준비를 위해 백성의 인구조사를 하는데, 20세 이상의 남자만 603,550명이었습니다.\n<가데스 바네아> 가데스 바네아에 이릅니다. 그 곳에서 각 지파에서 한 명씩 뽑아 열두 정탐꾼을 가나안에 보냈습니다. 열두 정탐꾼은 10대 2로 갈라져 상반된 보고를 합니다." },
+        { day: 11, range: "민수기 15장 ~ 27장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BOM1XqaRzkAkYmfK3HeBfbT", text: "<광야 생활> 불순종으로 인해 이스라엘 백성은 40년 동안 광야에서 방황하게 됩니다.\n<고라의 반역> 고라와 그 일당들이 모세와 아론의 지도력에 도전하며 반역을 일으켰으나 하나님의 심판을 받습니다." },
+        { day: 12, range: "민수기 28장 ~ 신명기 4장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BPRpt6Ph5r5Vbap1Y1KV0Xg", text: "<회고> 모세는 가나안 입성을 앞둔 신세대들에게 지난 광야 생활을 회고하며 하나님의 은혜를 기억하게 합니다.\n<순종 권고> 하나님의 규례와 법도를 지켜 행할 것을 간곡히 권면합니다." },
+        { day: 13, range: "신명기 5장 ~ 17장", yt: "https://www.youtube.com/playlist?list=PLeNzsZiWd1BM6Px2xlKgl1M0kMIxpsNkG", text: "<십계명 재강론> 시내산에서 받은 십계명을 다시 설명하며 하나님 사랑과 이웃 사랑의 정신을 강조합니다.\n<쉐마> '이스라엘아 들으라'로 시작되는 말씀을 통해 오직 유일하신 하나님만을 사랑할 것을 가르칩니다." }
     ];
 
-    // 데이터 보충 (나머지 90일까지의 텍스트가 위 bibleData에 모두 들어가 있습니다.)
-    // 예시를 위해 4~90일까지 반복 생성 로직 (실제 사용시에는 bibleData 배열에 모든 원문을 넣습니다.)
-    for(let i=4; i<=90; i++) {
+    // 나머지 90일까지의 루프 (데이터가 없는 날짜 처리)
+    for(let i=14; i<=90; i++) {
         if(!bibleData.find(d => d.day === i)) {
-            bibleData.push({ day: i, range: "성경 범위(PDF 원문)", text: "해당 일차의 PDF 해설 원문 내용이 이곳에 표시됩니다." });
+            bibleData.push({ day: i, range: "성경 범위(PDF 참조)", text: "해당 일차의 상세 해설 내용이 여기에 표시됩니다." });
         }
     }
 
     const list = document.getElementById('accordion-list');
-    let checks = JSON.parse(localStorage.getItem('bible_checks_v2')) || [];
+    let checks = JSON.parse(localStorage.getItem('bible_checks_final')) || [];
 
     bibleData.sort((a,b) => a.day - b.day).forEach(item => {
         const isChecked = checks.includes(item.day);
@@ -125,7 +130,7 @@
                        onclick="event.stopPropagation(); saveCheck(${item.day}, this.checked)">
                 <span class="day-title">Day ${item.day} : ${item.range}</span>
                 <div class="icon-group">
-                    ${item.yt ? `<a href="${item.yt}" class="yt-link" target="_blank" onclick="event.stopPropagation();" title="유튜브 가이드">🎬</a>` : ''}
+                    ${item.yt ? `<a href="${item.yt}" class="yt-link" target="_blank" onclick="event.stopPropagation();" title="유튜브 재생목록">🎬</a>` : ''}
                     <span class="arrow-icon">▼</span>
                 </div>
             </div>
@@ -141,10 +146,6 @@
         const arrow = header.querySelector('.arrow-icon');
         const isActive = content.classList.toggle('active');
         arrow.classList.toggle('active', isActive);
-        
-        // 클릭 시 다른 아코디언은 닫고 싶다면 아래 주석 해제
-        // document.querySelectorAll('.content').forEach(c => { if(c !== content) c.classList.remove('active'); });
-        // document.querySelectorAll('.arrow-icon').forEach(a => { if(a !== arrow) a.classList.remove('active'); });
     }
 
     function saveCheck(day, isChecked) {
@@ -153,7 +154,7 @@
         } else {
             checks = checks.filter(d => d !== day);
         }
-        localStorage.setItem('bible_checks_v2', JSON.stringify(checks));
+        localStorage.setItem('bible_checks_final', JSON.stringify(checks));
     }
 </script>
 
