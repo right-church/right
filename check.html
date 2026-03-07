@@ -42,13 +42,13 @@
         input[type="checkbox"]:checked { background: var(--success); border-color: var(--success); }
         input[type="checkbox"]:checked::after { content: '✓'; color: white; position: absolute; left: 50%; top: 48%; transform: translate(-50%, -50%); font-size: 14px; font-weight: bold; }
 
-        /* 메시지 보드 한 줄 정리 */
+        /* 메시지 보드 한 줄 및 수직 중앙 정렬 */
         #msg-list { margin-bottom: 10px; }
-        .msg-box { background: #f8f9fc; border-radius: 8px; padding: 8px 10px; margin-bottom: 5px; border: 1px solid #edf0f7; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
-        .msg-content-wrap { flex: 1; font-size: 0.85rem; line-height: 1.4; word-break: break-all; }
-        .msg-name { font-weight: 800; color: var(--primary); margin-right: 4px; }
+        .msg-box { background: #f8f9fc; border-radius: 8px; padding: 10px 12px; margin-bottom: 5px; border: 1px solid #edf0f7; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .msg-content-wrap { flex: 1; font-size: 0.85rem; display: flex; align-items: center; word-break: break-all; line-height: 1.4; }
+        .msg-name { font-weight: 800; color: var(--primary); margin-right: 8px; white-space: nowrap; }
         .msg-text { color: var(--text-dark); }
-        .like-btn { cursor: pointer; font-size: 0.68rem; display: flex; align-items: center; gap: 3px; color: #ff6b6b; padding: 2px 6px; border-radius: 20px; background: #fff; border: 1px solid #ffe3e3; transition: 0.2s; white-space: nowrap; flex-shrink: 0; margin-top: 1px; }
+        .like-btn { cursor: pointer; font-size: 0.68rem; display: flex; align-items: center; gap: 3px; color: #ff6b6b; padding: 3px 8px; border-radius: 20px; background: #fff; border: 1px solid #ffe3e3; transition: 0.2s; white-space: nowrap; flex-shrink: 0; }
         .like-btn:active { transform: scale(1.2); }
         .l-count { color: #858796; font-weight: 600; }
         
@@ -80,11 +80,11 @@
 <div class="card" style="padding:0;"><div id="scroll-container" class="table-outer"><table><thead><tr id="h-row"><th>이름</th></tr></thead><tbody id="a-body"></tbody></table></div></div>
 
 <div class="card">
-    <div style="font-size:0.85rem; font-weight:800; margin-bottom:10px;">💬 말씀 은혜 나눔</div>
+    <div style="font-size:0.85rem; font-weight:800; margin-bottom:12px;">💬 말씀 은혜 나눔</div>
     <div id="msg-list"></div>
     <div class="input-group">
         <input type="text" id="in-name" placeholder="이름" style="width:55px;">
-        <input type="text" id="in-content" placeholder="오늘 주신 은혜는?" style="flex:1;">
+        <input type="text" id="in-content" placeholder="오늘 주신 은혜를 나눠주세요." style="flex:1;">
         <button class="btn-send" onclick="postMessage()">전송</button>
     </div>
 </div>
@@ -183,7 +183,7 @@
             const div = document.createElement('div'); div.className = 'msg-box';
             div.innerHTML = `
                 <div class="msg-content-wrap">
-                    <span class="msg-name">${m.name}:</span>
+                    <span class="msg-name">${m.name}</span>
                     <span class="msg-text">${m.content}</span>
                 </div>
                 <div class="like-btn" onclick="toggleLike('${m.id}', this)">
