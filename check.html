@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>90일 성경통독 출석부</title>
+    <style>
+        :root { 
+            --bg-beige: #F8F5F0; /* 따뜻한 크림 베이지 배경 */
+            --card-white: #FFFFFF;
+            --text-brown: #5D4037; /* 깊은 우드 브라운 텍스트 */
+            --point-wood: #8D6E63; /* 부드러운 우드 포인트 */
+            --today-leaf: #A5D6A7; /* 부드러운 나뭇잎 그린 (Today) */
+            --today-bg: #F1F8E9; /* 아주 연한 그린 배경 */
+            --border-light: #E0DBCF;
+            --text-muted: #A1998E;
+        }
+        
+        body { font-family: "Noto Sans KR", -apple-system, sans-serif; background-color: var(--bg-beige); margin: 0; padding: 15px 0; color: var(--text-brown); -webkit-text-size-adjust: none; }
+        
+        /* 헤더 - 감성 타이포그래피 */
+        .header { text-align: center; margin-bottom: 20px; padding: 10px; }
+        .header h1 { font-size: 1.4rem; font-weight: 700; margin: 0; color: var(--text-brown); letter-spacing: -0.5px; }
+        .header p { font-size: 0.8rem; color: var(--point-wood); margin: 6px 0 0; font-weight: 400; }
+        
+        .content-box { width: 93%; margin: 0 auto 15px auto; box-sizing: border-box; }
+        
+        /* 통계 카드 - 부드러운 그림자 */
+        .stats-container { background: var(--card-white); padding: 20px; border-radius: 18px; box-shadow: 0 6px 15px rgba(93,64,55,0.06); border: 1px solid rgba(141,110,99,0.05); }
+        .stats-grid { display: flex; margin-bottom: 15px; }
+        .stat-item { text-align: center; flex: 1; position: relative; }
+        .stat-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: var(--border-light); }
+        .stat-value { font-size: 1.2rem; font-weight: 700; color: var(--point-wood); display: block; margin-bottom: 3px; }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; }
+        .progress-wrapper { background: #EFEBE9; border-radius: 10px; height: 7px; width: 100%; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, var(--point-wood), var(--today-leaf)); height: 100%; width: 0%; transition: width 1.3s ease-out; }
+
+        /* 테이블 - 내추럴 최적화 */
+        .table-outer { background: var(--card-white); border-radius: 18px; border: 1px solid rgba(141,110,99,0.05); overflow: hidden; box-shadow: 0 6px 15px rgba(93,64,55,0.06); }
+        .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; }
+        th, td { border-bottom: 1px solid #F3F0E9; border-right: 1px solid #F3F0E9; text-align: center; vertical-align: middle; }
+        
+        /* 고정 이름 열 */
+        th:first-child, td:first-child { width: 62px; position: sticky; left: 0; z-index: 25; background: #fff; font-size: 0.8rem; font-weight: 700; border-right: 2px solid var(--point-wood); color: var(--text-brown); }
+        
+        /* 데이터 열 - 초슬림(48px) */
+        th:not(:first-child), td:not(:first-child) { width: 48px; }
+        
+        /* 헤더 스타일 */
+        th { background: #FAF9F7; color: var(--text-brown); height: 62px; padding: 0; font-weight: 700; }
+        .day-num { font-size: 0.9rem; display: block; margin-bottom: 1px; }
+        .day-date { font-size: 0.65rem; font-weight: 400; color: var(--text-muted); }
+        
+        /* 성경 본문 행 */
+        .plan-row td { background: var(--card-white); color: var(--point-wood); font-size: 0.65rem; font-weight: 700; height: 48px; line-height: 1.3; }
+        
+        /* 체크박스 - 내추럴 우드 서클 */
+        input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; border-radius: 50%; border: 2px solid #D7CCC8; appearance: none; -webkit-appearance: none; display: inline-block; position: relative; background: #fff; transition: all 0.2s; }
+        input[type="checkbox"]:checked { background: var(--point-wood); border-color: var(--point-wood); }
+        input[type="checkbox"]:checked::after { content: '✓'; color: white; position: absolute; left: 4px; top: -1px; font-size: 15px; font-weight: bold; }
+        
+        /* 감성적인 Today 하이라이트 표시 */
+        .today-cell { background: var(--today-bg) !important; position: relative; }
+        th.today-cell .day-num, th.today-cell .day-date { color: var(--text-brown); font-weight: 800; }
+        th.today-cell::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 5px; height: 5px; background: var(--today-leaf); border-radius: 50%; } /* 그린 도트 포인트 */
+
+        td.checked-cell { background-color: #FFFDE7 !important; } /* 아주 연한 노란색 체크 하이라이트 */
+
+        /* 은혜나눔 게시판 - 따뜻한 카드 */
+        .board-container { background: var(--card-white); border-radius: 18px; padding: 20px; box-shadow: 0 6px 15px rgba(93,64,55,0.06); border: 1px solid rgba(141,110,99,0.05); }
+        .board-title { font-size: 1rem; font-weight: 700; color: var(--text-brown); margin-bottom: 18px; display: flex; align-items: center; gap: 6px; }
+        .board-item { padding: 14px 0; border-bottom: 1px solid #F3F0E9; display: flex; gap: 10px; align-items: flex-start; }
+        .msg-name { font-weight: 700; color: var(--point-wood); font-size: 0.8rem; min-width: 50px; margin-top: 2px; }
+        .msg-content { font-size: 0.85rem; color: #6D4C41; line-height: 1.5; flex: 1; }
+
+        .board-input-group { background: #F8F5F0; padding: 12px; border-radius: 12px; margin-top: 18px; display: flex; gap: 8px; }
+        input { border: 1px solid #D7CCC8; border-radius: 8px; padding: 10px; font-size: 0.85rem; background: var(--card-white); color: var(--text-brown); }
+        input::placeholder { color: var(--text-muted); }
+        input:focus { outline: none; border-color: var(--point-wood); }
+        .btn-post { background: var(--point-wood); color: white; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700; cursor: pointer; }
+
+        /* 하단 푸터 */
+        .footer { text-align: center; padding: 30px 0 50px; }
+        .nav-btn { padding: 10px 20px; border-radius: 10px; font-size: 0.8rem; font-weight: 600; border: none; cursor: pointer; margin: 0 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        
+        #loading { position: fixed; inset: 0; background: var(--bg-beige); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; font-size: 0.9rem; color: var(--point-wood); }
+        .spinner { width: 30px; height: 30px; border: 3px solid #EFEBE9; border-top: 3px solid var(--point-wood); border-radius: 50%; animation: spin 0.9s linear infinite; margin-bottom: 12px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="loading"><div class="spinner"></div>마음을 가다듬는 중...</div>
+    
+    <div class="header">
+        <h1>📖 90일 성경통독 출석부</h1>
+        <p id="tongdok-period">아름다운 동행, 기간 로딩 중...</p>
+    </div>
+
+    <div class="stats-container content-box">
+        <div class="stats-grid">
+            <div class="stat-item"><span id="overall-percent" class="stat-value">0%</span><span class="stat-label">우리의 진도</span></div>
+            <div class="stat-item"><span id="total-users" class="stat-value">0</span><span class="stat-label">함께하는 분들</span></div>
+            <div class="stat-item"><span id="total-checks" class="stat-value">0</span><span class="stat-label">누적 통독</span></div>
+        </div>
+        <div class="progress-wrapper"><div id="progress-bar" class="progress-fill"></div></div>
+    </div>
+
+    <div class="table-outer content-box">
+        <div id="table-scroll-container" class="table-inner">
+            <table>
+                <thead><tr id="header-row"><th>이름</th></tr></thead>
+                <tbody id="attendance-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="board-container content-box">
+        <div class="board-title">🌿 은혜나눔</div>
+        <div id="board-list"></div>
+        <div class="board-input-group">
+            <input type="text" id="post-name" placeholder="이름" maxlength="4" style="width: 50px;">
+            <input type="text" id="post-content" placeholder="오늘 주신 마음의 양식..." style="flex: 1;">
+            <button class="btn-post" onclick="postMessage()">등록</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button onclick="location.reload()" class="nav-btn" style="background:#EFEBE9; color:#5D4037;">새로고침</button>
+        <button id="admin-trigger" onclick="handleAdmin()" class="nav-btn" style="background:none; color:#C4B9AC; font-size:0.7rem; box-shadow: none;">관리자</button>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvm0fZ7Cs1X7eeUAZAxUDfafqaZSSanAQE26_p8Qfml3HR0kQvELJrVkuKoQsHCCZd/exec";
+        
+        const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
+        
+        let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
+        let todayIdx = -1;
+        let startDt = null;
+
+        async function init() {
+            try {
+                const res = await fetch(SCRIPT_URL);
+                const data = await res.json();
+                if(data.startDate) {
+                    const p = data.startDate.split('-');
+                    startDt = new Date(p[0], p[1]-1, p[2]);
+                    calcToday(data.startDate);
+                    displayPeriod(data.startDate);
+                }
+                renderTable(data.attendance);
+                updateStats();
+                renderBoard(data.messages);
+                if (todayIdx > 0) setTimeout(scrollToToday, 600);
+                document.getElementById('loading').style.display = 'none';
+            } catch (e) { document.getElementById('loading').innerText = "잠시 후 다시 시도해주세요."; }
+        }
+
+        function displayPeriod(s) {
+            let curr = new Date(s), count = 0, end = new Date(s);
+            while (count < 90) { if(curr.getDay() !== 0) { count++; if(count===90) end = new Date(curr); } curr.setDate(curr.getDate()+1); }
+            const f = (d) => `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`;
+            document.getElementById('tongdok-period').textContent = `우리들의 성경 여정: ${f(new Date(s))} - ${f(end)}`;
+        }
+
+        function calcToday(s) {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let curr = new Date(s), count = 0;
+            while (curr <= today && count < 180) { 
+                if(curr.getDay() !== 0) { 
+                    count++; 
+                    if(curr.getTime() === today.getTime()) { todayIdx = count; break; } 
+                } 
+                curr.setDate(curr.getDate()+1); 
+            }
+        }
+
+        function renderTable(data) {
+            const h = document.getElementById('header-row'), b = document.getElementById('attendance-body');
+            let dCur = startDt ? new Date(startDt) : null;
+            
+            for(let i=1; i<=90; i++) {
+                let th = document.createElement('th');
+                if(dCur) { while(dCur.getDay() === 0) dCur.setDate(dCur.getDate()+1); }
+                let dStr = dCur ? `${dCur.getMonth()+1}/${dCur.getDate()}` : "";
+                th.innerHTML = `<span class="day-num">${i}일</span><span class="day-date">${dStr}</span>`;
+                if(i === todayIdx) th.className = 'today-cell';
+                th.id = `col-${i}`;
+                h.appendChild(th);
+                if(dCur) dCur.setDate(dCur.getDate()+1);
+            }
+
+            let pRow = document.createElement('tr'); pRow.className='plan-row'; pRow.innerHTML="<td>본문</td>";
+            for(let i=1; i<=90; i++) { let td=document.createElement('td'); td.textContent=biblePlan[i]; if(i===todayIdx) td.className='today-cell'; pRow.appendChild(td); }
+            body.appendChild(pRow);
+
+            for(let r=1; r<data.length; r++) {
+                let name = data[r][0]; if(!name) continue;
+                let tr = document.createElement('tr');
+                let tn = document.createElement('td'); tn.textContent = name; tr.appendChild(tn);
+                for(let i=1; i<=90; i++) {
+                    let td = document.createElement('td'); if(i===todayIdx) td.className='today-cell';
+                    let cb = document.createElement('input'); cb.type='checkbox'; cb.checked=(data[r][i]==="V");
+                    cb.onclick = async (e) => {
+                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드에서 수정할 수 있습니다."); return; }
+                        updateStats();
+                        fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'attendance', name, day:i, checked:cb.checked})});
+                    };
+                    td.appendChild(cb); tr.appendChild(td);
+                }
+                b.appendChild(tr);
+            }
+        }
+
+        function updateStats() {
+            const users = document.querySelectorAll('#attendance-body tr').length - 1;
+            let checks = 0; document.querySelectorAll('input[type="checkbox"]').forEach(c => { if(c.checked) checks++; });
+            const pct = Math.round((checks / (users * 90)) * 100) || 0;
+            document.getElementById('total-users').textContent = users;
+            document.getElementById('total-checks').textContent = checks;
+            document.getElementById('overall-percent').textContent = pct + "%";
+            setTimeout(() => { document.getElementById('progress-bar').style.width = pct + "%"; }, 100);
+        }
+
+        function renderBoard(msgs) {
+            const l = document.getElementById('board-list'); l.innerHTML = "";
+            [...msgs].reverse().slice(0, 5).forEach(m => {
+                let d = document.createElement('div'); d.className='board-item';
+                d.innerHTML = `<span class="msg-name">${m.name}</span><div class="msg-content">${m.content}</div>`;
+                l.appendChild(d);
+            });
+        }
+
+        async function postMessage() {
+            const n = document.getElementById('post-name').value, c = document.getElementById('post-content').value;
+            if(!n || !c) return;
+            document.getElementById('loading').style.display = 'flex';
+            await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'message', name:n, content:c})});
+            location.reload();
+        }
+
+        function scrollToToday() {
+            const el = document.getElementById(`col-${todayIdx}`);
+            if(el) document.getElementById('table-scroll-container').scrollTo({left: el.offsetLeft - 100, behavior:'smooth'});
+        }
+
+        function handleAdmin() {
+            if(!isAdmin) { if(prompt("Key")==="9191") { localStorage.setItem('bible_admin_mode','true'); location.reload(); } }
+            else { localStorage.removeItem('bible_admin_mode'); location.reload(); }
+        }
+        init();
+    </script>
+</body>
+</html>
