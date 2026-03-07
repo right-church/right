@@ -34,9 +34,9 @@
         .header { text-align: center; margin-bottom: 12px; }
         .header h1 { font-size: 1.1rem; font-weight: 800; margin: 0; }
         .period-badge { 
-            display: inline-block; font-size: 0.7rem; color: var(--secondary);
-            background: #fff; padding: 3px 10px; border-radius: 50px; 
-            border: 1px solid var(--border); margin-top: 4px;
+            display: inline-block; font-size: 0.75rem; color: var(--secondary);
+            background: #fff; padding: 4px 12px; border-radius: 50px; 
+            border: 1px solid var(--border); margin-top: 6px; font-weight: 500;
         }
 
         .card { 
@@ -112,7 +112,7 @@
             font-size: 14px; font-weight: bold;
         }
 
-        /* 은혜나눔 게시판 & 좋아요 스타일 */
+        /* 은혜나눔 게시판 */
         .msg-box { 
             background: #f8f9fc; border-radius: 8px; padding: 10px; margin-bottom: 6px; 
             font-size: 0.85rem; display: flex; justify-content: space-between; align-items: flex-start;
@@ -134,35 +134,18 @@
         .footer { display: flex; justify-content: center; gap: 8px; margin: 15px 0 20px; }
         .btn-ui { padding: 8px 12px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.7rem; color: #4e73df; background: #eaecf4; }
 
-        /* iOS 스타일 로더 */
-        #loader { position: fixed; inset: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(5px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999; }
-        .ios-spinner { position: relative; width: 32px; height: 32px; }
-        .ios-spinner div {
-            position: absolute; width: 3px; height: 9px; background: #8e8e93; border-radius: 5px;
-            left: 14.5px; top: 0; transform-origin: 1.5px 16px; animation: ios-fade 1s linear infinite;
-        }
-        .ios-spinner div:nth-child(1) { transform: rotate(0deg); animation-delay: -1s; }
-        .ios-spinner div:nth-child(2) { transform: rotate(45deg); animation-delay: -0.875s; }
-        .ios-spinner div:nth-child(3) { transform: rotate(90deg); animation-delay: -0.75s; }
-        .ios-spinner div:nth-child(4) { transform: rotate(135deg); animation-delay: -0.625s; }
-        .ios-spinner div:nth-child(5) { transform: rotate(180deg); animation-delay: -0.5s; }
-        .ios-spinner div:nth-child(6) { transform: rotate(225deg); animation-delay: -0.375s; }
-        .ios-spinner div:nth-child(7) { transform: rotate(270deg); animation-delay: -0.25s; }
-        .ios-spinner div:nth-child(8) { transform: rotate(315deg); animation-delay: -0.125s; }
-        @keyframes ios-fade { from { opacity: 1; } to { opacity: 0.1; } }
+        /* 로딩 스피너 디자인 */
+        #loader { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999; }
+        .spinner { width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div id="loader">
-        <div class="ios-spinner">
-            <div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
-        </div>
-        <p style="font-size:0.8rem; color:#8e8e93; margin-top:10px;">불러오는 중...</p>
-    </div>
+    <div id="loader"><div class="spinner"></div></div>
 
     <div class="header">
         <h1>📖 90일 성경통독</h1>
-        <div id="tongdok-period" class="period-badge">데이터 불러오는 중...</div>
+        <div id="tongdok-period" class="period-badge">기간 계산 중...</div>
     </div>
 
     <div class="card">
@@ -184,7 +167,7 @@
     </div>
 
     <div class="card">
-        <div style="font-size:0.85rem; font-weight:800; margin-bottom:10px; color:var(--text-dark);">❤️ 성도들의 고백</div>
+        <div style="font-size:0.85rem; font-weight:800; margin-bottom:10px; color:var(--text-dark);">말씀은혜나눔</div>
         <div id="msg-list"></div>
         <div class="input-group">
             <input type="text" id="in-name" placeholder="이름" style="width:55px;">
@@ -221,9 +204,10 @@
         function showPeriod(s) {
             const start = parseD(s); if(!start) return;
             let curr = new Date(start), count = 0, end = new Date(start);
+            // 주일 제외 90일 계산
             while(count < 90) { if(curr.getDay()!==0) { count++; if(count===90) end=new Date(curr); } curr.setDate(curr.getDate()+1); }
-            const f = (d) => `${d.getMonth()+1}/${d.getDate()}`;
-            document.getElementById('tongdok-period').textContent = `${f(start)} ~ ${f(end)} 성경통독`;
+            const f = (d) => `${d.getFullYear()}. ${String(d.getMonth()+1).padStart(2,'0')}. ${String(d.getDate()).padStart(2,'0')}.`;
+            document.getElementById('tongdok-period').textContent = `${f(start)} ~ ${f(end)}`;
         }
 
         function calcToday(s) {
@@ -297,16 +281,13 @@
         }
 
         async function toggleLike(msgId, el) {
-            if(el.classList.contains('active')) return; // 이미 누른 경우 중복 방지
-            
+            if(el.classList.contains('active')) return;
             const countEl = el.querySelector('.l-count');
             countEl.innerText = parseInt(countEl.innerText) + 1;
             el.classList.add('active');
-            
             let likedList = JSON.parse(localStorage.getItem('bible_liked_ids') || '[]');
             likedList.push(msgId);
             localStorage.setItem('bible_liked_ids', JSON.stringify(likedList));
-            
             await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'like', id:msgId})});
         }
 
