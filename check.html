@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>90일 성경통독</title>
+    <title>90일 성경통독 대시보드</title>
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/static/pretendard.css" />
     <style>
         :root { 
@@ -12,7 +12,7 @@
             --dark-blue: #343a40; 
             --light-bg: #f1f3f5; 
             --card-bg: #ffffff;
-            --border-color: #eee; 
+            --border-color: #e9ecef; 
             --admin-color: #51cf66; 
             --highlight-yellow: #fff9db; 
             --today-bg: #edf2ff; 
@@ -22,41 +22,52 @@
             font-family: 'Pretendard', -apple-system, sans-serif; 
             background-color: var(--light-bg); 
             margin: 0; 
-            padding: 10px 0; 
+            padding: 15px 0; /* 상단 여백 약간 축소 */
             color: var(--dark-blue);
             -webkit-text-size-adjust: none; 
             box-sizing: border-box; 
         }
 
-        .header-container { text-align: center; margin-bottom: 15px; }
-        h1 { font-size: 1.2rem; font-weight: 800; margin: 5px 0; letter-spacing: -0.5px; }
-        #tongdok-period { font-size: 0.75rem; color: #868e96; background: #e9ecef; padding: 2px 10px; border-radius: 15px; }
+        /* 헤더 섹션 */
+        .header-container { text-align: center; margin-bottom: 20px; }
+        h1 { font-size: 1.3rem; font-weight: 800; margin: 0 0 6px 0; letter-spacing: -0.5px; color: var(--dark-blue); }
+        #tongdok-period { 
+            display: inline-block; 
+            font-size: 0.75rem; 
+            color: #868e96; 
+            background: #e9ecef; 
+            padding: 3px 12px; 
+            border-radius: 20px; 
+            font-weight: 500;
+        }
 
+        /* 카드 공통 스타일 */
         .content-box { 
-            width: 95%; 
-            margin: 0 auto 10px auto; 
+            width: 94%; /* 가로폭 소폭 확장 */
+            margin: 0 auto 15px auto; 
             background: var(--card-bg); 
-            border-radius: 16px; 
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
+            border-radius: 20px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03); 
             padding: 15px;
             box-sizing: border-box; 
         }
 
-        .stats-grid { display: flex; margin-bottom: 12px; }
+        /* 상단 통계 디자인 */
+        .stats-grid { display: flex; margin-bottom: 15px; }
         .stat-item { text-align: center; flex: 1; border-right: 1px solid var(--border-color); }
         .stat-item:last-child { border-right: none; }
-        .stat-value { font-size: 1.1rem; font-weight: 800; color: var(--main-blue); display: block; }
-        .stat-label { font-size: 0.7rem; color: #adb5bd; margin-top: 2px; }
-        .progress-wrapper { background: #e9ecef; border-radius: 10px; height: 10px; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, var(--main-blue), var(--accent-green)); height: 100%; width: 0%; transition: width 1s ease-out; }
+        .stat-value { font-size: 1.2rem; font-weight: 800; color: var(--main-blue); display: block; }
+        .stat-label { font-size: 0.7rem; color: #adb5bd; margin-top: 2px; font-weight: 600; }
+        .progress-wrapper { background: #e9ecef; border-radius: 10px; height: 10px; width: 100%; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, var(--main-blue), var(--accent-green)); height: 100%; width: 0%; transition: width 1.2s cubic-bezier(0.1, 0.5, 0.1, 1); }
 
-        /* 테이블 최적화 (칸 좁게) */
+        /* 테이블 영역 최적화 */
         .table-outer { padding: 0; overflow: hidden; }
         .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { border-collapse: separate; border-spacing: 0; width: max-content; }
-        th, td { padding: 0; border-bottom: 1px solid #f1f3f5; border-right: 1px solid #f1f3f5; text-align: center; vertical-align: middle; height: 45px; }
+        th, td { padding: 0; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; vertical-align: middle; height: 50px; }
         
-        /* 고정 이름 열 - 너비 축소 */
+        /* 고정 열 (이름) - 너비 축소 */
         th:first-child, td:first-child { 
             width: 60px; 
             position: sticky; 
@@ -64,63 +75,91 @@
             z-index: 20; 
             background-color: #fff; 
             border-right: 2px solid var(--main-blue); 
-            font-size: 0.75rem; 
+            font-size: 0.85rem; 
             font-weight: 700; 
         }
-        /* 데이터 칸 - 너비 대폭 축소 */
-        th:not(:first-child), td:not(:first-child) { width: 45px; }
+        /* 일반 열 (일차) - 너비 축소 (65px -> 46px) */
+        th:not(:first-child), td:not(:first-child) { width: 46px; }
         
-        th { background-color: #f8f9fa; color: #495057; font-size: 0.7rem; }
-        .plan-row td { background-color: var(--highlight-yellow); color: #f08c00; font-size: 0.6rem; font-weight: 700; line-height: 1.1; }
+        th { background-color: #f8f9fa; color: #495057; font-size: 0.75rem; font-weight: 700; }
+        .plan-row td { 
+            background-color: var(--highlight-yellow); 
+            color: #f08c00; 
+            font-size: 0.6rem; 
+            font-weight: 700; 
+            line-height: 1.1;
+            word-break: break-all;
+        }
         
-        /* 체크박스 크기 조절 */
+        /* 체크박스 커스텀 디자인 - 모바일 터치 최적화된 작은 사이즈 */
         input[type="checkbox"] { 
-            appearance: none; -webkit-appearance: none;
-            width: 20px; height: 20px; 
-            border: 1.5px solid #dee2e6; 
-            border-radius: 5px; background-color: #fff; cursor: pointer; position: relative;
+            appearance: none;
+            -webkit-appearance: none;
+            width: 22px; height: 22px; 
+            border: 2px solid #dee2e6; 
+            border-radius: 6px;
+            background-color: #fff;
+            cursor: pointer; 
+            position: relative;
+            transition: 0.2s;
         }
-        input[type="checkbox"]:checked { background-color: var(--main-blue); border-color: var(--main-blue); }
+        input[type="checkbox"]:checked {
+            background-color: var(--main-blue);
+            border-color: var(--main-blue);
+        }
         input[type="checkbox"]:checked::after {
-            content: '✓'; color: white; position: absolute; left: 50%; top: 50%;
-            transform: translate(-50%, -50%); font-size: 13px; font-weight: bold;
+            content: '✓';
+            color: white;
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 14px; font-weight: bold;
         }
         
+        /* 오늘 강조 표시 */
         .today-cell { background-color: var(--today-bg) !important; }
         th.today-cell::before { 
-            content: 'T'; position: absolute; top: 2px; left: 50%; transform: translateX(-50%); 
-            font-size: 0.5rem; background: var(--main-blue); color: white; padding: 0 3px; border-radius: 2px; 
+            content: 'ON'; position: absolute; top: 2px; left: 50%; transform: translateX(-50%); 
+            font-size: 0.5rem; background: var(--main-blue); color: white; padding: 0px 4px; border-radius: 3px; font-weight: 800; 
         }
 
-        /* 게시판 최적화 */
-        .board-title { font-size: 1rem; font-weight: 800; margin-bottom: 12px; }
-        .board-item { background: #f8f9fa; border-radius: 12px; padding: 10px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
-        .msg-body { display: flex; flex-direction: column; flex-grow: 1; overflow: hidden; }
+        /* 은혜나눔 게시판 */
+        .board-title { font-size: 1rem; font-weight: 800; color: var(--dark-blue); margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
+        .board-item { 
+            background: #f8f9fa; border-radius: 12px; padding: 10px 12px; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .msg-body { display: flex; flex-direction: column; gap: 2px; flex-grow: 1; overflow: hidden; }
         .msg-name { font-weight: 800; color: var(--main-blue); font-size: 0.75rem; }
         .msg-content { color: #495057; font-size: 0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .btn-like { background: #fff; border: 1px solid #ffc9c9; color: #ff6b6b; padding: 3px 8px; border-radius: 15px; font-size: 0.7rem; font-weight: 700; }
+        .btn-like { background: #fff; border: 1px solid #ffc9c9; color: #ff6b6b; padding: 4px 10px; border-radius: 15px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
 
         .board-input-group { display: flex; flex-direction: column; gap: 8px; margin-top: 15px; }
-        .input-row { display: flex; gap: 5px; }
-        #post-name { width: 60px; }
+        .input-row { display: flex; gap: 6px; }
+        #post-name { width: 65px; }
         #post-content { flex-grow: 1; }
-        .board-input-group input { padding: 10px; border: 1px solid #e9ecef; border-radius: 10px; font-size: 0.85rem; }
-        .btn-post { background: var(--main-blue); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 0.9rem; }
+        .board-input-group input { padding: 10px; border: 1px solid #e9ecef; border-radius: 10px; font-size: 0.85rem; background: #f8f9fa; }
+        .btn-post { background: var(--main-blue); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 800; font-size: 0.9rem; cursor: pointer; }
 
-        .footer { margin: 15px 0 40px; display: flex; justify-content: center; gap: 8px; }
-        .nav-btn { padding: 10px 18px; border-radius: 12px; font-size: 0.8rem; color: white; border: none; font-weight: 700; }
+        /* 하단 내비게이션 */
+        .footer { margin: 15px 0 50px; display: flex; justify-content: center; gap: 10px; }
+        .nav-btn { padding: 10px 20px; border-radius: 12px; font-size: 0.8rem; color: white; border: none; cursor: pointer; font-weight: 700; }
         
+        /* 로딩 화면 */
         #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); display:flex; flex-direction: column; justify-content:center; align-items:center; z-index:1000; }
-        .spinner { width: 30px; height: 30px; border: 4px solid #f3f3f3; border-top: 4px solid var(--main-blue); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 10px; }
+        .spinner { width: 30px; height: 30px; border: 4px solid #f3f3f3; border-top: 4px solid var(--main-blue); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 12px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div id="loading"><div class="spinner"></div><div style="color:#495057; font-weight:700; font-size:0.9rem;">말씀 준비 중... 📖</div></div>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div style="color:#495057; font-weight:700; font-size:0.9rem;">말씀을 준비하고 있어요... 📖</div>
+    </div>
     
     <div class="header-container">
         <h1>📖 90일 성경통독</h1>
-        <div id="tongdok-period">기간 로딩 중...</div>
+        <div id="tongdok-period">기간을 불러오는 중...</div>
     </div>
 
     <div class="stats-container content-box">
@@ -135,33 +174,34 @@
     <div class="table-outer content-box">
         <div id="table-scroll-container" class="table-inner">
             <table>
-                <thead><tr id="header-row"><th>이름</th></tr></thead>
+                <thead><tr id="header-row"><th>이름\일차</th></tr></thead>
                 <tbody id="attendance-body"></tbody>
             </table>
         </div>
     </div>
 
     <div class="board-container content-box">
-        <div class="board-title">💬 은혜나눔</div>
+        <div class="board-title">💬 오늘 주신 은혜</div>
         <div id="board-list"></div>
         <div class="board-input-group">
             <div class="input-row">
                 <input type="text" id="post-name" placeholder="이름" maxlength="4">
-                <input type="text" id="post-content" placeholder="오늘의 소감 한마디">
+                <input type="text" id="post-content" placeholder="기억에 남는 구절이나 소감을 적어주세요.">
             </div>
-            <button class="btn-post" onclick="postMessage()">등록</button>
+            <button class="btn-post" onclick="postMessage()">은혜 나누기</button>
         </div>
     </div>
 
     <div class="footer">
-        <button id="admin-btn" class="nav-btn" style="background:var(--admin-color);" onclick="handleAdmin()">인증</button>
+        <button id="admin-btn" class="nav-btn" style="background:var(--admin-color);" onclick="handleAdmin()">관리자 인증</button>
         <button class="nav-btn" style="background:#adb5bd;" onclick="location.reload()">새로고침</button>
     </div>
 
     <script>
-        // JS 로직은 이전과 동일하게 유지 (SCRIPT_URL, biblePlan, init, render 등)
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvm0fZ7Cs1X7eeUAZAxUDfafqaZSSanAQE26_p8Qfml3HR0kQvELJrVkuKoQsHCCZd/exec";
+        
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
+        
         let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
         let todayDayIndex = -1;
 
@@ -170,13 +210,21 @@
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
-                if(data.startDate) { calculateTodayIndex(data.startDate); displayPeriod(data.startDate); }
+                
+                if(data.startDate && data.startDate !== "") {
+                    calculateTodayIndex(data.startDate);
+                    displayPeriod(data.startDate);
+                }
+                
                 renderTable(data.attendance);
                 updateStats(data.attendance);
                 renderBoard(data.messages);
+                
                 if (todayDayIndex > 0) setTimeout(scrollToToday, 600);
                 document.getElementById('loading').style.display = 'none';
-            } catch (e) { document.getElementById('loading').innerHTML = "오류 발생!"; }
+            } catch (e) { 
+                document.getElementById('loading').innerHTML = "연결 오류!<br>구글 시트 설정을 확인하세요."; 
+            }
         }
 
         function displayPeriod(startStr) {
@@ -187,7 +235,7 @@
                 if (current.getDay() !== 0) { dayCount++; if (dayCount === 90) endDate = new Date(current); }
                 current.setDate(current.getDate() + 1);
             }
-            const format = (d) => `${d.getFullYear().toString().substring(2)}.${d.getMonth() + 1}.${d.getDate()}`;
+            const format = (d) => `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, '0')}.${String(d.getDate()).padStart(2, '0')}`;
             document.getElementById('tongdok-period').textContent = `${format(dateObj)} ~ ${format(endDate)}`;
         }
 
@@ -214,17 +262,22 @@
         function renderTable(sheetData) {
             const hRow = document.getElementById('header-row');
             const tbody = document.getElementById('attendance-body');
-            hRow.innerHTML = "<th>이름</th>";
+            hRow.innerHTML = "<th>이름\\일차</th>";
+            tbody.innerHTML = "";
+
             for(let i=1; i<=90; i++) {
                 let th = document.createElement('th');
-                th.innerHTML = (i === todayDayIndex) ? `${i}일` : `${i}`;
+                let now = new Date();
+                let dateDisplay = (i === todayDayIndex) ? `<div style="font-size:0.55rem; font-weight:400; margin-bottom:1px; color:var(--main-blue);">${now.getMonth()+1}/${now.getDate()}</div>` : "";
+                th.innerHTML = `${dateDisplay}${i}일`;
                 if(i === todayDayIndex) th.className = 'today-cell';
                 th.id = `col-head-${i}`;
                 hRow.appendChild(th);
             }
+
             let pRow = document.createElement('tr');
             pRow.className = 'plan-row';
-            pRow.innerHTML = "<td>본문</td>";
+            pRow.innerHTML = "<td>성경 본문</td>";
             for(let i=1; i<=90; i++) {
                 let td = document.createElement('td');
                 td.innerHTML = biblePlan[i] || "";
@@ -232,6 +285,7 @@
                 pRow.appendChild(td);
             }
             tbody.appendChild(pRow);
+
             for(let r=1; r<sheetData.length; r++) {
                 let name = sheetData[r][0]; if(!name) continue;
                 let tr = document.createElement('tr');
@@ -242,8 +296,8 @@
                     let cb = document.createElement('input'); 
                     cb.type = 'checkbox'; cb.checked = (sheetData[r][i] === "V");
                     cb.onclick = async (e) => {
-                        if(!isAdmin) { e.preventDefault(); alert("인증이 필요합니다."); return; }
-                        updateStats(sheetData);
+                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드에서 가능합니다. 하단 '관리자 인증'을 해주세요."); return; }
+                        updateStats(sheetData); 
                         fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'attendance', name:name, day:i, checked:cb.checked}) });
                     };
                     td.appendChild(cb); tr.appendChild(td);
@@ -255,7 +309,10 @@
         function updateStats(sheetData) {
             const userCount = sheetData.length - 1;
             let checkCount = 0;
-            document.querySelectorAll('#attendance-body tr:not(.plan-row) input:checked').forEach(() => checkCount++);
+            const rows = document.querySelectorAll('#attendance-body tr:not(.plan-row)');
+            rows.forEach(row => {
+                row.querySelectorAll('input[type="checkbox"]').forEach(cb => { if(cb.checked) checkCount++; });
+            });
             const total = (userCount > 0) ? userCount * 90 : 1;
             const percent = Math.round((checkCount / total) * 100);
             document.getElementById('total-users').textContent = userCount;
@@ -267,11 +324,19 @@
         function renderBoard(messages) {
             const list = document.getElementById('board-list');
             list.innerHTML = "";
-            [...messages].reverse().slice(0, 10).forEach(m => {
+            [...messages].reverse().slice(0, 15).forEach(m => {
                 const item = document.createElement('div');
                 item.className = 'board-item';
-                item.innerHTML = `<div class="msg-body"><span class="msg-name">${m.name}</span><span class="msg-content" onclick="alert('${m.content}')">${m.content}</span></div>
-                    <div><button class="btn-like" onclick="likeMsg('${m.id}', this)">❤️ ${m.likes}</button></div>`;
+                item.innerHTML = `
+                    <div class="msg-body">
+                        <span class="msg-name">${m.name}</span>
+                        <span class="msg-content" onclick="alert('${m.content}')">${m.content}</span>
+                    </div>
+                    <div class="msg-actions">
+                        <button class="btn-like" onclick="likeMsg('${m.id}', this)">❤️ ${m.likes}</button>
+                        ${isAdmin ? `<button onclick="deleteMsg('${m.id}')" style="color:#adb5bd; border:none; background:none; cursor:pointer; margin-left:8px; font-size:1rem;">✕</button>` : ''}
+                    </div>
+                `;
                 list.appendChild(item);
             });
         }
@@ -279,7 +344,7 @@
         async function postMessage() {
             const name = document.getElementById('post-name').value;
             const content = document.getElementById('post-content').value;
-            if(!name || !content) return alert("입력 오류");
+            if(!name || !content) return alert("이름과 내용을 모두 입력해주세요.");
             document.getElementById('loading').style.display = 'flex';
             await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'message', name, content}) });
             location.reload();
@@ -290,6 +355,12 @@
             fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'like_message', id}) });
             let count = btn.innerText.split(' ')[1];
             btn.innerText = `❤️ ${parseInt(count)+1}`;
+        }
+
+        async function deleteMsg(id) {
+            if(!confirm("이 메시지를 삭제할까요?")) return;
+            await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'delete_message', id}) });
+            location.reload();
         }
 
         function scrollToToday() {
