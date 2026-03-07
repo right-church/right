@@ -5,64 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>90일 성경통독 출석부</title>
     <style>
-        :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f4f7f6; --border-color: #ddd; --admin-color: #27ae60; --highlight-yellow: #fff9c4; --today-blue: #d1ecf1; --container-width: 94%; }
-        body { font-family: -apple-system, sans-serif; background-color: var(--light-bg); margin: 0; padding: 15px 0; -webkit-tap-highlight-color: transparent; }
+        :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f4f7f6; --border-color: #ddd; --admin-color: #27ae60; --highlight-yellow: #fff9c4; --today-blue: #d1ecf1; --container-width: 96%; }
+        body { font-family: -apple-system, sans-serif; background-color: var(--light-bg); margin: 0; padding: 10px 0; -webkit-tap-highlight-color: transparent; }
         
-        h1 { text-align: center; color: var(--dark-blue); font-size: 1.3rem; margin: 10px 0 5px 0; }
-        .reading-period { text-align: center; font-size: 0.85rem; color: #7f8c8d; margin-bottom: 15px; }
-        .period-badge { background: #fff; padding: 6px 16px; border-radius: 20px; border: 1px solid var(--border-color); display: inline-block; font-weight: 600; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        h1 { text-align: center; color: var(--dark-blue); font-size: 1.2rem; margin: 5px 0; }
+        .reading-period { text-align: center; font-size: 0.8rem; color: #7f8c8d; margin-bottom: 10px; }
+        .period-badge { background: #fff; padding: 4px 12px; border-radius: 15px; border: 1px solid var(--border-color); display: inline-block; font-weight: 600; }
 
-        .content-box { max-width: var(--container-width); margin: 0 auto 15px auto; width: var(--container-width); box-sizing: border-box; }
+        .content-box { max-width: var(--container-width); margin: 0 auto 10px auto; width: var(--container-width); }
 
-        /* 그래프(진행바) 스타일 추가 */
-        .progress-container { width: 100%; background-color: #eee; border-radius: 4px; margin-top: 4px; height: 8px; overflow: hidden; }
-        .progress-bar { height: 100%; background-color: var(--main-blue); transition: width 0.3s ease; }
-        .percent-text { font-size: 0.7rem; color: var(--main-blue); font-weight: bold; }
-
-        /* 테이블 및 기타 스타일 */
-        #admin-date-area { display: none; background: #fff; padding: 15px; border-radius: 12px; border: 2px dashed var(--main-blue); margin-bottom: 20px; text-align: center; }
-        .table-outer { background: #fff; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        /* 테이블 슬림화 */
+        .table-outer { background: #fff; border-radius: 10px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { border-collapse: separate; border-spacing: 0; width: max-content; }
-        th, td { padding: 0; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; vertical-align: middle; height: 65px; }
         
-        th { background-color: var(--main-blue); color: white; font-size: 0.85rem; font-weight: 500; height: 50px; }
-        th:first-child, td:first-child { width: 100px; position: sticky; left: 0; z-index: 10; background-color: #fcfcfc; border-right: 2px solid var(--main-blue); padding: 5px; }
-        th:not(:first-child), td:not(:first-child) { width: 65px; }
+        /* 헤더 높이 조절 */
+        th { background-color: var(--main-blue); color: white; font-size: 0.75rem; font-weight: 500; height: 45px; padding: 0 5px; }
+        .reading-range { display: block; font-size: 0.65rem; color: #e1f5fe; font-weight: normal; margin-top: 2px; }
+
+        /* 첫 번째 열(이름) 고정 및 슬림화 */
+        th:first-child, td:first-child { width: 90px; position: sticky; left: 0; z-index: 10; background-color: #fcfcfc; border-right: 2px solid var(--main-blue); padding: 4px; }
+        td { height: 48px; text-align: center; border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); font-size: 0.9rem; }
+        
+        /* 미니 진행바 */
+        .mini-progress-bg { width: 100%; height: 4px; background: #eee; border-radius: 2px; margin-top: 3px; overflow: hidden; }
+        .mini-progress-fill { height: 100%; background: var(--main-blue); transition: width 0.3s; }
+        .percent-label { font-size: 0.65rem; color: var(--main-blue); font-weight: bold; }
 
         th.today-col { background-color: #2980b9 !important; position: relative; }
-        th.today-col::after { content: "TODAY"; position: absolute; top: 2px; left: 50%; transform: translateX(-50%); font-size: 0.55rem; color: #fff9c4; font-weight: bold; }
+        th.today-col::after { content: "TODAY"; position: absolute; top: 1px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: #fff9c4; }
         td.today-col { background-color: var(--today-blue) !important; }
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
-        input[type="checkbox"] { width: 28px; height: 28px; accent-color: var(--main-blue); cursor: pointer; }
-
-        /* 기도제목 게시판 */
-        .board-container { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 20px; }
-        .board-title { font-size: 1.1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 15px; border-left: 4px solid var(--main-blue); padding-left: 10px; }
-        .board-item { background: #f8f9fa; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; line-height: 1.6; border: 1px solid #eee; position: relative; }
-        .btn-like { background: white; border: 1px solid #ffcccc; color: #ff7675; padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; cursor: pointer; margin-top: 8px; font-weight: bold; }
-
-        .board-input-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-        .board-input-group input, .board-input-group textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; outline: none; }
-        .btn-post { background: var(--main-blue); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        .footer { text-align: center; margin: 40px 0; display: flex; justify-content: center; gap: 10px; }
-        .nav-btn { padding: 12px 20px; border: none; border-radius: 8px; font-weight: bold; color: white; cursor: pointer; }
-        .btn-admin { background-color: var(--admin-color); }
-        .btn-logout { background-color: #e67e22; }
         
-        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:2000; font-weight:bold; color: var(--main-blue); }
+        input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--main-blue); cursor: pointer; vertical-align: middle; }
+
+        /* 게시판 슬림화 */
+        .board-container { background: #fff; border-radius: 10px; padding: 15px; margin-top: 15px; }
+        .board-title { font-size: 1rem; font-weight: bold; margin-bottom: 10px; border-left: 4px solid var(--main-blue); padding-left: 8px; }
+        .board-item { background: #f8f9fa; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem; border: 1px solid #eee; }
+
+        .board-input-group { display: flex; flex-direction: column; gap: 8px; }
+        .board-input-group input, .board-input-group textarea { padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.9rem; }
+        .btn-post { background: var(--main-blue); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; }
+
+        .footer { text-align: center; margin: 30px 0; }
+        .nav-btn { padding: 10px 15px; border: none; border-radius: 6px; font-weight: bold; color: white; font-size: 0.8rem; }
+        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); display:flex; justify-content:center; align-items:center; z-index:2000; font-weight:bold; }
     </style>
 </head>
 <body>
-    <div id="loading">데이터를 불러오고 그래프를 계산 중...</div>
+    <div id="loading">통독표 구성 중...</div>
 
-    <h1>📖 90일 성경통독 출석부</h1>
-    <div class="reading-period"><span class="period-badge" id="display-period">기간 설정 대기 중</span></div>
+    <h1>📖 90일 성경통독</h1>
+    <div class="reading-period"><span class="period-badge" id="display-period">시작일 설정 대기</span></div>
 
-    <div id="admin-date-area" class="content-box">
-        <div style="font-weight: bold;">⚙️ 시작일 설정 (공통)</div>
-        <input type="date" id="start-date-input" onchange="saveStartDate()" style="margin-top:10px; padding:8px; border-radius:5px; border:1px solid #ccc;">
+    <div id="admin-date-area" class="content-box" style="display:none; text-align:center; padding:10px; border:1px dashed #3498db; border-radius:10px;">
+        <span style="font-size:0.8rem; font-weight:bold;">시작일 설정: </span>
+        <input type="date" id="start-date-input" onchange="saveStartDate()">
     </div>
 
     <div class="table-outer content-box">
@@ -72,23 +71,35 @@
     </div>
 
     <div class="board-container content-box">
-        <div class="board-title">🙏 오늘의 은혜 & 기도제목</div>
+        <div class="board-title">🙏 은혜 & 기도제목</div>
         <div id="board-list"></div>
         <div class="board-input-group">
             <input type="text" id="post-name" placeholder="성함">
-            <textarea id="post-content" rows="3" placeholder="내용을 적어주세요."></textarea>
-            <button class="btn-post" onclick="postMessage()">등록하기</button>
+            <textarea id="post-content" rows="2" placeholder="은혜를 나눠주세요."></textarea>
+            <button class="btn-post" onclick="postMessage()">등록</button>
         </div>
     </div>
     
     <div class="footer">
-        <button id="admin-btn" class="nav-btn btn-admin" onclick="handleAdmin()">관리자 모드</button>
+        <button id="admin-btn" class="nav-btn" style="background:#27ae60" onclick="handleAdmin()">관리자 모드</button>
     </div>
 
     <script>
-        // 관리자님의 SCRIPT_URL
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3V8-gZc_wB_BYq8JpLD--3gRk1EY5Z-3BdU8YibFkk6gQ__EB94FYAqpDLueSgn56/exec"; 
         
+        // 통독 본문 데이터 (90일 표준)
+        const BIBLE_PLAN = [
+            "창1-11", "창12-23", "창24-36", "창37-50", "출1-15", "출16-27", "출28-40", "레1-14", "레15-27", "민1-12",
+            "민13-25", "민26-36", "신1-11", "신12-22", "신23-34", "수1-12", "수13-24", "삿1-12", "삿13-21", "룻/삼상1-10",
+            "삼상11-20", "삼상21-31", "삼하1-12", "삼하13-24", "왕상1-11", "왕상12-22", "왕하1-12", "왕하13-25", "대상1-14", "대상15-29",
+            "대하1-13", "대하14-26", "대하27-36", "스1-10", "느1-13", "에/욥1-10", "욥11-31", "욥32-42", "시1-30", "시31-60",
+            "시61-90", "시91-120", "시121-150", "잠1-15", "잠16-31", "전/아/사1-12", "사13-35", "사36-53", "사54-66", "렘1-15",
+            "렘16-30", "렘31-45", "렘46-52", "애/겔1-11", "겔12-24", "겔25-36", "겔37-48", "단1-12", "호1-14", "욜/암/옵",
+            "욘/미/나/하", "습/학/슥/말", "마1-10", "마11-20", "마21-28", "막1-8", "막9-16", "누1-8", "누9-16", "누17-24",
+            "요1-7", "요8-14", "요15-21", "행1-10", "행11-20", "행21-28", "롬1-8", "롬9-16", "고전1-8", "고전9-16",
+            "고후1-13", "갈/엡", "빌/골/살전후", "딤전후/딛/몬", "히1-13", "약/벧전후", "요일/삼/유다", "계1-11", "계12-22", "완독"
+        ];
+
         let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
         let currentDayCount = 0;
 
@@ -99,23 +110,19 @@
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
-                
                 if(data.startDate) {
-                    const startStr = data.startDate.split('T')[0];
-                    document.getElementById('start-date-input').value = startStr;
-                    currentDayCount = calculateCurrentDay(startStr);
-                    updatePeriodDisplay(startStr);
+                    const s = data.startDate.split('T')[0];
+                    document.getElementById('start-date-input').value = s;
+                    currentDayCount = calculateCurrentDay(s);
+                    updatePeriodDisplay(s);
                 }
-
                 render(data.attendance);
                 renderBoard(data.messages);
                 document.getElementById('loading').style.display = 'none';
-                
                 if(currentDayCount > 0) {
                     setTimeout(() => {
                         const container = document.getElementById('scroll-container');
-                        const targetScroll = (currentDayCount - 1) * 65 - (window.innerWidth / 2) + 115;
-                        container.scrollLeft = Math.max(0, targetScroll);
+                        container.scrollLeft = (currentDayCount - 1) * 65 - (window.innerWidth / 2) + 120;
                     }, 500);
                 }
             } catch (e) { alert("연결 실패!"); }
@@ -124,30 +131,26 @@
         function render(sheetData) {
             const hRow = document.getElementById('header-row');
             const tbody = document.getElementById('attendance-body');
-            hRow.innerHTML = "<th>이름 (진행률)</th>";
+            hRow.innerHTML = "<th>이름 (성공률)</th>";
+            
             for(let i=1; i<=90; i++) {
                 let th = document.createElement('th');
-                th.textContent = i + '일';
+                th.innerHTML = `${i}일<span class="reading-range">${BIBLE_PLAN[i-1] || ""}</span>`;
                 if(i === currentDayCount) th.className = 'today-col';
                 hRow.appendChild(th);
             }
 
             for(let r=1; r<sheetData.length; r++) {
                 let name = sheetData[r][0]; if(!name) continue;
-                
-                // 체크된 개수 계산하여 그래프 데이터 만들기
-                let checkedCount = 0;
-                for(let i=1; i<=90; i++) { if(sheetData[r][i] === "V") checkedCount++; }
-                let percent = Math.floor((checkedCount / 90) * 100);
+                let checked = 0;
+                for(let i=1; i<=90; i++) if(sheetData[r][i] === "V") checked++;
+                let pct = Math.floor((checked / 90) * 100);
 
                 let tr = document.createElement('tr');
-                
-                // 이름 칸에 그래프 추가
                 let tdName = document.createElement('td');
                 tdName.innerHTML = `
-                    <div style="font-weight:bold; font-size:0.9rem;">${name}</div>
-                    <div class="percent-text">${percent}%</div>
-                    <div class="progress-container"><div class="progress-bar" style="width:${percent}%"></div></div>
+                    <div style="font-weight:bold;">${name} <span class="percent-label">${pct}%</span></div>
+                    <div class="mini-progress-bg"><div class="mini-progress-fill" style="width:${pct}%"></div></div>
                 `;
                 tr.appendChild(tdName);
 
@@ -160,7 +163,6 @@
                     cb.onclick = (e) => {
                         if(!isAdmin) { e.preventDefault(); alert("관리자만 체크 가능합니다."); return; }
                         td.classList.toggle('checked-cell', cb.checked);
-                        // 체크할 때 실시간 그래프 업데이트는 새로고침 시 적용됨 (간결함을 위해)
                         fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'attendance', name:name, day:i, checked:cb.checked}) });
                     };
                     td.appendChild(cb); tr.appendChild(td);
@@ -169,7 +171,7 @@
             }
         }
 
-        // --- 기타 공통 함수들 ---
+        // --- 기능 함수들 ---
         function calculateCurrentDay(s) {
             const start = new Date(s); const today = new Date();
             start.setHours(0,0,0,0); today.setHours(0,0,0,0);
@@ -195,7 +197,7 @@
             (msgs || []).reverse().forEach(m => {
                 const item = document.createElement('div'); item.className = 'board-item';
                 let del = isAdmin ? `<button style="float:right; border:none; background:none; color:#ff7675;" onclick="deleteMsg('${m.id}', this)">삭제</button>` : '';
-                item.innerHTML = `${del} <b>${m.name}:</b> ${m.content} <br> <button class="btn-like" onclick="like('${m.id}', this)">❤️ <span>${m.likes||0}</span></button>`;
+                item.innerHTML = `${del} <b>${m.name}:</b> ${m.content} <br> <button style="background:none; border:none; cursor:pointer;" onclick="like('${m.id}', this)">❤️ <span>${m.likes||0}</span></button>`;
                 list.appendChild(item);
             });
         }
@@ -219,7 +221,6 @@
         function updateAdminUI() {
             const b = document.getElementById('admin-btn');
             b.textContent = isAdmin ? "관리자 종료" : "관리자 모드";
-            b.className = isAdmin ? "nav-btn btn-logout" : "nav-btn btn-admin";
         }
         init();
     </script>
