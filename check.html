@@ -151,7 +151,7 @@
     <div class="card">
         <div class="stats">
             <div class="stat-box"><span id="total-users" class="val">0</span><span class="lbl">참여자</span></div>
-            <div class="stat-box"><span id="total-checks" class="val">0</span><span class="lbl">완독일수</span></div>
+            <div class="stat-box"><span id="today-day-count" class="val">-</span><span class="lbl">오늘 n일차</span></div>
             <div class="stat-box"><span id="overall-percent" class="val">0%</span><span class="lbl">공동체 완독률</span></div>
         </div>
         <div class="progress-container"><div id="progress-bar" class="progress-bar"></div></div>
@@ -196,7 +196,12 @@
                 renderTable(data.attendance, data.startDate);
                 updateStats(data.attendance);
                 renderBoard(data.messages);
-                if (tIndex > 0) setTimeout(scrollToToday, 500);
+                if (tIndex > 0) {
+                    document.getElementById('today-day-count').textContent = tIndex + "일차";
+                    setTimeout(scrollToToday, 500);
+                } else {
+                    document.getElementById('today-day-count').textContent = "준비중";
+                }
                 document.getElementById('loader').style.display = 'none';
             } catch (e) { document.getElementById('loader').innerHTML = "연결 오류"; }
         }
@@ -213,7 +218,13 @@
             const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const start = parseD(s); if(!start || today < start) return;
             let curr = new Date(start), count = 0;
-            while(curr <= today && count < 150) { if(curr.getDay()!==0) { count++; if(curr.getTime()===today.getTime()) { tIndex=count; break; } } curr.setDate(curr.getDate()+1); }
+            while(curr <= today && count < 180) { // 90일이 넘어가도 계산되도록 범위 확대
+                if(curr.getDay()!==0) { 
+                    count++; 
+                    if(curr.getTime()===today.getTime()) { tIndex=count; break; } 
+                }
+                curr.setDate(curr.getDate()+1);
+            }
         }
 
         function parseD(s) { const p = s.split('-'); return p.length===3?new Date(p[0],p[1]-1,p[2]):null; }
@@ -255,7 +266,6 @@
             document.querySelectorAll('#a-body tr:not(.plan-row) input[type="checkbox"]').forEach(c => {if(c.checked) checks++;});
             const pct = Math.round((checks / (users * 90)) * 100) || 0;
             document.getElementById('total-users').textContent = users;
-            document.getElementById('total-checks').textContent = checks;
             document.getElementById('overall-percent').textContent = pct + "%";
             setTimeout(() => { document.getElementById('progress-bar').style.width = pct + "%"; }, 100);
         }
