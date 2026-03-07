@@ -297,7 +297,7 @@
             let likedList = JSON.parse(localStorage.getItem('bible_liked_ids') || '[]');
             likedList.push(msgId);
             localStorage.setItem('bible_liked_ids', JSON.stringify(likedList));
-            await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'like_message', id:msgId})});
+            await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'like', id:msgId})});
         }
 
         async function postMessage() {
