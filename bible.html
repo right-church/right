@@ -11,16 +11,8 @@
         
         .content-box { max-width: var(--container-width); margin: 0 auto 15px auto; width: var(--container-width); box-sizing: border-box; }
 
-        /* [수정] 날짜 설정 영역 - 관리자 전용 & 여백 조정 */
-        #admin-date-area { 
-            display: none; /* 기본 숨김 */
-            background: #e8f4fd; 
-            padding: 15px; 
-            border-radius: 12px; 
-            border: 1px dashed var(--main-blue);
-            margin-bottom: 20px;
-            text-align: center;
-        }
+        /* 관리자 전용 설정 영역 */
+        #admin-date-area { display: none; background: #e8f4fd; padding: 15px; border-radius: 12px; border: 1px dashed var(--main-blue); margin-bottom: 20px; text-align: center; }
         .date-input-group { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .date-input-group input { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
         .d-day-badge { background: var(--main-blue); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
@@ -45,27 +37,29 @@
         th:first-child, td:first-child { width: 75px; position: sticky; left: 0; z-index: 10; background-color: #fcfcfc; border-right: 2px solid var(--main-blue); font-weight: bold; }
         th:not(:first-child), td:not(:first-child) { width: 55px; }
 
-        /* [수정] 오늘 날짜 열 강조 */
-        .today-col { background-color: var(--today-blue) !important; font-weight: bold; position: relative; }
-        .today-col::after { content: "TODAY"; position: absolute; top: 2px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: var(--main-blue); }
+        /* [수정] 상단 일차(th)에만 TODAY 마크 표시 */
+        th.today-col { background-color: #2980b9 !important; position: relative; }
+        th.today-col::after { content: "TODAY"; position: absolute; top: 2px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: #fff9c4; font-weight: bold; }
+
+        /* 아래쪽 셀들은 배경색만 강조 */
+        td.today-col { background-color: var(--today-blue) !important; }
 
         .plan-row td { background-color: #f1f9ff !important; color: #2980b9; font-size: 0.7rem; font-weight: bold; line-height: 1.2; }
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
         input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--main-blue); cursor: pointer; }
 
-        /* 게시판 */
+        /* 게시판 및 기타 */
         .board-container { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .board-title { font-size: 1.1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 15px; border-left: 4px solid var(--main-blue); padding-left: 10px; }
         .board-item { background: #f8f9fa; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; line-height: 1.6; border: 1px solid #eee; }
         .btn-like { display: inline-flex; align-items: center; gap: 4px; background: white; border: 1px solid #ffcccc; color: #ff7675; padding: 3px 10px; border-radius: 15px; font-size: 0.8rem; cursor: pointer; margin-top: 8px; font-weight: bold; }
 
         .board-input-group { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; }
-        .board-input-group input, .board-input-group textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; outline: none; transition: border 0.3s; }
-        .board-input-group input:focus, .board-input-group textarea:focus { border-color: var(--main-blue); }
+        .board-input-group input, .board-input-group textarea { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; outline: none; }
         .btn-post { background: var(--main-blue); color: white; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; }
 
         .footer { text-align: center; margin: 40px 0 60px; display: flex; justify-content: center; gap: 12px; }
-        button.nav-btn { min-width: 130px; height: 50px; border: none; border-radius: 10px; font-weight: bold; color: white; cursor: pointer; font-size: 0.9rem; transition: opacity 0.2s; }
+        button.nav-btn { min-width: 130px; height: 50px; border: none; border-radius: 10px; font-weight: bold; color: white; cursor: pointer; font-size: 0.9rem; }
         .btn-admin { background-color: var(--admin-color); }
         .btn-logout { background-color: #e67e22; }
         .btn-refresh { background-color: #95a5a6; }
@@ -87,7 +81,6 @@
             <input type="date" id="start-date-input" onchange="saveStartDate()">
             <span id="d-day-info" class="d-day-badge">설정 필요</span>
         </div>
-        <div style="font-size: 0.75rem; color: #666; margin-top: 8px;">* 주일(일요일)을 제외한 15주(90일) 일정으로 자동 계산됩니다.</div>
     </div>
 
     <div class="stats-container content-box">
@@ -202,7 +195,7 @@
             for(let i=1; i<=90; i++) { 
                 let td = document.createElement('td'); 
                 td.textContent = biblePlan[i] || ""; 
-                if(i === currentDayCount) td.classList.add('today-col');
+                if(i === currentDayCount) td.className = 'today-col';
                 pRow.appendChild(td); 
             }
             tbody.appendChild(pRow);
