@@ -29,7 +29,7 @@
         th:first-child, td:first-child { width: 85px; position: sticky; left: 0; z-index: 10; background-color: #fcfcfc; border-right: 2px solid var(--main-blue); font-weight: bold; }
         th:not(:first-child), td:not(:first-child) { width: 65px; }
 
-        /* TODAY 표시 (상단 일차에만) */
+        /* TODAY 표시 */
         th.today-col { background-color: #2980b9 !important; position: relative; }
         th.today-col::after { content: "TODAY"; position: absolute; top: 2px; left: 50%; transform: translateX(-50%); font-size: 0.55rem; color: #fff9c4; font-weight: bold; }
         td.today-col { background-color: var(--today-blue) !important; }
@@ -56,13 +56,13 @@
     </style>
 </head>
 <body>
-    <div id="loading">데이터 불러오는 중...</div>
+    <div id="loading">통독 데이터를 불러오는 중...</div>
 
     <h1>📖 90일 성경통독 출석부</h1>
     <div class="reading-period"><span class="period-badge" id="display-period">시작 날짜를 설정해주세요</span></div>
 
     <div id="admin-date-area" class="content-box">
-        <div style="font-weight: bold;">⚙️ 공통 통독 시작일 설정</div>
+        <div style="font-weight: bold;">⚙️ 통독 시작일 설정 (모든 성도 공통)</div>
         <div class="date-input-group">
             <input type="date" id="start-date-input" onchange="saveStartDate()">
             <span id="d-day-info" style="color:var(--main-blue); font-weight:bold;"></span>
@@ -90,8 +90,8 @@
     </div>
 
     <script>
-        // 보내주신 URL 적용 완료
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDtQ_XW666_q4q-mh0aXW6zPSUZzY1qKY4kZHtS9k9Nn3noGaFMMxLyQeKi34_6BFr/exec"; 
+        // 새로운 배포 URL 적용 완료
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzzKEtdWcS5T-ee2FWBSFEdZ52STRebCenAWJy2F7Ttx3isaYNpIhftPeQIgd3DEHs/exec"; 
         
         let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
         let currentDayCount = 0;
@@ -115,7 +115,6 @@
                 renderBoard(data.messages);
                 document.getElementById('loading').style.display = 'none';
                 
-                // 오늘 날짜로 자동 스크롤
                 if(currentDayCount > 0) {
                     setTimeout(() => {
                         const container = document.getElementById('scroll-container');
@@ -124,14 +123,14 @@
                     }, 600);
                 }
             } catch (e) { 
-                alert("연결에 실패했습니다. 스프레드시트 배포 설정을 확인해주세요."); 
+                alert("연결 오류: 시트의 앱스 스크립트 배포 설정을 확인해주세요."); 
             }
         }
 
         async function saveStartDate() {
             if(!isAdmin) return;
             const newDate = document.getElementById('start-date-input').value;
-            if(!confirm("모든 참여자에게 적용됩니다. 변경할까요?")) return;
+            if(!confirm("모든 성도님에게 이 날짜를 적용할까요?")) return;
             
             document.getElementById('loading').style.display = 'flex';
             await fetch(SCRIPT_URL, { 
@@ -227,7 +226,7 @@
 
         async function deleteMsg(id, btn) {
             if(!isAdmin) return;
-            if(confirm("이 메시지를 삭제할까요?")) {
+            if(confirm("메시지를 삭제하시겠습니까?")) {
                 btn.parentElement.remove();
                 await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'delete_message', id:id}) });
             }
