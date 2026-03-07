@@ -151,7 +151,7 @@
     <div class="card">
         <div class="stats">
             <div class="stat-box"><span id="total-users" class="val">0</span><span class="lbl">참여자</span></div>
-            <div class="stat-box"><span id="today-day-count" class="val">-</span><span class="lbl">오늘 n일차</span></div>
+            <div class="stat-box"><span id="today-day-count" class="val">-</span><span class="lbl">성경통독</span></div>
             <div class="stat-box"><span id="overall-percent" class="val">0%</span><span class="lbl">공동체 완독률</span></div>
         </div>
         <div class="progress-container"><div id="progress-bar" class="progress-bar"></div></div>
@@ -218,7 +218,7 @@
             const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             const start = parseD(s); if(!start || today < start) return;
             let curr = new Date(start), count = 0;
-            while(curr <= today && count < 180) { // 90일이 넘어가도 계산되도록 범위 확대
+            while(curr <= today && count < 180) { 
                 if(curr.getDay()!==0) { 
                     count++; 
                     if(curr.getTime()===today.getTime()) { tIndex=count; break; } 
