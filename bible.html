@@ -7,8 +7,12 @@
     <style>
         :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f4f7f6; --border-color: #ddd; --admin-color: #27ae60; --highlight-yellow: #fff9c4; --today-blue: #d1ecf1; --container-width: 92%; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Malgun Gothic", sans-serif; background-color: var(--light-bg); margin: 0; padding: 15px 0; }
-        h1 { text-align: center; color: var(--dark-blue); font-size: 1.3rem; margin: 10px 0 20px 0; }
         
+        /* 제목 및 기간 표시 */
+        h1 { text-align: center; color: var(--dark-blue); font-size: 1.3rem; margin: 10px 0 5px 0; }
+        .reading-period { text-align: center; font-size: 0.85rem; color: #7f8c8d; margin-bottom: 20px; font-weight: 500; }
+        .period-badge { background: #eee; padding: 4px 12px; border-radius: 15px; display: inline-block; }
+
         .content-box { max-width: var(--container-width); margin: 0 auto 15px auto; width: var(--container-width); box-sizing: border-box; }
 
         /* 관리자 전용 설정 영역 */
@@ -37,11 +41,8 @@
         th:first-child, td:first-child { width: 75px; position: sticky; left: 0; z-index: 10; background-color: #fcfcfc; border-right: 2px solid var(--main-blue); font-weight: bold; }
         th:not(:first-child), td:not(:first-child) { width: 55px; }
 
-        /* [수정] 상단 일차(th)에만 TODAY 마크 표시 */
         th.today-col { background-color: #2980b9 !important; position: relative; }
         th.today-col::after { content: "TODAY"; position: absolute; top: 2px; left: 50%; transform: translateX(-50%); font-size: 0.5rem; color: #fff9c4; font-weight: bold; }
-
-        /* 아래쪽 셀들은 배경색만 강조 */
         td.today-col { background-color: var(--today-blue) !important; }
 
         .plan-row td { background-color: #f1f9ff !important; color: #2980b9; font-size: 0.7rem; font-weight: bold; line-height: 1.2; }
@@ -74,6 +75,9 @@
     </div>
 
     <h1>📖 90일 성경통독 출석부</h1>
+    <div class="reading-period">
+        <span class="period-badge" id="display-period">시작 날짜를 설정해주세요</span>
+    </div>
 
     <div id="admin-date-area" class="content-box">
         <div style="font-weight: bold; margin-bottom: 10px; color: var(--dark-blue);">⚙️ 관리자 설정: 통독 시작일</div>
@@ -124,6 +128,24 @@
 
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
 
+        function updatePeriodDisplay() {
+            const startStr = localStorage.getItem('bible_start_date');
+            if(!startStr) return;
+            
+            const startDate = new Date(startStr);
+            let count = 0;
+            let endDate = new Date(startDate);
+            
+            // 주일을 제외하고 90일이 되는 날짜 계산
+            while(count < 90) {
+                if(endDate.getDay() !== 0) count++;
+                if(count < 90) endDate.setDate(endDate.getDate() + 1);
+            }
+
+            const formatDate = (d) => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+            document.getElementById('display-period').textContent = `${formatDate(startDate)} ~ ${formatDate(endDate)}`;
+        }
+
         function calculateCurrentDay() {
             const startStr = localStorage.getItem('bible_start_date');
             if(!startStr) return 0;
@@ -152,6 +174,7 @@
         async function init() {
             if(isAdmin) document.getElementById('admin-date-area').style.display = 'block';
             updateAdminUI();
+            updatePeriodDisplay();
             const savedDate = localStorage.getItem('bible_start_date');
             if(savedDate) document.getElementById('start-date-input').value = savedDate;
             currentDayCount = calculateCurrentDay();
