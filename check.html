@@ -17,7 +17,6 @@
             --today-bg: #eef2ff;
             --today-text: #4e73df;
             --plan-bg: #fff9db;
-            /* 규격 설정 */
             --cell-w: 45px;
             --cell-h: 38px;
             --name-w: 70px; 
@@ -58,7 +57,6 @@
             transition: width 0.5s ease;
         }
 
-        /* 테이블 스티키 레이아웃 */
         .table-outer {
             width: 100%; 
             max-height: 65vh; 
@@ -70,7 +68,6 @@
         }
         
         table { border-collapse: separate; border-spacing: 0; width: max-content; table-layout: fixed; }
-        
         thead { position: sticky; top: 0; z-index: 30; }
         .plan-row { position: sticky; top: var(--cell-h); z-index: 20; }
 
@@ -112,7 +109,6 @@
             font-size: 14px; font-weight: bold;
         }
 
-        /* 은혜나눔 게시판 */
         .msg-box { 
             background: #f8f9fc; border-radius: 8px; padding: 10px; margin-bottom: 6px; 
             font-size: 0.85rem; display: flex; justify-content: space-between; align-items: flex-start;
@@ -124,6 +120,7 @@
             border-radius: 20px; padding: 2px 8px; font-size: 0.75rem; 
             display: flex; align-items: center; gap: 3px; color: var(--secondary);
             transition: 0.2s; white-space: nowrap; margin-left: 8px;
+            user-select: none;
         }
         .like-btn.active { border-color: #ff6b6b; color: #ff6b6b; background: #fff5f5; }
         
@@ -134,7 +131,6 @@
         .footer { display: flex; justify-content: center; gap: 8px; margin: 15px 0 20px; }
         .btn-ui { padding: 8px 12px; border-radius: 8px; border: none; font-weight: 700; font-size: 0.7rem; color: #4e73df; background: #eaecf4; }
 
-        /* 로딩 스피너 디자인 */
         #loader { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 999; }
         .spinner { width: 30px; height: 30px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -182,7 +178,8 @@
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvm0fZ7Cs1X7eeUAZAxUDfafqaZSSanAQE26_p8Qfml3HR0kQvELJrVkuKoQsHCCZd/exec";
+        // 새로운 URL 적용됨
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxj3OYaKACKxkWbECQ1htl1Ys443ec0zoxPstYbtEkunvqJjD7cIN88SkJnmM7uJUWA/exec";
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
         let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
         let tIndex = -1;
@@ -203,7 +200,10 @@
                     document.getElementById('today-day-count').textContent = "준비중";
                 }
                 document.getElementById('loader').style.display = 'none';
-            } catch (e) { document.getElementById('loader').innerHTML = "연결 오류"; }
+            } catch (e) { 
+                console.error(e);
+                document.getElementById('loader').innerHTML = "연결 오류가 발생했습니다."; 
+            }
         }
 
         function showPeriod(s) {
@@ -274,7 +274,7 @@
             const l = document.getElementById('msg-list'); l.innerHTML = "";
             const likedList = JSON.parse(localStorage.getItem('bible_liked_ids') || '[]');
             
-            [...ms].reverse().slice(0, 10).forEach((m, idx) => {
+            [...ms].reverse().slice(0, 10).forEach((m) => {
                 const isLiked = likedList.includes(m.id);
                 const i = document.createElement('div'); i.className = 'msg-box';
                 i.innerHTML = `
@@ -289,15 +289,37 @@
             });
         }
 
+        // 수정한 좋아요 로직 (낙관적 업데이트 반영)
         async function toggleLike(msgId, el) {
-            if(el.classList.contains('active')) return;
+            if(el.classList.contains('active') || el.dataset.loading === 'true') return;
+            
             const countEl = el.querySelector('.l-count');
-            countEl.innerText = parseInt(countEl.innerText) + 1;
+            let currentCount = parseInt(countEl.innerText) || 0;
+
+            // 1. 즉시 UI 반영
             el.classList.add('active');
+            countEl.innerText = currentCount + 1;
+            el.dataset.loading = 'true';
+
+            // 2. 로컬 저장소 업데이트
             let likedList = JSON.parse(localStorage.getItem('bible_liked_ids') || '[]');
-            likedList.push(msgId);
-            localStorage.setItem('bible_liked_ids', JSON.stringify(likedList));
-            await fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'like', id:msgId})});
+            if (!likedList.includes(msgId)) {
+                likedList.push(msgId);
+                localStorage.setItem('bible_liked_ids', JSON.stringify(likedList));
+            }
+
+            // 3. 서버 전송
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({type: 'like_message', id: msgId})
+                });
+            } catch (e) {
+                console.error("좋아요 서버 전송 실패:", e);
+                // 전송 실패 시 필요하다면 UI 원복 로직 추가 가능
+            } finally {
+                delete el.dataset.loading;
+            }
         }
 
         async function postMessage() {
