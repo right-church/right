@@ -36,7 +36,7 @@
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
         input[type="checkbox"] { width: 26px; height: 26px; accent-color: var(--main-blue); cursor: pointer; }
 
-        /* 게시판 */
+        /* 기도제목 게시판 */
         .board-container { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-top: 20px; }
         .board-title { font-size: 1.1rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 15px; border-left: 4px solid var(--main-blue); padding-left: 10px; }
         .board-item { background: #f8f9fa; padding: 14px; border-radius: 8px; margin-bottom: 12px; font-size: 0.9rem; line-height: 1.6; border: 1px solid #eee; position: relative; }
@@ -51,11 +51,14 @@
         .btn-admin { background-color: var(--admin-color); }
         .btn-logout { background-color: #e67e22; }
         
-        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); display:flex; justify-content:center; align-items:center; z-index:2000; font-weight:bold; color: var(--main-blue); }
+        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:2000; font-weight:bold; color: var(--main-blue); }
     </style>
 </head>
 <body>
-    <div id="loading">통독 데이터를 불러오는 중...</div>
+    <div id="loading">
+        <div style="margin-bottom:10px;">통독 데이터를 불러오는 중...</div>
+        <div style="font-size:0.8rem; font-weight:normal; color:#666;">(A2 셀부터 이름이 있어야 표가 생성됩니다)</div>
+    </div>
 
     <h1>📖 90일 성경통독 출석부</h1>
     <div class="reading-period"><span class="period-badge" id="display-period">시작 날짜를 설정해주세요</span></div>
@@ -89,8 +92,8 @@
     </div>
 
     <script>
-        // 최신 배포 URL 적용 완료
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwLM6190kpx9N_Bdw62TfV6JcBXBnDx1egLuFirXzMfG3ziDIHDQePfmGLTqtvlKLGx/exec"; 
+        // 새로운 배포 URL 적용 완료
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx3V8-gZc_wB_BYq8JpLD--3gRk1EY5Z-3BdU8YibFkk6gQ__EB94FYAqpDLueSgn56/exec"; 
         
         let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
         let currentDayCount = 0;
@@ -104,7 +107,7 @@
                 const data = await res.json();
                 
                 if(data.error) {
-                    alert("시트 연결 오류: " + data.error);
+                    alert("서버 에러: " + data.error);
                     return;
                 }
 
@@ -115,10 +118,12 @@
                     updatePeriodDisplay(startStr);
                 }
 
+                // 표 렌더링
                 render(data.attendance);
                 renderBoard(data.messages);
                 document.getElementById('loading').style.display = 'none';
                 
+                // 오늘 날짜로 자동 스크롤
                 if(currentDayCount > 0) {
                     setTimeout(() => {
                         const container = document.getElementById('scroll-container');
@@ -127,14 +132,14 @@
                     }, 600);
                 }
             } catch (e) { 
-                alert("불러오기 실패. '모든 사용자(Anyone)' 권한으로 배포했는지 확인해주세요."); 
+                alert("불러오기 실패! '모든 사용자(Anyone)' 권한으로 배포했는지 확인해주세요."); 
             }
         }
 
         async function saveStartDate() {
             if(!isAdmin) return;
             const newDate = document.getElementById('start-date-input').value;
-            if(!confirm("모든 성도님에게 적용됩니다. 변경할까요?")) return;
+            if(!confirm("모든 성도님에게 이 날짜를 적용할까요?")) return;
             
             document.getElementById('loading').style.display = 'flex';
             await fetch(SCRIPT_URL, { 
@@ -174,13 +179,22 @@
             const hRow = document.getElementById('header-row');
             const tbody = document.getElementById('attendance-body');
             hRow.innerHTML = "<th>이름\\일차</th>";
+            
             for(let i=1; i<=90; i++) {
                 let th = document.createElement('th');
                 th.textContent = i + '일';
                 if(i === currentDayCount) th.className = 'today-col';
                 hRow.appendChild(th);
             }
-            if(!sheetData || sheetData.length < 1) return;
+
+            // 시트에 이름이 하나도 없을 경우 대비
+            if (!sheetData || sheetData.length <= 1) {
+                const emptyTr = document.createElement('tr');
+                emptyTr.innerHTML = `<td colspan="91" style="padding:20px; color:#999;">시트 A2 셀부터 이름을 입력해 주세요.</td>`;
+                tbody.appendChild(emptyTr);
+                return;
+            }
+
             for(let r=1; r<sheetData.length; r++) {
                 let name = sheetData[r][0]; if(!name) continue;
                 let tr = document.createElement('tr');
@@ -231,7 +245,7 @@
 
         async function deleteMsg(id, btn) {
             if(!isAdmin) return;
-            if(confirm("메시지를 삭제하시겠습니까?")) {
+            if(confirm("이 메시지를 삭제할까요?")) {
                 btn.parentElement.remove();
                 await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'delete_message', id:id}) });
             }
