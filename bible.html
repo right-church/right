@@ -28,8 +28,8 @@
         th, td { padding: 0; border-bottom: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; text-align: center; vertical-align: middle; height: 48px; }
         th:first-child, td:first-child { width: 60px; position: sticky; left: 0; z-index: 10; background-color: #fcfcfc; border-right: 2px solid var(--main-blue); font-size: 0.8rem; font-weight: bold; }
         th:not(:first-child), td:not(:first-child) { width: 55px; }
-        th { background-color: var(--main-blue); color: white; font-size: 0.7rem; height: 34px; }
-        .plan-row td { background-color: #f1f9ff; color: #2980b9; font-size: 0.6rem; line-height: 1.2; padding: 4px 2px; font-weight: 600; height: 50px; }
+        th { background-color: var(--main-blue); color: white; font-size: 0.7rem; height: 42px; line-height: 1.2; }
+        .plan-row td { background-color: #f1f9ff; color: #2980b9; font-size: 0.65rem; line-height: 1.2; padding: 4px 2px; font-weight: 600; height: 42px; }
         
         input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; }
         .today-cell { background-color: var(--today-bg) !important; position: relative; }
@@ -99,7 +99,6 @@
     </div>
 
     <script>
-        // 새로운 SCRIPT_URL 적용
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvm0fZ7Cs1X7eeUAZAxUDfafqaZSSanAQE26_p8Qfml3HR0kQvELJrVkuKoQsHCCZd/exec";
         
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
@@ -138,7 +137,7 @@
             let endDate = new Date(dateObj);
 
             while (dayCount < 90) {
-                if (current.getDay() !== 0) { // 주일 제외
+                if (current.getDay() !== 0) {
                     dayCount++;
                     if (dayCount === 90) endDate = new Date(current);
                 }
@@ -179,30 +178,33 @@
             hRow.innerHTML = "<th>이름\\일차</th>";
             tbody.innerHTML = "";
 
+            // 헤더 생성 (일차 + 날짜)
             for(let i=1; i<=90; i++) {
                 let th = document.createElement('th');
-                th.innerHTML = `${i}일`;
-                if(i === todayDayIndex) th.className = 'today-cell';
+                let dayLabel = `${i}일`;
+                if(i === todayDayIndex) {
+                    const now = new Date();
+                    dayLabel = `<div style="font-size:0.6rem; opacity:0.9;">${now.getMonth()+1}/${now.getDate()}</div>${i}일`;
+                    th.className = 'today-cell';
+                }
+                th.innerHTML = dayLabel;
                 th.id = `col-head-${i}`;
                 hRow.appendChild(th);
             }
 
+            // 성경 본문 행 생성
             let pRow = document.createElement('tr');
             pRow.className = 'plan-row';
-            pRow.innerHTML = "<td>본문&날짜</td>";
+            pRow.innerHTML = "<td>성경 본문</td>";
             for(let i=1; i<=90; i++) {
                 let td = document.createElement('td');
-                let dateStr = "";
-                if(i === todayDayIndex) {
-                    const now = new Date();
-                    dateStr = `<div style="font-size:0.5rem; color:var(--main-blue); margin-bottom:2px;">${now.getMonth()+1}/${now.getDate()}</div>`;
-                }
-                td.innerHTML = `${dateStr}${biblePlan[i] || ""}`;
+                td.innerHTML = biblePlan[i] || "";
                 if(i === todayDayIndex) td.className = 'today-cell';
                 pRow.appendChild(td);
             }
             tbody.appendChild(pRow);
 
+            // 참여자 출석 체크 행 생성
             for(let r=1; r<sheetData.length; r++) {
                 let name = sheetData[r][0]; if(!name) continue;
                 let tr = document.createElement('tr');
