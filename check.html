@@ -42,11 +42,12 @@
         input[type="checkbox"]:checked { background: var(--success); border-color: var(--success); }
         input[type="checkbox"]:checked::after { content: '✓'; color: white; position: absolute; left: 50%; top: 48%; transform: translate(-50%, -50%); font-size: 14px; font-weight: bold; }
 
-        /* 메시지 보드 개선 스타일 */
-        .msg-box { background: #fff; border-radius: 10px; padding: 12px; margin-bottom: 8px; display: flex; flex-direction: column; border: 1px solid #f0f0f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        /* 메시지 보드: 하트를 내용과 같은 라인으로 배치 */
+        .msg-box { background: #fff; border-radius: 10px; padding: 12px; margin-bottom: 8px; border: 1px solid #f0f0f0; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
         .msg-name { font-weight: 800; color: var(--primary); font-size: 0.75rem; margin-bottom: 4px; }
-        .msg-text { color: var(--text-dark); font-size: 0.88rem; line-height: 1.5; word-break: break-all; }
-        .like-btn { align-self: flex-end; cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; gap: 3px; color: #ff6b6b; margin-top: 4px; padding: 4px 8px; border-radius: 12px; background: #fff5f5; border: 1px solid #ffe3e3; transition: 0.2s; }
+        .msg-body { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .msg-text { color: var(--text-dark); font-size: 0.88rem; line-height: 1.5; word-break: break-all; flex: 1; }
+        .like-btn { cursor: pointer; font-size: 0.72rem; display: flex; align-items: center; gap: 3px; color: #ff6b6b; padding: 3px 8px; border-radius: 12px; background: #fff5f5; border: 1px solid #ffe3e3; transition: 0.2s; white-space: nowrap; flex-shrink: 0; margin-top: 2px; }
         .like-btn:active { transform: scale(1.2); }
         .l-count { color: #858796; font-weight: 600; }
         
@@ -166,9 +167,11 @@
             const div = document.createElement('div'); div.className = 'msg-box';
             div.innerHTML = `
                 <div class="msg-name">${m.name}</div>
-                <div class="msg-text">${m.content}</div>
-                <div class="like-btn" onclick="toggleLike('${m.id}', this)">
-                    ❤️ <span class="l-count">${m.likes || 0}</span>
+                <div class="msg-body">
+                    <div class="msg-text">${m.content}</div>
+                    <div class="like-btn" onclick="toggleLike('${m.id}', this)">
+                        ❤️ <span class="l-count">${m.likes || 0}</span>
+                    </div>
                 </div>`;
             l.appendChild(div);
         });
