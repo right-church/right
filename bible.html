@@ -3,106 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>90일 성경통독</title>
+    <title>90일 성경통독 출석부</title>
     <style>
-        :root {
-            --primary: #007AFF;
-            --bg: #F2F2F7;
-            --white: #FFFFFF;
-            --text: #1C1C1E;
-            --border: #E5E5EA;
-            --today-bg: #EBF5FF;
-        }
-
-        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; color: var(--text); -webkit-text-size-adjust: none; }
-        
-        /* 상단 헤더 */
-        .header { background: var(--white); padding: 25px 20px; border-bottom: 1px solid var(--border); }
-        .header h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
-        .header p { font-size: 13px; color: #8E8E93; margin: 5px 0 0; }
-
-        /* 통계 영역 */
-        .stats-row { display: flex; padding: 15px 20px; gap: 20px; background: var(--white); border-bottom: 1px solid var(--border); }
-        .stat-group { flex: 1; }
-        .stat-label { font-size: 11px; color: #8E8E93; font-weight: 600; display: block; }
-        .stat-value { font-size: 17px; font-weight: 700; color: var(--primary); }
-
-        /* 출석부 테이블 - 칸 너비 최적화 */
-        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--white); }
-        table { border-collapse: collapse; width: max-content; }
-        
-        /* 고정 열 (이름) */
-        th:first-child, td:first-child { 
-            width: 60px; position: sticky; left: 0; z-index: 10; 
-            background: var(--white); border-right: 1.5px solid var(--primary); 
-            font-size: 13px; font-weight: 600;
+        :root { 
+            --azure: #3B82F6; 
+            --slate-800: #1F2937;
+            --slate-600: #4B5563;
+            --slate-400: #9CA3AF;
+            --slate-200: #E5E7EB;
+            --slate-100: #F3F4F6;
+            --bg: #FFFFFF;
+            --today-bg: #EFF6FF;
         }
         
-        /* 데이터 열 (모바일용 슬림 너비: 48px) */
-        th:not(:first-child), td:not(:first-child) { width: 48px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); margin: 0; padding: 0; color: var(--slate-800); -webkit-text-size-adjust: none; }
         
-        th { height: 55px; background: #F9F9FB; font-size: 12px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
-        .d-num { display: block; font-weight: 700; }
-        .d-date { display: block; font-size: 10px; font-weight: 400; color: #8E8E93; }
+        /* 헤더 섹션 - 심플한 타이포그래피 */
+        .header { padding: 30px 20px 20px; text-align: left; }
+        .header h1 { font-size: 1.3rem; font-weight: 800; margin: 0; letter-spacing: -0.8px; }
+        .header p { font-size: 0.8rem; color: var(--slate-600); margin: 5px 0 0; }
         
-        td { height: 48px; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
-        .plan-row td { font-size: 10px; background: #FAFAFA; color: var(--primary); font-weight: 600; }
+        /* 통계 대시보드 - 슬림 카드 */
+        .content-box { width: 92%; margin: 0 auto 12px auto; box-sizing: border-box; }
+        .stats-container { background: var(--bg); padding: 18px; border-radius: 12px; border: 1px solid var(--slate-200); }
+        .stats-grid { display: flex; margin-bottom: 12px; }
+        .stat-item { text-align: center; flex: 1; position: relative; }
+        .stat-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 25%; height: 50%; width: 1px; background: var(--slate-200); }
+        .stat-value { font-size: 1.1rem; font-weight: 800; color: var(--azure); display: block; margin-bottom: 3px; }
+        .stat-label { font-size: 0.7rem; color: var(--slate-400); font-weight: 500; text-transform: uppercase; }
+        .progress-wrapper { background: var(--slate-100); border-radius: 10px; height: 6px; width: 100%; overflow: hidden; }
+        .progress-fill { background: var(--azure); height: 100%; width: 0%; transition: width 1.2s cubic-bezier(0.1, 0.5, 0.1, 1); }
 
-        /* 투데이 하이라이트 */
-        .is-today { background: var(--today-bg) !important; color: var(--primary); }
-        th.is-today { position: relative; }
-        th.is-today::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--primary); }
+        /* 출석 테이블 - 초슬림 최적화 */
+        .table-outer { background: var(--bg); border-radius: 12px; border: 1px solid var(--slate-200); overflow: hidden; }
+        .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; }
+        th, td { border-bottom: 1px solid var(--slate-200); border-right: 1px solid var(--slate-200); text-align: center; vertical-align: middle; }
+        
+        /* 고정 이름 열 - 컴팩트 너비 */
+        th:first-child, td:first-child { width: 60px; position: sticky; left: 0; z-index: 25; background: #fff; font-size: 0.8rem; font-weight: 700; border-right: 2px solid var(--azure); }
+        
+        /* 데이터 열 - 초슬림 너비(45px) */
+        th:not(:first-child), td:not(:first-child) { width: 45px; }
+        
+        /* 헤더 스타일 */
+        th { background: var(--slate-100); color: var(--slate-800); height: 60px; padding: 0; font-weight: 700; }
+        .day-num { font-size: 0.9rem; display: block; margin-bottom: 1px; }
+        .day-date { font-size: 0.65rem; font-weight: 400; color: var(--slate-600); }
+        
+        /* 성경 본문 행 */
+        .plan-row td { background: var(--bg); color: var(--azure); font-size: 0.65rem; font-weight: 700; height: 45px; line-height: 1.3; }
+        
+        /* 체크박스 - 미니멀 블루 서클 */
+        input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; border-radius: 50%; border: 2px solid #ddd; appearance: none; -webkit-appearance: none; display: inline-block; position: relative; background: #fff; transition: all 0.2s; }
+        input[type="checkbox"]:checked { background: var(--azure); border-color: var(--azure); }
+        input[type="checkbox"]:checked::after { content: '✓'; color: white; position: absolute; left: 4px; top: -2px; font-size: 14px; font-weight: bold; }
+        
+        /* 세련된 Today 하이라이트 표시 */
+        .today-cell { background: var(--today-bg) !important; position: relative; }
+        th.today-cell .day-num, th.today-cell .day-date { color: var(--azure); font-weight: 800; }
+        th.today-cell::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--azure); }
 
-        /* 체크박스 */
-        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; }
+        td.checked-cell { background-color: #fffdf0 !important; }
 
-        /* 게시판 */
-        .board { background: var(--white); margin-top: 15px; padding: 20px; border-top: 1px solid var(--border); }
-        .board-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; }
-        .msg { margin-bottom: 12px; border-bottom: 1px solid #F2F2F7; padding-bottom: 10px; }
-        .msg-info { font-size: 12px; font-weight: 700; color: var(--primary); }
-        .msg-body { font-size: 14px; margin-top: 2px; }
+        /* 은혜나눔 게시판 - 미니멀 리스트 */
+        .board-container { background: var(--bg); padding: 20px 20px 80px; }
+        .board-title { font-size: 1rem; font-weight: 800; color: var(--slate-800); margin-bottom: 15px; }
+        .board-item { padding: 12px 0; border-bottom: 1px solid var(--slate-200); display: flex; gap: 8px; align-items: flex-start; }
+        .msg-name { font-weight: 700; color: var(--azure); font-size: 0.8rem; min-width: 50px; }
+        .msg-content { font-size: 0.85rem; color: var(--slate-600); line-height: 1.5; flex: 1; }
 
-        .input-box { display: flex; gap: 8px; margin-top: 20px; }
-        input[type="text"] { border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 14px; background: var(--bg); outline: none; }
-        .btn-send { background: var(--primary); color: #FFF; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; }
+        .board-input-group { background: var(--slate-100); padding: 12px; border-radius: 10px; margin-top: 15px; display: flex; gap: 6px; }
+        input { border: 1px solid var(--slate-200); border-radius: 8px; padding: 10px; font-size: 0.85rem; background: var(--bg); }
+        input:focus { outline: none; border-color: var(--azure); }
+        .btn-post { background: var(--azure); color: white; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; cursor: pointer; }
 
-        #loading { position: fixed; inset: 0; background: #FFF; z-index: 1000; display: flex; justify-content: center; align-items: center; font-size: 14px; color: #8E8E93; }
+        .footer { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(255,255,255,0.9); padding: 10px; border-top: 1px solid var(--slate-200); display: flex; justify-content: center; backdrop-filter: blur(5px); }
+        .nav-btn { padding: 10px 20px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; border: none; cursor: pointer; margin: 0 4px; }
+        
+        #loading { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; font-size: 0.9rem; color: var(--slate-600); }
+        .spinner { width: 30px; height: 30px; border: 3px solid #f0f0f0; border-top: 3px solid var(--azure); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 10px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div id="loading">데이터 로딩 중...</div>
+    <div id="loading"><div class="spinner"></div>데이터 동기화 중...</div>
     
     <div class="header">
-        <h1>90일 성경통독</h1>
-        <p id="period-info"></p>
+        <h1>90일 성경통독 출석부</h1>
+        <p id="tongdok-period">기간 로딩 중...</p>
     </div>
 
-    <div class="stats-row">
-        <div class="stat-group"><span class="stat-label">진도율</span><span id="overall-percent" class="stat-value">0%</span></div>
-        <div class="stat-group"><span class="stat-label">참여자</span><span id="total-users" class="stat-value">0</span></div>
-        <div class="stat-group"><span class="stat-label">누적 완료</span><span id="total-checks" class="stat-value">0</span></div>
-    </div>
-
-    <div class="table-wrap" id="table-scroll">
-        <table>
-            <thead><tr id="header-row"><th>이름</th></tr></thead>
-            <tbody id="attendance-body"></tbody>
-        </table>
-    </div>
-
-    <div class="board">
-        <div class="board-title">나눔 게시판</div>
-        <div id="board-list"></div>
-        <div class="input-box">
-            <input type="text" id="post-name" placeholder="이름" style="width: 50px;">
-            <input type="text" id="post-content" placeholder="은혜로운 말씀 한마디" style="flex: 1;">
-            <button class="btn-send" onclick="postMessage()">등록</button>
+    <div class="stats-container content-box">
+        <div class="stats-grid">
+            <div class="stat-item"><span id="overall-percent" class="stat-value">0%</span><span class="stat-label">진도율</span></div>
+            <div class="stat-item"><span id="total-users" class="stat-value">0</span><span class="stat-label">참여자</span></div>
+            <div class="stat-item"><span id="total-checks" class="stat-value">0</span><span class="stat-label">누적읽기</span></div>
         </div>
+        <div class="progress-wrapper"><div id="progress-bar" class="progress-fill"></div></div>
+    </div>
+
+    <div class="table-outer content-box">
+        <div id="table-scroll-container" class="table-inner">
+            <table>
+                <thead><tr id="header-row"><th>이름</th></tr></thead>
+                <tbody id="attendance-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="board-container">
+        <div class="board-title">💬 은혜나눔</div>
+        <div id="board-list"></div>
+        <div class="board-input-group content-box">
+            <input type="text" id="post-name" placeholder="이름" maxlength="4" style="width: 50px;">
+            <input type="text" id="post-content" placeholder="함께 나눌 은혜의 말씀..." style="flex: 1;">
+            <button class="btn-post" onclick="postMessage()">등록</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        <button onclick="location.reload()" class="nav-btn" style="background:#f0f0f0; color:#555;">새로고침</button>
+        <button id="admin-trigger" onclick="handleAdmin()" class="nav-btn" style="background:none; color:#ccc; font-size:0.7rem;">관리자</button>
     </div>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyvm0fZ7Cs1X7eeUAZAxUDfafqaZSSanAQE26_p8Qfml3HR0kQvELJrVkuKoQsHCCZd/exec";
+        
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
         
         let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
@@ -117,21 +144,21 @@
                     const p = data.startDate.split('-');
                     startDt = new Date(p[0], p[1]-1, p[2]);
                     calcToday(data.startDate);
-                    showPeriod(data.startDate);
+                    displayPeriod(data.startDate);
                 }
                 renderTable(data.attendance);
                 updateStats();
                 renderBoard(data.messages);
-                if (todayIdx > 0) setTimeout(autoScroll, 600);
+                if (todayIdx > 0) setTimeout(scrollToToday, 600);
                 document.getElementById('loading').style.display = 'none';
-            } catch (e) { document.getElementById('loading').innerText = "에러 발생"; }
+            } catch (e) { document.getElementById('loading').innerText = "Load Error"; }
         }
 
-        function showPeriod(s) {
+        function displayPeriod(s) {
             let curr = new Date(s), count = 0, end = new Date(s);
             while (count < 90) { if(curr.getDay() !== 0) { count++; if(count===90) end = new Date(curr); } curr.setDate(curr.getDate()+1); }
             const f = (d) => `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`;
-            document.getElementById('period-info').textContent = `${f(new Date(s))} - ${f(end)}`;
+            document.getElementById('tongdok-period').textContent = `${f(new Date(s))} - ${f(end)}`;
         }
 
         function calcToday(s) {
@@ -155,26 +182,30 @@
                 let th = document.createElement('th');
                 if(dCur) { while(dCur.getDay() === 0) dCur.setDate(dCur.getDate()+1); }
                 let dStr = dCur ? `${dCur.getMonth()+1}/${dCur.getDate()}` : "";
-                th.innerHTML = `<span class="d-num">${i}일</span><span class="d-date">${dStr}</span>`;
-                if(i === todayIdx) th.className = 'is-today';
-                th.id = `day-${i}`;
+                th.innerHTML = `<span class="day-num">${i}일</span><span class="day-date">${dStr}</span>`;
+                if(i === todayIdx) th.className = 'today-cell';
+                th.id = `col-${i}`;
                 h.appendChild(th);
                 if(dCur) dCur.setDate(dCur.getDate()+1);
             }
 
-            let pTr = document.createElement('tr'); pTr.className='plan-row'; pTr.innerHTML="<td>본문</td>";
-            for(let i=1; i<=90; i++) { let td=document.createElement('td'); td.textContent=biblePlan[i]; if(i===todayIdx) td.className='is-today'; pTr.appendChild(td); }
-            b.appendChild(pTr);
+            let pRow = document.createElement('tr'); pRow.className='plan-row'; pRow.innerHTML="<td>본문</td>";
+            for(let i=1; i<=90; i++) { 
+                let td=document.createElement('td'); td.textContent=biblePlan[i]; 
+                if(i===todayIdx) td.className='today-cell'; 
+                pRow.appendChild(td); 
+            }
+            b.appendChild(pRow);
 
             for(let r=1; r<data.length; r++) {
                 let name = data[r][0]; if(!name) continue;
                 let tr = document.createElement('tr');
                 let tn = document.createElement('td'); tn.textContent = name; tr.appendChild(tn);
                 for(let i=1; i<=90; i++) {
-                    let td = document.createElement('td'); if(i===todayIdx) td.className='is-today';
+                    let td = document.createElement('td'); if(i===todayIdx) td.className='today-cell';
                     let cb = document.createElement('input'); cb.type='checkbox'; cb.checked=(data[r][i]==="V");
                     cb.onclick = async (e) => {
-                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드 전용"); return; }
+                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드 필요"); return; }
                         updateStats();
                         fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'attendance', name, day:i, checked:cb.checked})});
                     };
@@ -187,16 +218,18 @@
         function updateStats() {
             const users = document.querySelectorAll('#attendance-body tr').length - 1;
             let checks = 0; document.querySelectorAll('input[type="checkbox"]').forEach(c => { if(c.checked) checks++; });
+            const pct = Math.round((checks / (users * 90)) * 100) || 0;
             document.getElementById('total-users').textContent = users;
             document.getElementById('total-checks').textContent = checks;
-            document.getElementById('overall-percent').textContent = Math.round((checks / (users * 90)) * 100) + "%";
+            document.getElementById('overall-percent').textContent = pct + "%";
+            setTimeout(() => { document.getElementById('progress-bar').style.width = pct + "%"; }, 100);
         }
 
         function renderBoard(msgs) {
             const l = document.getElementById('board-list'); l.innerHTML = "";
             [...msgs].reverse().slice(0, 5).forEach(m => {
-                let d = document.createElement('div'); d.className='msg';
-                d.innerHTML = `<div class="msg-info">${m.name}</div><div class="msg-body">${m.content}</div>`;
+                let d = document.createElement('div'); d.className='board-item';
+                d.innerHTML = `<span class="msg-name">${m.name}</span><div class="msg-content">${m.content}</div>`;
                 l.appendChild(d);
             });
         }
@@ -209,9 +242,9 @@
             location.reload();
         }
 
-        function autoScroll() {
-            const el = document.getElementById(`day-${todayIdx}`);
-            if(el) document.getElementById('table-scroll').scrollTo({left: el.offsetLeft - 80, behavior:'smooth'});
+        function scrollToToday() {
+            const el = document.getElementById(`col-${todayIdx}`);
+            if(el) document.getElementById('table-scroll-container').scrollTo({left: el.offsetLeft - 100, behavior:'smooth'});
         }
 
         function handleAdmin() {
