@@ -15,7 +15,6 @@
         }
         body { font-family: 'Pretendard', sans-serif; background-color: var(--bg-color); margin: 0; padding: 10px 0; color: var(--text-dark); -webkit-text-size-adjust: none; }
         .header { text-align: center; margin-bottom: 12px; }
-        /* 2. 메인 타이틀 크기 및 스타일 */
         .header h1 { font-size: 1.15rem; font-weight: 800; margin: 0; color: #2e384d; }
         .period-badge { display: inline-block; font-size: 0.75rem; color: var(--secondary); background: #fff; padding: 4px 12px; border-radius: 50px; border: 1px solid var(--border); margin-top: 6px; }
         .card { width: 96%; margin: 0 auto 10px; background: var(--card-bg); border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); padding: 12px; box-sizing: border-box; }
@@ -57,10 +56,7 @@
 </head>
 <body>
 <div id="loader"><div class="spinner"></div></div>
-<div class="header">
-    <h1>📖 90일 성경통독 출석부</h1>
-    <div id="tongdok-period" class="period-badge">기간 계산 중...</div>
-</div>
+<div class="header"><h1>📖 90일 성경통독 출석부</h1><div id="tongdok-period" class="period-badge">기간 계산 중...</div></div>
 <div class="card">
     <div class="stats">
         <div class="stat-box"><span id="total-users" class="val">0명</span><span class="lbl">참여자</span></div>
@@ -78,7 +74,6 @@
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw2sKW6bTrwpHHHeowVN79AESPihKs3en4e7tNCLW2zkITO1N_yFhyUAcvjUeGGntW0/exec";
     
     const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
-    
     let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
     let tIndex = -1;
 
@@ -93,7 +88,7 @@
             renderBoard(data.messages);
             if (tIndex > 0) {
                 document.getElementById('today-day-count').textContent = tIndex + "일차";
-                setTimeout(scrollToToday, 500);
+                setTimeout(scrollToToday, 600);
             }
             document.getElementById('loader').style.display = 'none';
         } catch (e) { document.getElementById('loader').innerHTML = "데이터 로딩 오류"; }
@@ -153,8 +148,6 @@
         let checks = 0;
         rows.forEach(r => { r.querySelectorAll('input:checked').forEach(() => checks++); });
         const pct = Math.round((checks / (rows.length * 90)) * 100) || 0;
-        
-        // 상단 수치 업데이트
         document.getElementById('total-users').textContent = rows.length + "명";
         document.getElementById('overall-percent').textContent = pct + "%";
         document.getElementById('progress-bar').style.width = pct + "%";
@@ -186,8 +179,13 @@
     }
 
     function scrollToToday() {
-        const s = document.getElementById('scroll-container'); const t = document.getElementById(`day-${tIndex}`);
-        if(t) { s.scrollTo({ left: t.offsetLeft - (s.offsetWidth / 2), behavior: 'smooth' }); }
+        const s = document.getElementById('scroll-container'); 
+        const t = document.getElementById(`day-${tIndex}`);
+        if(t) {
+            // 오늘 날짜가 화면 왼쪽에서 약 66% 지점에 오도록 계산 (오른쪽 2/3 지점)
+            const targetScroll = t.offsetLeft - (s.offsetWidth * 0.66);
+            s.scrollTo({ left: targetScroll, behavior: 'smooth' });
+        }
     }
 
     function handleAdmin() {
