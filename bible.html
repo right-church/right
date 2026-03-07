@@ -6,59 +6,84 @@
     <title>90일 성경통독</title>
     <style>
         :root { --main-blue: #3498db; --dark-blue: #2c3e50; --light-bg: #f8f9fa; --border-color: #eee; --admin-color: #27ae60; --highlight-yellow: #fffde7; --today-bg: #e3f2fd; }
+        
         body { font-family: -apple-system, sans-serif; background-color: var(--light-bg); margin: 0; padding: 10px 0; -webkit-text-size-adjust: none; box-sizing: border-box; }
-        h1 { text-align: center; color: var(--dark-blue); font-size: 1.1rem; margin: 5px 0 12px 0; }
+        h1 { text-align: center; color: var(--dark-blue); font-size: 1.2rem; margin: 5px 0 15px 0; letter-spacing: -0.5px; }
+        
         .content-box { width: 94%; margin: 0 auto 12px auto; box-sizing: border-box; }
 
-        /* 통계 & 그래프 */
-        .stats-container { background: white; padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .stats-grid { display: flex; margin-bottom: 10px; }
+        /* 통계 섹션 */
+        .stats-container { background: white; padding: 15px; border-radius: 12px; border: 1px solid var(--border-color); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .stats-grid { display: flex; margin-bottom: 12px; }
         .stat-item { text-align: center; flex: 1; border-right: 1px solid #f0f0f0; }
         .stat-item:last-child { border-right: none; }
-        .stat-value { font-size: 1rem; font-weight: bold; color: var(--main-blue); display: block; }
-        .stat-label { font-size: 0.65rem; color: #95a5a6; }
-        .progress-wrapper { background: #eee; border-radius: 10px; height: 10px; width: 100%; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 0.8s ease; }
+        .stat-value { font-size: 1.1rem; font-weight: bold; color: var(--main-blue); display: block; }
+        .stat-label { font-size: 0.7rem; color: #95a5a6; margin-top: 2px; }
 
-        /* 테이블 */
-        .table-outer { background: #fff; border-radius: 10px; border: 1px solid var(--border-color); overflow: hidden; }
+        /* 진도율 바 */
+        .progress-wrapper { background: #eee; border-radius: 10px; height: 10px; width: 100%; overflow: hidden; }
+        .progress-fill { background: linear-gradient(90deg, #3498db, #2ecc71); height: 100%; width: 0%; transition: width 1s ease-in-out; }
+
+        /* 출석부 테이블 */
+        .table-outer { background: #fff; border-radius: 12px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; }
-        th, td { padding: 0; border-bottom: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; text-align: center; vertical-align: middle; height: 38px; }
-        th:first-child, td:first-child { width: 55px; position: sticky; left: 0; z-index: 10; background-color: #fcfcfc; border-right: 1.5px solid var(--main-blue); font-size: 0.75rem; font-weight: bold; }
-        th:not(:first-child), td:not(:first-child) { width: 44px; }
-        th { background-color: var(--main-blue); color: white; font-size: 0.65rem; height: 30px; }
-        .plan-row td { background-color: #f1f9ff; color: #2980b9; font-size: 0.55rem; line-height: 1.1; padding: 0 2px; }
-        input[type="checkbox"] { width: 18px; height: 18px; margin: 0; cursor: pointer; }
+        th, td { padding: 0; border-bottom: 1px solid #f0f0f0; border-right: 1px solid #f0f0f0; text-align: center; vertical-align: middle; height: 42px; }
         
-        /* 오늘 표시 전용 스타일 */
-        .today-cell { background-color: var(--today-bg) !important; color: #000; font-weight: bold; box-shadow: inset 0 0 0 2px var(--main-blue); }
+        /* 첫 번째 열(이름) 고정 */
+        th:first-child, td:first-child { width: 60px; position: sticky; left: 0; z-index: 10; background-color: #fcfcfc; border-right: 2px solid var(--main-blue); font-size: 0.8rem; font-weight: bold; }
+        th:not(:first-child), td:not(:first-child) { width: 48px; }
+
+        th { background-color: var(--main-blue); color: white; font-size: 0.7rem; height: 34px; }
+        .plan-row td { background-color: #f1f9ff; color: #2980b9; font-size: 0.6rem; line-height: 1.2; padding: 0 2px; font-weight: 500; }
+        
+        input[type="checkbox"] { width: 20px; height: 20px; cursor: pointer; vertical-align: middle; }
+        
+        /* 오늘 날짜 하이라이트 */
+        .today-cell { background-color: var(--today-bg) !important; position: relative; }
+        .today-cell::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid var(--main-blue); pointer-events: none; }
         td.checked-cell { background-color: var(--highlight-yellow) !important; }
 
-        /* 게시판 (내용 바로 옆 좋아요) */
-        .board-container { background: #fff; border-radius: 10px; padding: 12px; border: 1px solid var(--border-color); }
-        .board-title { font-size: 0.9rem; font-weight: bold; margin-bottom: 10px; border-bottom: 1.5px solid #f8f9fa; padding-bottom: 5px; }
-        .board-item { display: flex; align-items: center; padding: 7px 0; border-bottom: 1px solid #f5f5f5; font-size: 0.82rem; }
-        .msg-name { font-weight: bold; color: var(--main-blue); width: 45px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 5px; }
-        .msg-content { flex-shrink: 1; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 8px; }
-        .msg-actions { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-        .btn-like { background: #fff1f1; border: 1px solid #ffcccc; color: #ff7675; padding: 1px 6px; border-radius: 10px; font-size: 0.65rem; cursor: pointer; }
+        /* 게시판 섹션 */
+        .board-container { background: #fff; border-radius: 12px; padding: 15px; border: 1px solid var(--border-color); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .board-title { font-size: 0.95rem; font-weight: bold; color: var(--dark-blue); margin-bottom: 12px; border-bottom: 2px solid #f8f9fa; padding-bottom: 8px; }
         
-        .board-input-group { display: flex; gap: 5px; margin-top: 12px; height: 34px; }
-        #post-name { width: 50px; flex-shrink: 0; }
-        #post-content { flex-grow: 1; }
-        .board-input-group input { padding: 5px 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 0.85rem; outline: none; }
-        .btn-post { background: var(--main-blue); color: white; border: none; padding: 0 15px; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .board-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f5f5f5; font-size: 0.85rem; }
+        .board-item:last-child { border-bottom: none; }
+        
+        .msg-name { font-weight: bold; color: var(--main-blue); width: 50px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-right: 8px; }
+        .msg-content { flex-grow: 1; color: #333; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; cursor: pointer; }
+        .msg-actions { display: flex; align-items: center; gap: 6px; flex-shrink: 0; margin-left: 8px; }
+        
+        .btn-like { background: #fff1f1; border: 1px solid #ffcccc; color: #ff7675; padding: 2px 8px; border-radius: 12px; font-size: 0.7rem; cursor: pointer; transition: 0.2s; }
+        .btn-like:active { transform: scale(0.9); }
+        .btn-del-mini { color: #ccc; border: none; background: none; font-size: 0.9rem; cursor: pointer; padding: 0 4px; }
 
-        .footer { margin: 20px 0 40px; display: flex; justify-content: center; gap: 8px; }
-        .nav-btn { padding: 8px 15px; border-radius: 6px; font-size: 0.75rem; color: white; border: none; cursor: pointer; }
+        /* 입력 영역 */
+        .board-input-group { display: flex; gap: 6px; margin-top: 15px; height: 38px; }
+        #post-name { width: 55px; flex-shrink: 0; }
+        #post-content { flex-grow: 1; }
+        .board-input-group input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.85rem; outline: none; transition: border 0.2s; }
+        .board-input-group input:focus { border-color: var(--main-blue); }
+        .btn-post { background: var(--main-blue); color: white; border: none; padding: 0 15px; border-radius: 8px; font-size: 0.85rem; font-weight: bold; cursor: pointer; }
+
+        /* 하단 버튼 */
+        .footer { margin: 25px 0 50px; display: flex; justify-content: center; gap: 10px; }
+        .nav-btn { padding: 10px 18px; border-radius: 8px; font-size: 0.8rem; color: white; border: none; cursor: pointer; font-weight: 500; }
         .btn-admin { background: var(--admin-color); }
         .btn-refresh { background: #95a5a6; }
-        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.85); display:flex; justify-content:center; align-items:center; z-index:1000; font-weight:bold; }
+        
+        #loading { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.9); display:flex; flex-direction: column; justify-content:center; align-items:center; z-index:1000; font-size:1rem; font-weight:bold; color: var(--dark-blue); }
+        .spinner { width: 30px; height: 30px; border: 4px solid #f3f3f3; border-top: 4px solid var(--main-blue); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
-    <div id="loading">⏳ 데이터를 불러오는 중...</div>
+    <div id="loading">
+        <div class="spinner"></div>
+        <div>성경 데이터를 연결하고 있습니다...</div>
+    </div>
+
     <h1>📖 90일 성경통독</h1>
 
     <div class="stats-container content-box">
@@ -67,7 +92,9 @@
             <div class="stat-item"><span id="total-checks" class="stat-value">0</span><span class="stat-label">누적읽기</span></div>
             <div class="stat-item"><span id="overall-percent" class="stat-value">0%</span><span class="stat-label">전체진도</span></div>
         </div>
-        <div class="progress-wrapper"><div id="progress-bar" class="progress-fill"></div></div>
+        <div class="progress-wrapper">
+            <div id="progress-bar" class="progress-fill"></div>
+        </div>
     </div>
 
     <div class="table-outer content-box">
@@ -83,127 +110,159 @@
         <div class="board-title">🙏 기도제목 & 은혜나눔</div>
         <div id="board-list"></div>
         <div class="board-input-group">
-            <input type="text" id="post-name" placeholder="이름">
-            <input type="text" id="post-content" placeholder="내용">
+            <input type="text" id="post-name" placeholder="이름" maxlength="4">
+            <input type="text" id="post-content" placeholder="함께 나눌 내용을 입력하세요.">
             <button class="btn-post" onclick="postMessage()">등록</button>
         </div>
     </div>
     
     <div class="footer">
         <button id="admin-btn" class="nav-btn btn-admin" onclick="handleAdmin()">관리자 모드</button>
-        <button id="set-date-btn" class="nav-btn btn-admin" style="display:none;" onclick="setStartDate()">시작일 설정</button>
         <button class="nav-btn btn-refresh" onclick="location.reload()">새로고침</button>
     </div>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzTWLJGSR5TemSU1H_6Af_jf0HYfDE3vsn9r-wiMZ4A7RVVjQii4IfN-A1wRpyJmu9L/exec";
+        // 구글 앱스 스크립트 배포 URL
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNbxzVoyLTMGcCORY2AmW8Mxs9RjfvCNC9-PV9WZzctZsGL1hrQN6kup5qfcMM8gWL/exec";
+        
+        // 성경 통독 계획표 (1~90일)
         const biblePlan = { 1: "창1-13", 2: "창14-26", 3: "창27-39", 4: "창40-출2", 5: "출3-15", 6: "출16-29", 7: "출30-레2", 8: "레3-15", 9: "레16-민1", 10: "민2-14", 11: "민15-27", 12: "민28-신5", 13: "신6-18", 14: "신19-31", 15: "신32-수10", 16: "수11-23", 17: "수24-삿12", 18: "삿13-삼상1", 19: "삼상2-14", 20: "삼상15-27", 21: "삼상28-삼하9", 22: "삼하10-22", 23: "삼하23-왕상11", 24: "왕상12-왕하3", 25: "왕하4-16", 26: "왕하17-대상4", 27: "대상5-17", 28: "대상18-대하1", 29: "대하2-14", 30: "대하15-28", 31: "대하29-스5", 32: "스6-느8", 33: "느9-에8", 34: "에9-욥11", 35: "욥12-24", 36: "욥25-38", 37: "욥39-시9", 38: "시10-22", 39: "시23-35", 40: "시36-48", 41: "시49-61", 42: "시62-75", 43: "시76-88", 44: "시89-101", 45: "시102-114", 46: "시115-127", 47: "시128-140", 48: "시141-잠4", 49: "잠5-17", 50: "잠18-30", 51: "잠31-전12", 52: "아1-사5", 53: "사6-18", 54: "사19-32", 55: "사33-45", 56: "사46-58", 57: "사59-렘5", 58: "렘6-18", 59: "렘19-31", 60: "렘32-45", 61: "렘46-겔1", 62: "겔2-14", 63: "겔15-27", 64: "겔28-40", 65: "겔51-단5", 66: "단6-호7", 67: "호8-암3", 68: "암4-미2", 69: "미3-습2", 70: "습3-슥10", 71: "슥11-마5", 72: "마6-19", 73: "마20-막4", 74: "막5-눅1", 75: "눅2-14", 76: "눅15-요3", 77: "요4-16", 78: "요17-행9", 79: "행10-22", 80: "행23-롬7", 81: "롬8-고전4", 82: "고전5-고후1", 83: "고후2-갈1", 84: "갈2-빌3", 85: "빌4-살후3", 86: "딤전1-몬1", 87: "히1-약1", 88: "약2-요일2", 89: "요일3-계8", 90: "계9-22" };
         
         let isAdmin = localStorage.getItem('bible_admin_mode') === 'true';
         let todayDayIndex = -1;
 
         async function init() {
-            if(isAdmin) { document.getElementById('admin-btn').textContent="로그아웃"; document.getElementById('set-date-btn').style.display="inline"; }
+            if(isAdmin) document.getElementById('admin-btn').textContent = "관리자 로그아웃";
+            
             try {
                 const res = await fetch(SCRIPT_URL);
                 const data = await res.json();
                 
-                // 오늘 날짜 인덱스 계산 (주일 제외)
-                if(data.startDate) {
-                    calculateTodayIndex(data.startDate);
-                }
+                // 시작일 기반 '오늘' 인덱스 계산
+                if(data.startDate) calculateTodayIndex(data.startDate);
                 
-                render(data.attendance);
-                calculateStats(data.attendance);
+                renderTable(data.attendance);
+                updateStats(data.attendance);
                 renderBoard(data.messages);
                 
-                if (todayDayIndex > 0) setTimeout(scrollToToday, 500);
+                if (todayDayIndex > 0) setTimeout(scrollToToday, 600);
                 document.getElementById('loading').style.display = 'none';
-            } catch (e) { 
+            } catch (e) {
                 console.error(e);
-                document.getElementById('loading').textContent = "연결 오류! 관리자에게 문의하세요."; 
+                document.getElementById('loading').innerHTML = "<div>⚠️ 시트 연결 실패!</div><div style='font-size:0.8rem; margin-top:10px;'>URL 배포 및 시트 이름을 확인하세요.</div>";
             }
         }
 
+        // 오늘이 통독 몇 일차인지 계산 (주일 제외)
         function calculateTodayIndex(startStr) {
-            const today = new Date(); today.setHours(0,0,0,0);
-            const start = new Date(startStr); start.setHours(0,0,0,0);
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
             
-            if (today < start) { todayDayIndex = -1; return; }
+            // 시트에서 온 날짜 파싱 (YYYY-MM-DD)
+            const parts = startStr.split('-');
+            const startDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
 
-            let current = new Date(start);
+            if (today < startDate) return;
+
+            let current = new Date(startDate);
             let dayCount = 0;
             
-            // 시작일부터 오늘까지 루프를 돌며 주일(0)을 제외하고 카운트
-            while (current <= today && dayCount < 90) {
-                if (current.getDay() !== 0) { // 주일이 아니면
+            while (current <= today && dayCount < 100) {
+                if (current.getDay() !== 0) { // 0: 일요일
                     dayCount++;
                     if (current.getTime() === today.getTime()) {
                         todayDayIndex = dayCount;
                         break;
                     }
                 }
-                current.setDate(current.setDate(current.getDate() + 1));
+                current.setDate(current.getDate() + 1);
             }
         }
 
-        function render(sheetData) {
+        function renderTable(sheetData) {
             const hRow = document.getElementById('header-row');
             const tbody = document.getElementById('attendance-body');
             hRow.innerHTML = "<th>이름\\일차</th>";
             tbody.innerHTML = "";
 
-            // 헤더 생성
+            // 헤더 (1~90일)
             for(let i=1; i<=90; i++) {
-                let th = document.createElement('th'); th.innerHTML = `${i}일`;
+                let th = document.createElement('th');
+                th.innerHTML = `${i}일`;
                 if(i === todayDayIndex) th.className = 'today-cell';
-                th.id = `col-head-${i}`; hRow.appendChild(th);
+                th.id = `col-head-${i}`;
+                hRow.appendChild(th);
             }
 
-            // 본문 범위(Plan) 행
+            // 본문 계획 행
             let pRow = document.createElement('tr');
             pRow.className = 'plan-row';
-            pRow.innerHTML = "<td>본문 범위</td>";
+            pRow.innerHTML = "<td>성경 본문</td>";
             for(let i=1; i<=90; i++) {
-                let td = document.createElement('td'); td.textContent = biblePlan[i] || "";
+                let td = document.createElement('td');
+                td.textContent = biblePlan[i] || "";
                 if(i === todayDayIndex) td.className = 'today-cell';
                 pRow.appendChild(td);
             }
             tbody.appendChild(pRow);
 
-            // 사용자 데이터 행
+            // 참여자 데이터 (2행부터 시작)
             for(let r=1; r<sheetData.length; r++) {
                 let name = sheetData[r][0]; if(!name) continue;
                 let tr = document.createElement('tr');
-                let tdName = document.createElement('td'); tdName.textContent = name; tr.appendChild(tdName);
+                let tdName = document.createElement('td'); 
+                tdName.textContent = name; 
+                tr.appendChild(tdName);
+
                 for(let i=1; i<=90; i++) {
                     let td = document.createElement('td');
                     if(i === todayDayIndex) td.className = 'today-cell';
+                    
                     let cb = document.createElement('input'); 
                     cb.type = 'checkbox';
                     cb.checked = (sheetData[r][i] === "V");
                     if(cb.checked) td.classList.add('checked-cell');
+                    
                     cb.onclick = async (e) => {
-                        if(!isAdmin) { e.preventDefault(); alert("관리자만 가능합니다."); return; }
+                        if(!isAdmin) { 
+                            e.preventDefault(); 
+                            alert("체크는 관리자 모드에서만 가능합니다."); 
+                            return; 
+                        }
                         td.classList.toggle('checked-cell', cb.checked);
                         fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'attendance', name:name, day:i, checked:cb.checked}) });
+                        updateStatsLocally();
                     };
-                    td.appendChild(cb); tr.appendChild(td);
+                    td.appendChild(cb); 
+                    tr.appendChild(td);
                 }
                 tbody.appendChild(tr);
             }
         }
 
-        function calculateStats(sheetData) {
+        function updateStats(sheetData) {
             const userCount = sheetData.length - 1;
             let checkCount = 0;
             for(let r=1; r<sheetData.length; r++) {
                 for(let c=1; c<=90; c++) if(sheetData[r][c] === "V") checkCount++;
             }
-            const total = userCount * 90;
-            const percent = total > 0 ? Math.round((checkCount / total) * 100) : 0;
+            const totalGoal = userCount * 90;
+            const percent = totalGoal > 0 ? Math.round((checkCount / totalGoal) * 100) : 0;
+            
             document.getElementById('total-users').textContent = userCount;
             document.getElementById('total-checks').textContent = checkCount;
+            document.getElementById('overall-percent').textContent = percent + "%";
+            document.getElementById('progress-bar').style.width = percent + "%";
+        }
+
+        // 로컬에서 즉시 진도율 갱신 (반응성 향상)
+        function updateStatsLocally() {
+            const cbs = document.querySelectorAll('input[type="checkbox"]');
+            const total = cbs.length;
+            let checked = 0;
+            cbs.forEach(cb => { if(cb.checked) checked++; });
+            const percent = Math.round((checked / total) * 100);
+            document.getElementById('total-checks').textContent = checked;
             document.getElementById('overall-percent').textContent = percent + "%";
             document.getElementById('progress-bar').style.width = percent + "%";
         }
@@ -219,7 +278,7 @@
                     <span class="msg-content" onclick="alert('${m.content.replace(/'/g, "\\'")}')">${m.content}</span>
                     <div class="msg-actions">
                         <button class="btn-like" onclick="likeMsg('${m.id}', this)">❤️ ${m.likes}</button>
-                        ${isAdmin ? `<button class="btn-del-mini" onclick="deleteMsg('${m.id}')" style="color:#ccc; border:none; background:none; cursor:pointer;">✕</button>` : ''}
+                        ${isAdmin ? `<button class="btn-del-mini" onclick="deleteMsg('${m.id}')">✕</button>` : ''}
                     </div>
                 `;
                 list.appendChild(item);
@@ -229,7 +288,8 @@
         async function postMessage() {
             const name = document.getElementById('post-name').value;
             const content = document.getElementById('post-content').value;
-            if(!name || !content) return alert("이름과 내용을 입력하세요.");
+            if(!name || !content) return alert("이름과 내용을 모두 입력해 주세요.");
+            
             document.getElementById('loading').style.display = 'flex';
             await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'message', name, content}) });
             location.reload();
@@ -238,12 +298,12 @@
         async function likeMsg(id, btn) {
             btn.disabled = true;
             fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'like_message', id}) });
-            let parts = btn.innerText.split(' ');
-            btn.innerText = `❤️ ${parseInt(parts[1])+1}`;
+            let count = btn.innerText.split(' ')[1];
+            btn.innerText = `❤️ ${parseInt(count)+1}`;
         }
 
         async function deleteMsg(id) {
-            if(!confirm("삭제하시겠습니까?")) return;
+            if(!confirm("정말 삭제하시겠습니까?")) return;
             await fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'delete_message', id}) });
             location.reload();
         }
@@ -251,24 +311,25 @@
         function scrollToToday() {
             const container = document.getElementById('table-scroll-container');
             const target = document.getElementById(`col-head-${todayDayIndex}`);
-            if (target) container.scrollLeft = target.offsetLeft - (window.innerWidth / 2);
-        }
-
-        function setStartDate() {
-            const d = prompt("시작일 설정 (예: 2026-03-09)");
-            if(d && /^\d{4}-\d{2}-\d{2}$/.test(d)) {
-                document.getElementById('loading').style.display = 'flex';
-                fetch(SCRIPT_URL, { method:'POST', body: JSON.stringify({type:'set_start_date', date: d}) })
-                .then(() => location.reload());
-            } else if(d) { alert("날짜 형식이 틀립니다 (YYYY-MM-DD)"); }
+            if (target) {
+                const scrollPos = target.offsetLeft - (window.innerWidth / 2) + (target.offsetWidth / 2);
+                container.scrollTo({ left: scrollPos, behavior: 'smooth' });
+            }
         }
 
         function handleAdmin() {
             if (!isAdmin) {
-                if(prompt("관리자 암호") === "9191") { localStorage.setItem('bible_admin_mode', 'true'); location.reload(); }
-            } else { localStorage.removeItem('bible_admin_mode'); location.reload(); }
+                if(prompt("관리자 비밀번호를 입력하세요.") === "9191") {
+                    localStorage.setItem('bible_admin_mode', 'true');
+                    location.reload();
+                }
+            } else {
+                localStorage.removeItem('bible_admin_mode');
+                location.reload();
+            }
         }
 
+        // 실행
         init();
     </script>
 </body>
