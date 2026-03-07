@@ -17,7 +17,7 @@
             --today-bg: #eef2ff;
             --today-text: #4e73df;
             --plan-bg: #fff9db;
-            /* 요청 규격 */
+            /* 규격 설정 */
             --cell-w: 45px;
             --cell-h: 38px;
             --name-w: 70px; 
@@ -58,10 +58,10 @@
             transition: width 0.5s ease;
         }
 
-        /* 테이블 영역 최적화 */
+        /* 테이블 스티키 레이아웃 */
         .table-outer {
             width: 100%; 
-            max-height: 65vh; /* 모바일에서 표가 너무 길어지지 않게 조정 */
+            max-height: 65vh; 
             overflow: auto; 
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -71,7 +71,6 @@
         
         table { border-collapse: separate; border-spacing: 0; width: max-content; table-layout: fixed; }
         
-        /* 헤더 및 본문 행 상단 고정 */
         thead { position: sticky; top: 0; z-index: 30; }
         .plan-row { position: sticky; top: var(--cell-h); z-index: 20; }
 
@@ -83,28 +82,23 @@
             font-size: 0.75rem; box-sizing: border-box;
         }
         
-        /* 첫 번째 컬럼(이름) 고정 */
         th:first-child, td:first-child { 
             width: var(--name-w); position: sticky; left: 0; z-index: 40; 
             background: #fff; border-right: 2px solid var(--border);
             font-weight: 700;
         }
         
-        /* 고정 영역 교차점(이름 헤더) 지수 조정 */
         thead th:first-child { z-index: 50; background: #f8f9fc; }
         .plan-row td:first-child { z-index: 45; }
 
         th { background: #f8f9fc; color: var(--secondary); font-size: 0.6rem; }
         .date-label { font-size: 0.5rem; color: #a0aec0; display: block; line-height: 1; }
 
-        /* 본문(Plan) 행 스타일 */
         .plan-row td { background-color: var(--plan-bg); color: #975a16; font-size: 0.62rem; font-weight: 700; }
 
-        /* 오늘 강조 */
         .today-mark { background-color: var(--today-bg) !important; color: var(--today-text) !important; }
         .today-mark .date-label { color: var(--today-text); font-weight: 800; }
 
-        /* 체크박스 터치 최적화 */
         .chk-label { display: flex; width: 100%; height: 100%; align-items: center; justify-content: center; cursor: pointer; }
         input[type="checkbox"] { 
             appearance: none; -webkit-appearance: none;
@@ -118,14 +112,11 @@
             font-size: 14px; font-weight: bold;
         }
 
-        /* 은혜 나눔 메시지 */
         .msg-box { background: #f8f9fc; border-radius: 8px; padding: 8px; margin-bottom: 5px; font-size: 0.8rem; }
         .msg-name { font-weight: 800; color: var(--primary); margin-right: 4px; }
         
         .input-group { display: flex; gap: 4px; margin-top: 8px; }
-        .input-group input { 
-            border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-size: 0.85rem; outline: none; 
-        }
+        .input-group input { border: 1px solid var(--border); border-radius: 6px; padding: 8px; font-size: 0.85rem; outline: none; }
         .btn-send { background: var(--primary); color: white; border: none; padding: 0 12px; border-radius: 6px; font-weight: 700; font-size: 0.8rem; }
 
         .footer { display: flex; justify-content: center; gap: 8px; margin: 15px 0 20px; }
@@ -141,7 +132,7 @@
 
     <div class="header">
         <h1>📖 90일 성경통독</h1>
-        <div id="tongdok-period" class="period-badge">로딩 중...</div>
+        <div id="tongdok-period" class="period-badge">데이터 불러오는 중...</div>
     </div>
 
     <div class="card">
@@ -201,7 +192,7 @@
             let curr = new Date(start), count = 0, end = new Date(start);
             while(count < 90) { if(curr.getDay()!==0) { count++; if(count===90) end=new Date(curr); } curr.setDate(curr.getDate()+1); }
             const f = (d) => `${d.getMonth()+1}/${d.getDate()}`;
-            document.getElementById('tongdok-period').textContent = `${f(start)} ~ ${f(end)} 90일 통독`;
+            document.getElementById('tongdok-period').textContent = `${f(start)} ~ ${f(end)} 성경통독`;
         }
 
         function calcToday(s) {
@@ -236,7 +227,7 @@
                     let lbl = document.createElement('label'); lbl.className = 'chk-label';
                     let cb = document.createElement('input'); cb.type='checkbox'; cb.checked=(sd[r][i]==="V");
                     cb.onclick = async (e) => {
-                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드에서만 가능합니다."); return; }
+                        if(!isAdmin) { e.preventDefault(); alert("관리자만 체크 가능합니다."); return; }
                         updateStats(sd); fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'attendance', name:n, day:i, checked:cb.checked})});
                     };
                     lbl.appendChild(cb); td.appendChild(lbl); tr.appendChild(td);
@@ -272,10 +263,12 @@
         }
 
         function scrollToToday() {
-            const s = document.getElementById('scroll-container'); const t = document.getElementById(`day-${tIndex}`);
+            const s = document.getElementById('scroll-container'); 
+            const t = document.getElementById(`day-${tIndex}`);
             if(t) {
-                const center = t.offsetLeft - (s.offsetWidth / 2) + (t.offsetWidth / 2);
-                s.scrollTo({ left: center, behavior: 'smooth' });
+                // (s.offsetWidth * 2 / 3) 를 빼주어 오늘 날짜가 화면의 2/3 지점(오른쪽)에 오게 설정
+                const offset = t.offsetLeft - (s.offsetWidth * 2 / 3);
+                s.scrollTo({ left: offset, behavior: 'smooth' });
             }
         }
 
