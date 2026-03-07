@@ -3,126 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>90일 성경통독 출석부</title>
+    <title>90일 성경통독</title>
     <style>
-        :root { 
-            --main-blue: #4a90e2; 
-            --accent-green: #50c878;
-            --dark-blue: #1e272e; 
-            --light-bg: #f5f7fa; 
-            --card-bg: #ffffff;
-            --border-color: #eef1f4; 
-            --today-highlight: #f0f7ff;
-            --text-main: #2d3436;
-            --text-muted: #b2bec3;
+        :root {
+            --primary: #007AFF;
+            --bg: #F2F2F7;
+            --white: #FFFFFF;
+            --text: #1C1C1E;
+            --border: #E5E5EA;
+            --today-bg: #EBF5FF;
+        }
+
+        body { font-family: -apple-system, sans-serif; background: var(--bg); margin: 0; color: var(--text); -webkit-text-size-adjust: none; }
+        
+        /* 상단 헤더 */
+        .header { background: var(--white); padding: 25px 20px; border-bottom: 1px solid var(--border); }
+        .header h1 { font-size: 22px; font-weight: 700; margin: 0; letter-spacing: -0.5px; }
+        .header p { font-size: 13px; color: #8E8E93; margin: 5px 0 0; }
+
+        /* 통계 영역 */
+        .stats-row { display: flex; padding: 15px 20px; gap: 20px; background: var(--white); border-bottom: 1px solid var(--border); }
+        .stat-group { flex: 1; }
+        .stat-label { font-size: 11px; color: #8E8E93; font-weight: 600; display: block; }
+        .stat-value { font-size: 17px; font-weight: 700; color: var(--primary); }
+
+        /* 출석부 테이블 - 칸 너비 최적화 */
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--white); }
+        table { border-collapse: collapse; width: max-content; }
+        
+        /* 고정 열 (이름) */
+        th:first-child, td:first-child { 
+            width: 60px; position: sticky; left: 0; z-index: 10; 
+            background: var(--white); border-right: 1.5px solid var(--primary); 
+            font-size: 13px; font-weight: 600;
         }
         
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--light-bg); margin: 0; padding: 20px 0; color: var(--text-main); -webkit-text-size-adjust: none; }
+        /* 데이터 열 (모바일용 슬림 너비: 48px) */
+        th:not(:first-child), td:not(:first-child) { width: 48px; }
         
-        /* 헤더 섹션 */
-        .header-container { text-align: center; margin-bottom: 25px; }
-        h1 { color: var(--dark-blue); font-size: 1.5rem; font-weight: 800; margin: 0 0 5px 0; letter-spacing: -0.8px; }
-        #tongdok-period { font-size: 0.85rem; color: var(--text-muted); font-weight: 400; }
+        th { height: 55px; background: #F9F9FB; font-size: 12px; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+        .d-num { display: block; font-weight: 700; }
+        .d-date { display: block; font-size: 10px; font-weight: 400; color: #8E8E93; }
         
-        .content-box { width: 92%; margin: 0 auto 15px auto; box-sizing: border-box; }
-        
-        /* 통계 카드 */
-        .stats-container { background: var(--card-bg); padding: 22px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
-        .stats-grid { display: flex; margin-bottom: 20px; }
-        .stat-item { text-align: center; flex: 1; position: relative; }
-        .stat-item:not(:last-child)::after { content: ''; position: absolute; right: 0; top: 20%; height: 60%; width: 1px; background: var(--border-color); }
-        .stat-value { font-size: 1.3rem; font-weight: 800; color: var(--main-blue); display: block; margin-bottom: 4px; }
-        .stat-label { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
-        
-        .progress-wrapper { background: #edf2f7; border-radius: 10px; height: 8px; width: 100%; overflow: hidden; }
-        .progress-fill { background: linear-gradient(90deg, var(--main-blue), var(--accent-green)); height: 100%; width: 0%; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+        td { height: 48px; text-align: center; border-bottom: 1px solid var(--border); border-right: 1px solid var(--border); }
+        .plan-row td { font-size: 10px; background: #FAFAFA; color: var(--primary); font-weight: 600; }
 
-        /* 테이블 디자인 - 칸 너비를 모바일에 맞게 소폭 조정 (52px) */
-        .table-outer { background: var(--card-bg); border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
-        .table-inner { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        table { border-collapse: separate; border-spacing: 0; table-layout: fixed; width: max-content; }
-        
-        th, td { border-bottom: 1px solid var(--border-color); border-right: 1px solid var(--border-color); text-align: center; vertical-align: middle; }
-        
-        /* 고정 이름 열 */
-        th:first-child, td:first-child { width: 65px; position: sticky; left: 0; z-index: 25; background: #fff; font-size: 0.82rem; font-weight: 700; border-right: 2px solid var(--main-blue); }
-        th:not(:first-child), td:not(:first-child) { width: 52px; }
-        
-        /* 헤더 날짜 레이아웃 */
-        th { background: #fbfcfd; color: var(--text-main); height: 65px; padding: 0; font-weight: 700; }
-        .day-num { font-size: 0.9rem; display: block; margin-bottom: 1px; }
-        .day-date { font-size: 0.65rem; font-weight: 400; color: var(--text-muted); }
-        
-        .plan-row td { background: #fafbfc; color: var(--main-blue); font-size: 0.65rem; font-weight: 700; height: 50px; line-height: 1.3; }
-        
-        /* 체크박스 커스텀 */
-        input[type="checkbox"] { width: 22px; height: 22px; cursor: pointer; border-radius: 6px; border: 2px solid #ddd; appearance: none; -webkit-appearance: none; display: inline-block; position: relative; background: #fff; transition: all 0.2s; }
-        input[type="checkbox"]:checked { background: var(--main-blue); border-color: var(--main-blue); }
-        input[type="checkbox"]:checked::after { content: '✓'; color: white; position: absolute; left: 4px; top: -1px; font-size: 15px; font-weight: bold; }
-        
-        /* Today 하이라이트 표시 */
-        .today-cell { background: var(--today-highlight) !important; position: relative; }
-        th.today-cell .day-num, th.today-cell .day-date { color: var(--main-blue); font-weight: 800; }
-        th.today-cell::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--main-blue); }
+        /* 투데이 하이라이트 */
+        .is-today { background: var(--today-bg) !important; color: var(--primary); }
+        th.is-today { position: relative; }
+        th.is-today::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--primary); }
 
-        /* 은혜나눔 게시판 */
-        .board-container { background: var(--card-bg); border-radius: 20px; padding: 22px; box-shadow: 0 10px 25px rgba(0,0,0,0.04); }
-        .board-title { font-size: 1.1rem; font-weight: 800; color: var(--dark-blue); margin-bottom: 20px; }
-        .board-item { padding: 12px 0; border-bottom: 1px solid var(--border-color); }
-        .msg-name { font-weight: 700; color: var(--main-blue); font-size: 0.8rem; margin-bottom: 4px; display: block; }
-        .msg-content { font-size: 0.85rem; color: #4b4b4b; line-height: 1.5; }
+        /* 체크박스 */
+        input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; }
 
-        .board-input-group { background: #f8f9fb; padding: 15px; border-radius: 15px; margin-top: 20px; }
-        .inputs-top { display: flex; gap: 8px; margin-bottom: 8px; }
-        input { border: 1px solid #e1e5eb; border-radius: 10px; padding: 10px; font-size: 0.85rem; }
-        .btn-post { background: var(--main-blue); color: white; border: none; width: 100%; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        /* 게시판 */
+        .board { background: var(--white); margin-top: 15px; padding: 20px; border-top: 1px solid var(--border); }
+        .board-title { font-size: 16px; font-weight: 700; margin-bottom: 15px; }
+        .msg { margin-bottom: 12px; border-bottom: 1px solid #F2F2F7; padding-bottom: 10px; }
+        .msg-info { font-size: 12px; font-weight: 700; color: var(--primary); }
+        .msg-body { font-size: 14px; margin-top: 2px; }
 
-        #loading { position: fixed; inset: 0; background: #fff; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 10000; }
-        .spinner { width: 35px; height: 35px; border: 4px solid #f0f0f0; border-top: 4px solid var(--main-blue); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        .input-box { display: flex; gap: 8px; margin-top: 20px; }
+        input[type="text"] { border: 1px solid var(--border); border-radius: 8px; padding: 10px; font-size: 14px; background: var(--bg); outline: none; }
+        .btn-send { background: var(--primary); color: #FFF; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 600; }
+
+        #loading { position: fixed; inset: 0; background: #FFF; z-index: 1000; display: flex; justify-content: center; align-items: center; font-size: 14px; color: #8E8E93; }
     </style>
 </head>
 <body>
-    <div id="loading"><div class="spinner"></div><div style="margin-top:15px; font-size: 0.9rem; color: #4a90e2;">출석부 정보를 읽어오는 중...</div></div>
+    <div id="loading">데이터 로딩 중...</div>
     
-    <div class="header-container">
-        <h1>📖 90일 성경통독 출석부</h1>
-        <div id="tongdok-period">기간 로딩 중...</div>
+    <div class="header">
+        <h1>90일 성경통독</h1>
+        <p id="period-info"></p>
     </div>
 
-    <div class="stats-container content-box">
-        <div class="stats-grid">
-            <div class="stat-item"><span id="overall-percent" class="stat-value">0%</span><span class="stat-label">전체 진도</span></div>
-            <div class="stat-item"><span id="total-users" class="stat-value">0</span><span class="stat-label">참여자</span></div>
-            <div class="stat-item"><span id="total-checks" class="stat-value">0</span><span class="stat-label">누적 통독</span></div>
-        </div>
-        <div class="progress-wrapper"><div id="progress-bar" class="progress-fill"></div></div>
+    <div class="stats-row">
+        <div class="stat-group"><span class="stat-label">진도율</span><span id="overall-percent" class="stat-value">0%</span></div>
+        <div class="stat-group"><span class="stat-label">참여자</span><span id="total-users" class="stat-value">0</span></div>
+        <div class="stat-group"><span class="stat-label">누적 완료</span><span id="total-checks" class="stat-value">0</span></div>
     </div>
 
-    <div class="table-outer content-box">
-        <div id="table-scroll-container" class="table-inner">
-            <table>
-                <thead><tr id="header-row"><th>이름</th></tr></thead>
-                <tbody id="attendance-body"></tbody>
-            </table>
-        </div>
+    <div class="table-wrap" id="table-scroll">
+        <table>
+            <thead><tr id="header-row"><th>이름</th></tr></thead>
+            <tbody id="attendance-body"></tbody>
+        </table>
     </div>
 
-    <div class="board-container content-box">
-        <div class="board-title">💬 은혜나눔</div>
+    <div class="board">
+        <div class="board-title">나눔 게시판</div>
         <div id="board-list"></div>
-        <div class="board-input-group">
-            <div class="inputs-top">
-                <input type="text" id="post-name" placeholder="이름" style="width: 60px;">
-                <input type="text" id="post-content" placeholder="함께 나눌 은혜의 말씀..." style="flex: 1;">
-            </div>
-            <button class="btn-post" onclick="postMessage()">등록하기</button>
+        <div class="input-box">
+            <input type="text" id="post-name" placeholder="이름" style="width: 50px;">
+            <input type="text" id="post-content" placeholder="은혜로운 말씀 한마디" style="flex: 1;">
+            <button class="btn-send" onclick="postMessage()">등록</button>
         </div>
-    </div>
-
-    <div style="text-align:center; padding: 40px 0;">
-        <button onclick="location.reload()" style="background:#eee; border:none; padding:10px 20px; border-radius:10px; font-size:0.8rem;">새로고침</button>
-        <button id="admin-trigger" onclick="handleAdmin()" style="background:none; border:none; color:#ccc; font-size:0.7rem; margin-left:10px;">관리자</button>
     </div>
 
     <script>
@@ -141,21 +117,21 @@
                     const p = data.startDate.split('-');
                     startDt = new Date(p[0], p[1]-1, p[2]);
                     calcToday(data.startDate);
-                    displayPeriod(data.startDate);
+                    showPeriod(data.startDate);
                 }
                 renderTable(data.attendance);
                 updateStats();
                 renderBoard(data.messages);
-                if (todayIdx > 0) setTimeout(scrollToToday, 600);
+                if (todayIdx > 0) setTimeout(autoScroll, 600);
                 document.getElementById('loading').style.display = 'none';
-            } catch (e) { document.getElementById('loading').innerText = "접속 지연중..."; }
+            } catch (e) { document.getElementById('loading').innerText = "에러 발생"; }
         }
 
-        function displayPeriod(s) {
+        function showPeriod(s) {
             let curr = new Date(s), count = 0, end = new Date(s);
             while (count < 90) { if(curr.getDay() !== 0) { count++; if(count===90) end = new Date(curr); } curr.setDate(curr.getDate()+1); }
             const f = (d) => `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`;
-            document.getElementById('tongdok-period').textContent = `${f(new Date(s))} - ${f(end)}`;
+            document.getElementById('period-info').textContent = `${f(new Date(s))} - ${f(end)}`;
         }
 
         function calcToday(s) {
@@ -179,30 +155,26 @@
                 let th = document.createElement('th');
                 if(dCur) { while(dCur.getDay() === 0) dCur.setDate(dCur.getDate()+1); }
                 let dStr = dCur ? `${dCur.getMonth()+1}/${dCur.getDate()}` : "";
-                th.innerHTML = `<span class="day-num">${i}일</span><span class="day-date">${dStr}</span>`;
-                if(i === todayIdx) th.className = 'today-cell';
-                th.id = `col-${i}`;
+                th.innerHTML = `<span class="d-num">${i}일</span><span class="d-date">${dStr}</span>`;
+                if(i === todayIdx) th.className = 'is-today';
+                th.id = `day-${i}`;
                 h.appendChild(th);
                 if(dCur) dCur.setDate(dCur.getDate()+1);
             }
 
-            let pRow = document.createElement('tr'); pRow.className='plan-row'; pRow.innerHTML="<td>본문</td>";
-            for(let i=1; i<=90; i++) { 
-                let td=document.createElement('td'); td.textContent=biblePlan[i]; 
-                if(i===todayIdx) td.className='today-cell'; 
-                pRow.appendChild(td); 
-            }
-            b.appendChild(pRow);
+            let pTr = document.createElement('tr'); pTr.className='plan-row'; pTr.innerHTML="<td>본문</td>";
+            for(let i=1; i<=90; i++) { let td=document.createElement('td'); td.textContent=biblePlan[i]; if(i===todayIdx) td.className='is-today'; pTr.appendChild(td); }
+            b.appendChild(pTr);
 
             for(let r=1; r<data.length; r++) {
                 let name = data[r][0]; if(!name) continue;
                 let tr = document.createElement('tr');
                 let tn = document.createElement('td'); tn.textContent = name; tr.appendChild(tn);
                 for(let i=1; i<=90; i++) {
-                    let td = document.createElement('td'); if(i===todayIdx) td.className='today-cell';
+                    let td = document.createElement('td'); if(i===todayIdx) td.className='is-today';
                     let cb = document.createElement('input'); cb.type='checkbox'; cb.checked=(data[r][i]==="V");
                     cb.onclick = async (e) => {
-                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드에서 가능합니다."); return; }
+                        if(!isAdmin) { e.preventDefault(); alert("관리자 모드 전용"); return; }
                         updateStats();
                         fetch(SCRIPT_URL, {method:'POST', body:JSON.stringify({type:'attendance', name, day:i, checked:cb.checked})});
                     };
@@ -215,18 +187,16 @@
         function updateStats() {
             const users = document.querySelectorAll('#attendance-body tr').length - 1;
             let checks = 0; document.querySelectorAll('input[type="checkbox"]').forEach(c => { if(c.checked) checks++; });
-            const pct = Math.round((checks / (users * 90)) * 100) || 0;
             document.getElementById('total-users').textContent = users;
             document.getElementById('total-checks').textContent = checks;
-            document.getElementById('overall-percent').textContent = pct + "%";
-            setTimeout(() => { document.getElementById('progress-bar').style.width = pct + "%"; }, 100);
+            document.getElementById('overall-percent').textContent = Math.round((checks / (users * 90)) * 100) + "%";
         }
 
         function renderBoard(msgs) {
             const l = document.getElementById('board-list'); l.innerHTML = "";
             [...msgs].reverse().slice(0, 5).forEach(m => {
-                let d = document.createElement('div'); d.className='board-item';
-                d.innerHTML = `<span class="msg-name">${m.name}</span><div class="msg-content">${m.content}</div>`;
+                let d = document.createElement('div'); d.className='msg';
+                d.innerHTML = `<div class="msg-info">${m.name}</div><div class="msg-body">${m.content}</div>`;
                 l.appendChild(d);
             });
         }
@@ -239,9 +209,9 @@
             location.reload();
         }
 
-        function scrollToToday() {
-            const el = document.getElementById(`col-${todayIdx}`);
-            if(el) document.getElementById('table-scroll-container').scrollTo({left: el.offsetLeft - 100, behavior:'smooth'});
+        function autoScroll() {
+            const el = document.getElementById(`day-${todayIdx}`);
+            if(el) document.getElementById('table-scroll').scrollTo({left: el.offsetLeft - 80, behavior:'smooth'});
         }
 
         function handleAdmin() {
