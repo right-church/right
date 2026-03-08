@@ -229,8 +229,6 @@
         const s = document.getElementById('scroll-container'); 
         const t = document.getElementById(`day-${tIndex}`);
         if(t) {
-            // 투데이 셀을 화면 왼쪽에서 약 1/3 지점에 오게 하여, 
-            // 전체적으로는 오른쪽(앞으로 남은 일정)이 많이 보이게 배치함
             const targetScroll = t.offsetLeft - (s.offsetWidth * 0.66);
             s.scrollTo({ left: targetScroll, behavior: 'smooth' });
         }
