@@ -42,7 +42,6 @@
         input[type="checkbox"]:checked { background: var(--success); border-color: var(--success); }
         input[type="checkbox"]:checked::after { content: '✓'; color: white; position: absolute; left: 50%; top: 48%; transform: translate(-50%, -50%); font-size: 14px; font-weight: bold; }
 
-        /* 메시지 보드 한 줄 및 수직 중앙 정렬 */
         #msg-list { margin-bottom: 10px; }
         .msg-box { background: #f8f9fc; border-radius: 8px; padding: 10px 12px; margin-bottom: 5px; border: 1px solid #edf0f7; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
         .msg-content-wrap { flex: 1; font-size: 0.85rem; display: flex; align-items: center; word-break: break-all; line-height: 1.4; }
@@ -111,7 +110,9 @@
             updateStats();
             renderBoard(data.messages);
             if (tIndex > 0) {
-                document.getElementById('today-day-count').textContent = tIndex + "일차";
+                const isSunday = new Date().getDay() === 0;
+                document.getElementById('today-day-count').textContent = tIndex + "일차" + (isSunday ? " (주일)" : "");
+                // 표 렌더링 후 스크롤 이동
                 setTimeout(scrollToToday, 600);
             }
             document.getElementById('loader').style.display = 'none';
@@ -127,10 +128,26 @@
     }
 
     function calcToday(s) {
-        const now = new Date(); const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        const start = parseD(s); if(!start || today < start) return;
-        let curr = new Date(start), count = 0;
-        while(curr <= today && count < 180) { if(curr.getDay()!==0) { count++; if(curr.getTime()===today.getTime()) { tIndex=count; break; } } curr.setDate(curr.getDate()+1); }
+        const now = new Date(); 
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const start = parseD(s); 
+        if(!start || today < start) return;
+
+        let curr = new Date(start);
+        let count = 0;
+        let lastValidIndex = 0;
+
+        while(curr <= today && count < 180) { 
+            if(curr.getDay() !== 0) {
+                count++;
+                lastValidIndex = count; 
+            }
+            if(curr.getTime() === today.getTime()) {
+                tIndex = (curr.getDay() === 0) ? lastValidIndex : count;
+                break;
+            }
+            curr.setDate(curr.getDate() + 1); 
+        }
     }
 
     function parseD(s) { const p = s.split('-'); return p.length===3?new Date(p[0],p[1]-1,p[2]):null; }
